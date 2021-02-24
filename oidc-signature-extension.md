@@ -9,6 +9,8 @@ This specification defines an extension to OpenID Connect to facilitate the use 
 
 1. [**Introduction**](#introduction)
 
+    1.1. [Requirements Notation and Conventions](#requirements-notation-and-conventions)
+
 2. [**Signature Request Object**](#signature-request-object)
 
 3. [**Signature Response Data**](#signature-response-data)
@@ -24,6 +26,12 @@ TODO:
 
 - Describe different types of signature use cases; BankID/Freja and federated signing.
 
+<a name="requirements-notation-and-conventions"></a>
+### 1.1. Requirements Notation and Conventions
+
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” are to be interpreted as described in \[[RFC2119](#rfc2119)\].
+
+These keywords are capitalized when used to unambiguously specify requirements over protocol features and behavior that affect the interoperability and security of implementations. When these words are not capitalized, they are meant in their natural-language sense.
 
 <a name="the-signature-request-object"></a>
 ## 2. The Signature Request Object
@@ -69,6 +77,10 @@ If we add the sign request extension as a request object this would mean that we
 
 <a name="normative-references"></a>
 ## 4. Normative References
+
+<a name="rfc2119"></a>
+**\[RFC2119\]**
+> [Bradner, S., Key words for use in RFCs to Indicate Requirement Levels, March 1997](https://www.ietf.org/rfc/rfc2119.txt).
 
 <a name="openid-core"></a>
 **\[OpenID.Core\]**
