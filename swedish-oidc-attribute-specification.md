@@ -1,15 +1,17 @@
-# Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
+# Attribute Specification for the Swedish OpenID Connect Profile 
 
-### Version: 1.0 - draft 01 - 2021-02-23
+### Version: 1.0 - draft 01 - 2021-02-24
 
 ## Abstract
 
-This specification defines attributes/claims and scopes for the Swedish OAuth2 and OpenID Connect profiles.
+This specification defines claims (attributes) and scopes for the Swedish OpenID Connect profile.
 
 
 ## Table of Contents
 
 1. [**Introduction**](#introduction)
+
+    1.1. [Requirements Notation and Conventions](#requirements-notation-and-conventions)
 
 2. [**Attributes and Claims**](#attributes-and-claims)
 
@@ -43,9 +45,31 @@ This specification defines attributes/claims and scopes for the Swedish OAuth2 a
     
     2.3.4. [Signature Claims](#signature-claims)
     
-    2.4. [Request Object Claims](#request-object-claims)
+    2.4. [General Purpose Claims](#general-purpose-claims)
+
+    2.4.1. [Country](#country)
+    
+    2.4.2. [Birth Name](#birth-name)
+    
+    2.4.3. [Place of Birth](#place-of-birth)
+    
+    2.5. [Request Object Claims](#request-object-claims)
 
 3. [**Scopes**](#scopes)
+
+    3.1. [Natural Person Name Information](#natural-person-name-information)
+    
+    3.2. [Natural Person Identity - Personal Number](#natural-person-identity-personal-number)
+    
+    3.3. [Natural Person Identity - eIDAS Identity](#natural-person-identity-eidas-identity)
+    
+    3.4. [Natural Person Identity - HSA-ID](#natural-person-identity-hsa-id)
+    
+    3.5. [Natural Person Organizational Identity](#natural-person-organizational-identity)
+
+    3.6. [Authentication Information](#authentication-information)
+
+    3.7. [Signatures](#signatures)
 
 4. [**Mappings to Other Specifications**](#mappings-to-other-specifications)
 
@@ -60,9 +84,16 @@ This specification defines attributes/claims and scopes for the Swedish OAuth2 a
 <a name="introduction"></a>
 ## 1. Introduction
 
-This specification aims to provide definitions of a common set of attributes (claims) that may be used by Swedish OAuth2 and OpenID Connect providers and clients. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
+This specification aims to provide definitions of a common set of attributes (claims) that may be used by Swedish OpenID Connect providers and clients. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
 
 Special purpose attributes, such as the healthcare specific attributes defined in \[[Sambi.AttrSpec](#sambi-attrspec)\], are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
+
+<a name="requirements-notation-and-conventions"></a>
+### 1.1. Requirements Notation and Conventions
+
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” are to be interpreted as described in \[[RFC2119](#rfc2119)\].
+
+These keywords are capitalized when used to unambiguously specify requirements over protocol features and behavior that affect the interoperability and security of implementations. When these words are not capitalized, they are meant in their natural-language sense.
 
 <a name="attributes-and-claims"></a>
 ## 2. Attributes and Claims
@@ -278,10 +309,42 @@ The [Signature Extension for OpenID Connect](#signext), \[[SignExt](#signext)\],
 
 > Note: For federated signing according to the Sweden Connect model only.
 
-<a name="request-object-claims"></a>
-### 2.4. Request Object Claims
+<a name="general-purpose-claims"></a>
+### 2.4. General Purpose Claims
 
-> Specific claims that are sent in a Request Object (in a JWT for the `request` or `request_uri` parameters).
+This section contains definitions of general purpose claims that do not fit into any of the above categories. For some of the attributes represented there should really be a standard claim defined (for example, country, place of birth, etc.).
+
+<a name="country"></a>
+#### 2.4.1. Country
+
+**Claim:** `http://claims.oidc.se/1.0/country`
+
+**Description:** \[[OpenID.Core](#openid-core)\] defines the `address` claim containing a `country` field, but there are many other areas where a country needs to be represented other than in the context of an individual's address. The `http://claims.oidc.se/1.0/country` claim is a general purpose claim that can be used to represent a country.
+
+**Type:** String. ISO 3166-1 alpha-2 \[[ISO3166](#iso3166)\] two letter country code.
+
+<a name="birth-name"></a>
+#### 2.4.2. Birth Name
+
+**Claim:** `http://claims.oidc.se/1.0/birthName`
+
+**Description:** Claims that corresponds to the `name` claim defined in \[[OpenID.Core](#openid-core)\] but is the full name at the time of birth for the subject.
+
+**Type:** String
+
+<a name="place-of-birth"></a>
+#### 2.4.3. Place of Birth
+
+**Claim:** `http://claims.oidc.se/1.0/placeOfbirth`
+
+**Description:** Claim representing the place of birth for the subject. This specification does not define "place". Depending on the context it may be "City" or "City, Country" or any other representation.
+
+**Type:** String 
+
+<a name="request-object-claims"></a>
+### 2.5. Request Object Claims
+
+> TODO: Specific claims that are sent in a Request Object (in a JWT for the `request` or `request_uri` parameters).
 
 <a name="scopes"></a>
 ## 3. Scopes
@@ -298,7 +361,126 @@ This section defines a set of scopes where each named scope maps to a set of cla
 Section 5.4 of \[[OpenID.Core](#openid-core)\] defines a set of standard scope values including the `profile` scope that
 maps to the end-user "profile". This information comprises of the claims: `name`, `family_name`, `given_name`, `middle_name`, `nickname`, `preferred_username`, `profile`, `picture`, `website`, `gender`, `birthdate`, `zoneinfo`, `locale`, and `updated_at`.
 
-> For discussion: There is no point in trying to create scopes that also contains the user surname and family name. At the same time the `profile` scope delivers a little bit too much for most cases.
+The `profile` scope is pretty much intended as a scope for an Internet user wishing to create an account on a website. Claims such as `preferred_username`, `picture` and `website` indicates that. Of course, not all claims within the scope need to be delivered, but it is more useful to define more fine grained scopes. Also, for the sake of privacy a relying party should not ask for more claims than it actually requires. Therefore, this specification defines a set of scopes that combines standard claims with the claims defined in this specification.
+
+This specification specifically takes into consideration the Swedish eID solutions, and the attributes that are tied to a Swedish eID.
+
+For each scope defined below a set of claims is declared. Each declared claim has an indicator telling whether it is Mandatory or Optional within the given scope. A profile specification extending this attribute specification MAY change a declared claim's requirement from Optional to Mandatory, but MUST NOT lower the requirements from Mandatory to Optional. In those cases the extending specification need to define a new scope. Also, a profile specification extending this attribute MAY declare new claims, but MUST NOT remove any claims from the scope definition.
+
+<a name="natural-person-name-information"></a>
+### 3.1. Natural Person Name Information
+
+**Scope:** `http://scopes.oidc.se/1.0/naturalPersonName`
+
+**Description:** A scope that defines a claim set that provides basic natural person information without revealing the civic registration number of the subject.
+
+| Claim | Description/comment | Requirement |
+| :--- | :--- | :--- |
+| `family_name` | Surname/family name | Mandatory |
+| `given_name` | Given name | Mandatory |
+| `name` | Display name | Mandatory |
+
+<a name="natural-person-identity-personal-number"></a>
+### 3.2. Natural Person Identity - Personal Number
+
+**Scope:** `http://scopes.oidc.se/1.0/naturalPersonPnr`
+
+**Description:** The scope extends the `http://scopes.oidc.se/1.0/naturalPersonName` scope with a Swedish civic registration number (personnummer).
+
+| Claim | Description/comment | Requirement |
+| :--- | :--- | :--- |
+| `http://claims.oidc.se/1.0/`<br />`personalNumber` | Swedish civic registration number | Mandatory |
+| `family_name` | Surname/family name | Mandatory |
+| `given_name` | Given name | Mandatory |
+| `name` | Display name | Mandatory | 
+| `birthdate` | Date of birth | Optional | 
+
+<a name="natural-person-identity-eidas-identity"></a>
+### 3.3. Natural Person Identity - eIDAS Identity
+
+**Scope:** `http://scopes.oidc.se/1.0/naturalPersonEidas`
+
+**Description:** The scope provides personal identity information for a subject that has been authenticated via the eIDAS Framework.
+
+| Claim | Description/comment | Requirement |
+| :--- | :--- | :--- |
+| `http://claims.oidc.se/1.0/`<br />`eidas/prid` | Provisional ID | Mandatory |
+| `http://claims.oidc.se/1.0/`<br />`eidas/pridPersistence` | Provisional ID persistence indicator | Mandatory |
+| `http://claims.oidc.se/1.0/`<br />`eidas/personIdentifier` | Mapping of the eIDAS PersonIdentifier attribute | Mandatory |
+| `birthdate` | Date of birth | Mandatory | 
+| `family_name` | Surname/family name | Mandatory |
+| `given_name` | Given name | Mandatory |
+| `http://claims.oidc.se/1.0/country` | Country code for the eIDAS country that authenticated the subject. | Mandatory |
+| `txn` | ID of assertion issued by the member state node. | Mandatory |
+| `http://claims.oidc.se/`<br />`1.0/personalNumber` | The Swedish civic registration number of the subject. This claim is delivered if the Swedish eIDAS node can find a registered binding between the eIDAS person identifier and a Swedish civic registration number. | Optional |
+| `http://claims.oidc.se/1.0/`<br />`eidas/personalNumberBinding` | If the Swedish civic registration number is released, this claim is also included to indicate under which process the mapping between the eIDAS person identifier and the Swedish civic registration number was performed. | Optional |
+
+The Swedish eIDAS node can also deliver additional claims that need to be explicitly requested by the relying party. These claims are then delivered if available from the foreign member state node. The claims are:
+
+- `http://claims.oidc.se/1.0/birthName` - Birth name of the subject.
+- `http://claims.oidc.se/1.0/placeOfbirth` - Place of birth of the subject.
+- `gender` - Gender of the subject.
+- `address` - Current address of the subject.
+
+<a name="natural-person-identity-hsa-id"></a>
+### 3.4. Natural Person Identity - HSA-ID
+
+**Scope:** `http://scopes.oidc.se/1.0/naturalPersonHsaId`
+
+**Description:** The scope extends the `http://scopes.oidc.se/1.0/naturalPersonName` scope with a HSA-ID claim.
+
+| Claim | Description/comment | Requirement |
+| :--- | :--- | :--- |
+| `http://claims.oidc.se/`<br />`1.0/hsaid` | HSA-ID | Mandatory |
+| `family_name` | Surname/family name | Mandatory |
+| `given_name` | Given name | Mandatory |
+| `name` | Display name | Mandatory | 
+| `birthdate` | Date of birth | Optional | 
+
+<a name="natural-person-organizational-identity"></a>
+### 3.5. Natural Person Organizational Identity
+
+**Scope:** `http://scopes.oidc.se/1.0/naturalPersonOrgId`
+
+**Description:** The “Natural Person Organizational Identity” scope provides basic organizational identity information about a person. The organizational identity does not necessarily imply that the subject has any particular relationship with or standing within the organization, but rather that this identity has been issued/provided by that organization for any particular reason (employee, customer, consultant, etc.).
+
+| Claim | Description/comment | Requirement |
+| :--- | :--- | :--- |
+| `name` | Display name. The claim MAY contain personal information such as the given name or surname, but it MAY also be used as an anonymized display name, for example, "Administrator 123". This is decided by the issuing organization. | Mandatory |
+| `http://claims.oidc.se/`<br />`1.0/orgAffiliation` | Personal identifier and organizational number (`http://claims.oidc.se/1.0/orgNumber`). | Mandatory |
+| `http://claims.oidc.se/`<br />`1.0/orgName` | Organization name | Mandatory |
+| `http://claims.oidc.se/`<br />`1.0/orgNumber` | Swedish organization number. This number can always be derived from the mandatory orgAffiliation claim, but for simplicitly it is recommended that an attribute provider includes this claim. | Optional, but recommended | 
+
+<a name="authentication-information"></a>
+### 3.6. Authentication Information
+
+**Scope:** `http://scopes.oidc.se/1.0/authnInfo`
+
+**Description:** A scope that is used to request claims that represents information from the authentication process and information about the subject's credentials used to authenticate. 
+
+This specification declares all claims as optional. A profile specification extending this attribute specification MAY change requirements to Mandatory and declare additional claims.
+
+| Claim | Description/comment | Requirement |
+| :--- | :--- | :--- |
+| `txn` | Transaction identifier for the operation. | Optional |
+| `http://claims.oidc.se/`<br />`1.0/userCertificate` | The certificate presented by the user during the authentication process. | Optional |
+| `http://claims.oidc.se/`<br />`1.0/credentialValidFrom` | The start time of the user credential's validity. | Optional |
+| `http://claims.oidc.se/`<br />`1.0/credentialValidTo` | The end time of the user credential's validity. | Optional |
+| `http://claims.oidc.se/`<br />`1.0/deviceIp` | IP address of user's device holding the credentials. | Optional | 
+
+Note: The `http://claims.oidc.se/1.0/authnEvidence` (authentication evidence) claim is not declared in the scope and need to be requested explicitly if required. The reason for this is that few relying parties are likely to be interested in that kind of detailed authentication information.
+
+<a name="signatures"></a>
+### 3.7. Signatures
+
+**Scope:** `http://scopes.oidc.se/1.0/signature`
+
+**Description:** This scope services two purposes; it indicates for the identity provider that the current authentication request is a request for signature, and, it requests the claims declared below.
+
+For details about signing, see "Signature Extension for OpenID Connect", \[[SignExt](#signext)\].
+
+> TODO: Since we support two different signing models with different results we should probably define two separate scopes ... And we perhaps should define those in \[[SignExt](#signext)\].
+
 
 <a name="mappings-to-other-specifications"></a>
 ## 4. Mappings to Other Specifications
@@ -318,13 +500,13 @@ The following table defines a mapping from the SAML attribute names defined in "
 | Gender | urn:oid:1.3.6.1.5.5.7.9.3 (gender) | `gender` | \[[OpenID.Core](#openid-core)\] | \[OpenID.Core\] defines possible values to be `female` and `male`. \[[SC.AttrSpec](#sc-attrspec)\] defines the possible values to be `M`/`m`, `F`/`f` and `U`/`u` (for unspecified). |
 | Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `http://claims.oidc.se/`<br/>`1.0/personalNumber` | This specification | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish co-ordination number. This specification defines this claim to be `http://claims.oidc.se/1.0/coordinationNumber`. |
 | Date of birth | urn:oid:1.3.6.1.5.5.7.9.1 (dateOfBirth) | `birthdate` | \[[OpenID.Core](#openid-core)\] | The format (YYYY-MM-DD) is the same for both the dateOfBirth SAML-attribute and the `birthdate` claim. |
-| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | - | - | No mapping exists at this moment. |
+| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | ``http://claims.oidc.se/`<br />`1.0/birthName`` | This specification | |
 | Street address | urn:oid:2.5.4.9 (street) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
 | Post office box | urn:oid:2.5.4.18 (postOfficeBox) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. The `street_address` MAY include house number, street name, Post Office Box, and multi-line extended street address information.   |
 | Postal code | urn:oid:2.5.4.17 (postalCode) | `address.postal_code` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
 | Locality | urn:oid:2.5.4.7 (l) | `address.locality` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Country | urn:oid:2.5.4.6 (c) | `address.country` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Place of birth | urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth) | - | - | No mapping exists at this moment. |
+| Country | urn:oid:2.5.4.6 (c) | `address.country` or<br />`http://claims.oidc.se/`<br />`1.0/country` | \[[OpenID.Core](#openid-core)\]<br />This specification | Depends on in which context country is to be represented. |
+| Place of birth | urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth) | `http://claims.oidc.se/`<br />`1.0/placeOfbirth` | This specification | |
 | Country of citizenship | urn:oid:1.3.6.1.5.5.7.9.4 (countryOfCitizenship) | - | - | No mapping exists at this moment. |
 | Country of Residence | urn:oid:1.3.6.1.5.5.7.9.5 (countryOfResidence) | - | - | No mapping exists at this moment. |
 | Telephone number | urn:oid:2.5.4.20 (telephoneNumber) | `phone_number` | \[[OpenID.Core](#openid-core)\] | See also `phone_number_verified`. |
@@ -387,10 +569,12 @@ The following table defines a mapping from the attribute names defined in "Freja
 | Type of address | `addresses[0].type` | TDB | - | TBD |
 | Source of address information | `addresses[0].sourceType` | TBD | - | TBD |
 
-
-
 <a name="normative-references"></a>
 ## 5. Normative References
+
+<a name="rfc2119"></a>
+**\[RFC2119\]**
+> [Bradner, S., Key words for use in RFCs to Indicate Requirement Levels, March 1997](https://www.ietf.org/rfc/rfc2119.txt).
 
 <a name="openid-core"></a>
 **\[OpenID.Core\]**
@@ -407,6 +591,10 @@ The following table defines a mapping from the attribute names defined in "Freja
 <a name="rfc8417"></a>
 **\[RFC8417\]**
 > [P. Hunt, M. Jones, W. Denniss, M. Ansari, "Security Event Token (SET)", July 2018](https://tools.ietf.org/html/rfc8417).
+
+<a name="iso3166"></a>
+**\[ISO3166\]**
+> Codes for the representation of names of countries and their subdivisions Part 1: Country codes, ISO standard, ISO 3166-1.
 
 <a name="signext"></a>
 **\[SignExt\]**
