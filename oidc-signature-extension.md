@@ -72,7 +72,7 @@ If we add the sign request extension as a request object this would mean that we
 <a name="signature-response-data"></a>
 ## 3. Signature Response Data
 
-- `http://claims.oidc.se/userSignature`
+- `https://claims.oidc.se/userSignature`
 - and additional claims ...
 
 <a name="normative-references"></a>
