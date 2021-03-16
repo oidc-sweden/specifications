@@ -1,4 +1,6 @@
-# Signature Extension for OpenID Connect 1.0 - draft 01
+# Signature Extension for OpenID Connect
+
+### Version: 1.0 - draft 01 - 2021-03-15
 
 ## Abstract
 
@@ -10,6 +12,12 @@ This specification defines an extension to OpenID Connect to facilitate the use 
 1. [**Introduction**](#introduction)
 
     1.1. [Requirements Notation and Conventions](#requirements-notation-and-conventions)
+    
+2. [**Signature Models**](#signature-models)
+    
+    2.1. [Delegated Signing](#delegated-signing)
+    
+    2.2. [Federated Signing](#federated-signing)
 
 2. [**Signature Request Object**](#signature-request-object)
 
@@ -22,9 +30,7 @@ This specification defines an extension to OpenID Connect to facilitate the use 
 <a name="introduction"></a>
 ## 1. Introduction
 
-TODO: 
-
-- Describe different types of signature use cases; BankID/Freja and federated signing.
+This specification defines an extension to OpenID Connect to facilitate that a user digitally signs data provided by a Relying Party at the OpenID Provider.
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -33,8 +39,71 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 These keywords are capitalized when used to unambiguously specify requirements over protocol features and behavior that affect the interoperability and security of implementations. When these words are not capitalized, they are meant in their natural-language sense.
 
+<a name="signature-models"></a>
+## 2. Signature Models
+
+This specification supports two types of signature models, or use cases; *Delegated Signing* and *Federated Signing*. 
+
+As we will see, an OpenID Provider that supports the Delegated Signing model will automatically also support the Federated Signing model, but an OpenID Provider that supports the Federated Signing model does not necessarily support the Delegated Signing model.
+
+<a name="delegated-signing"></a>
+#### 2.1. Delegated Signing
+
+For the delegated signing model the Relying Party delegates the signing operation to the OpenID Provider by sending an authentication request with a sign extension. The flow below illustrates each step in for the delegated signing model.
+
+![Delegated signing](img/delegated-signing.png)
+
+1. The user wants to sign something at the Relying Party, for example a form, and clicks "Sign".
+
+2. The Relying Party (client) initiates an "authentication for signature" by redirecting the user to the OpenID Provider along with an authentication request containing a sign extension (see chapter XX below).
+
+3. During the "authentication for signature" the user actually performs a signature of the "to-be-signed" data that was supplied as an extension to the authentication request. In this step the OpenID Provider also displays a summary of what is being signed.
+
+4. After a completed signature operation the user agent is redirected back to the client along with an authorization code.
+
+5. Next, the client obtains an ID token that contains information about the signee along with the signed data.
+
+6. Finally, the completed signature operation is acknowledged to the user.
+
+The advantage with this use case is that it is simple and straightforward. The disadvantage is that only OpenID Providers that actually supports eID:s that support creating signatures can be used.
+
+
+<a name="federated-signing"></a>
+#### 2.2. Federated Signing
+
+The federated signature model is defined within the [Swedish eID Framework](https://docs.swedenconnect.se/technical-framework) and comprises an additional role, the Signature Service.
+
+A Signature Service is a stand-alone service that exposes a signature API to its relying parties. Within the Swedish eID Framework this API is an extension to OASIS Digital Signature Service (\[[SC.DssExt](#sc-dssext)\]). The Signature Service generates a private key and a certificate on behalf of the user and signs the data with this key. Before this is done the Signature Service needs to authenticate the user and obtain his or hers approval to sign. This is done by sending an authentication request to an Identity Provider (in this specification an OpenID Provider).
+
+One advantage of this model is that the actual signature is created at the Signature Service which means that the actual eID being used does not have to be PKI-based, and/or, have the capability to sign. Another advantage is that signatures can be created according to a format decided by the Relying Party, independently of what is supported by any OpenID Providers used by the Relying Party.
+
+One obvious drawback with this model is that is more complex than the delegated signing model. 
+
+The flow below illustrates each step in this use case.
+
+![Federated signing](img/federated-signing.png)
+
+1. The user wants to sign something at the Relying Party, for example a form, and clicks "Sign".
+
+2. The Relying Party (client) now compiles a SignRequest message and includes this when it posts the user agent to the Signature Service. This SignRequest message is according to \[[SC.DssExt](#sc-dssext)\] and contains one, or several, digests of the data to be signed along with elements such as required signature format, required user attributes, which identity provider to use, and much more.
+
+3. Before the Signature Service can proceed it needs to authenticate the user, and obtain his or hers approval to sign the data. So the Signature Service, that is now an OIDC client, initiates an "authentication for signature" by redirecting the user to the OpenID Provider along with an authentication request containing a sign extension (see chapter XX below).
+
+4. The user now authenticates. During this process the OpenID Provider displays a summary of what is to be signed (the sign message). Note that depending on whether the OpenID Provider has signing capabilities or not, the user may actually perform a signature at this stage (see XXX below).
+
+5. After a completed "authentication for signature" operation the user agent is redirected back to the Signature Service along with an authorization code.
+
+6. Next, the Signature Service obtains an ID token that contains information about the user along with a user consent for signature.
+
+7. Now the Signature Service generates a key pair, and signs the data received from the Relying Party (step 2).
+
+8. A SignResponse message according to \[[SC.DssExt](#sc-dssext)\] is now created and posted back to the Relying Party.
+
+9. Finally, the completed signature operation is acknowledged to the user.
+
+
 <a name="the-signature-request-object"></a>
-## 2. The Signature Request Object
+## 3. The Signature Request Object
 
 Example of a Request Object holding the sign request extension:
 
@@ -70,13 +139,13 @@ If we add the sign request extension as a request object this would mean that we
 
 
 <a name="signature-response-data"></a>
-## 3. Signature Response Data
+## 4. Signature Response Data
 
 - `https://claims.oidc.se/userSignature`
 - and additional claims ...
 
 <a name="normative-references"></a>
-## 4. Normative References
+## 5. Normative References
 
 <a name="rfc2119"></a>
 **\[RFC2119\]**
