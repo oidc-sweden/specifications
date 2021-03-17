@@ -1,6 +1,6 @@
 # Attribute Specification for the Swedish OpenID Connect Profile 
 
-### Version: 1.0 - draft 01 - 2021-02-24
+### Version: 1.0 - draft 01 - 2021-03-17
 
 ## Abstract
 
@@ -39,11 +39,11 @@ This specification defines claims (attributes) and scopes for the Swedish OpenID
     
     2.3.1. [User Certificate](#user-certificate)
     
-    2.3.2. [User Credentials Validity](#user-credentials-validity)
+    2.3.2. [User Signature](#user-signature)
     
-    2.3.3. [Authentication Evidence](#authentication-evidence)
+    2.3.3. [User Credentials Validity](#user-credentials-validity)
     
-    2.3.4. [Signature Claims](#signature-claims)
+    2.3.4. [Authentication Evidence](#authentication-evidence)
     
     2.4. [General Purpose Claims](#general-purpose-claims)
 
@@ -52,8 +52,6 @@ This specification defines claims (attributes) and scopes for the Swedish OpenID
     2.4.2. [Birth Name](#birth-name)
     
     2.4.3. [Place of Birth](#place-of-birth)
-    
-    2.5. [Request Object Claims](#request-object-claims)
 
 3. [**Scopes**](#scopes)
 
@@ -68,8 +66,6 @@ This specification defines claims (attributes) and scopes for the Swedish OpenID
     3.5. [Natural Person Organizational Identity](#natural-person-organizational-identity)
 
     3.6. [Authentication Information](#authentication-information)
-
-    3.7. [Signatures](#signatures)
 
 4. [**Mappings to Other Specifications**](#mappings-to-other-specifications)
 
@@ -232,13 +228,24 @@ An "authentication information" claim delivers information about a specific auth
 
 **Type:** String (Base64 encoded)
 
+<a name="user-signature"></a>
+#### 2.3.2. User Signature
+
+**Claim:** `https://claims.oidc.se/1.0/userSignature`
+
+**Description:** A signature that was produced by the subject (user) during the authentication, or signature, process.
+
+> Note: This specification does not state any requirements on the type of signature object that is stored as a claim value.
+
+**Type:** String (Base64 encoded)
+
 <a name="user-credentials-validity"></a>
-#### 2.3.2. User Credentials Validity
+#### 2.3.3. User Credentials Validity
 
 A relying party may wish to get information about the user's credentials used during the authentication process to serve as input to its risk based monitoring system, or simply to inform the user about "your eID is about to expire" (even though it is more natural to have the OP doing this). This section defines the corresponding claims to attributes and properties that are in use today in Swedish eID solutions.
 
 <a name="credential-valid-from"></a>
-##### 2.3.2.1. Credential Valid From
+##### 2.3.3.1. Credential Valid From
 
 **Claim:** `https://claims.oidc.se/1.0/credentialValidFrom`
 
@@ -247,7 +254,7 @@ A relying party may wish to get information about the user's credentials used du
 **Type:** Integer - seconds since epoch (1970-01-01)
 
 <a name="credential-valid-to"></a>
-##### 2.3.2.2. Credential Valid To
+##### 2.3.3.2. Credential Valid To
 
 **Claim:** `https://claims.oidc.se/1.0/credentialValidTo`
 
@@ -256,7 +263,7 @@ A relying party may wish to get information about the user's credentials used du
 **Type:** Integer - seconds since epoch (1970-01-01)
 
 <a name="device-ip-address"></a>
-##### 2.3.2.3. Device IP Address
+##### 2.3.3.3. Device IP Address
 
 **Claim:** `https://claims.oidc.se/1.0/deviceIp`
 
@@ -267,7 +274,7 @@ A relying party may wish to get information about the user's credentials used du
 **Type:** String - An IPv4 or IPv6 address.
 
 <a name="authentication-evidence"></a>
-### 2.3.3. Authentication Evidence
+### 2.3.4. Authentication Evidence
 
 **Claim:** `https://claims.oidc.se/1.0/authnEvidence`
 
@@ -276,38 +283,6 @@ A relying party may wish to get information about the user's credentials used du
 > Note: This specification does not further specify the contents of the claim.  
 
 **Type:** String (Base64 encoded)
-
-<a name="signature-claims"></a>
-### 2.3.4. Signature Claims
-
-The [Signature Extension for OpenID Connect](#signext), \[[SignExt](#signext)\], specification is a part of the Swedish OpenID Connect profile and defines an extension that enables a relying party to request that the user signs some data (or authenticates for signature). This section defines the claims that may be delivered as a result of such a process. 
-
-<a name="user-signature"></a>
-##### 2.3.4.1. User Signature
-
-**Claim:** `https://claims.oidc.se/1.0/userSignature`
-
-**Description:** A signature that was produced by the subject (user) during the authentication, or signature, process.
-
-> Note: This specification does not state any requirements on the type of signature object that is stored as a claim value.
-
-**Type:** String (Base64 encoded)
-
-##### 2.3.4.2. Signature Activation Data
-
-**Claim:** `https://claims.oidc.se/1.0/sad`
-
-**Description:** The sad attribute holds Signature Activation Data that is required by a signature service in order to service a signature request in accordance with CEN EN 419 241-2. See further the "Signature Activation Protocol for Federated Signing", \[[SC.SAP](#sc-sap)\], specification.
-
-**Type:** String
-
-##### 2.3.4.3. Sign Message Digest
-
-**Claim:** `https://claims.oidc.se/1.0/signMessageDigest`
-
-**Description:** The signMessageDigest claim is delivered as a proof that an identity provider displayed a sign message for the user and that the user actively confirmed acceptance of this sign message. See section 3.2.4 of \[[SC.AttrSpec](#sc-attrspec)\] for details.
-
-> Note: For federated signing according to the Sweden Connect model only.
 
 <a name="general-purpose-claims"></a>
 ### 2.4. General Purpose Claims
@@ -340,11 +315,6 @@ This section contains definitions of general purpose claims that do not fit into
 **Description:** Claim representing the place of birth for the subject. This specification does not define "place". Depending on the context it may be "City" or "City, Country" or any other representation.
 
 **Type:** String 
-
-<a name="request-object-claims"></a>
-### 2.5. Request Object Claims
-
-> TODO: Specific claims that are sent in a Request Object (in a JWT for the `request` or `request_uri` parameters).
 
 <a name="scopes"></a>
 ## 3. Scopes
@@ -470,18 +440,6 @@ This specification declares all claims as optional. A profile specification exte
 
 Note: The `https://claims.oidc.se/1.0/authnEvidence` (authentication evidence) claim is not declared in the scope and need to be requested explicitly if required. The reason for this is that few relying parties are likely to be interested in that kind of detailed authentication information.
 
-<a name="signatures"></a>
-### 3.7. Signatures
-
-**Scope:** `https://scopes.oidc.se/1.0/signature`
-
-**Description:** This scope services two purposes; it indicates for the identity provider that the current authentication request is a request for signature, and, it requests the claims declared below.
-
-For details about signing, see "Signature Extension for OpenID Connect", \[[SignExt](#signext)\].
-
-> TODO: Since we support two different signing models with different results we should probably define two separate scopes ... And we perhaps should define those in \[[SignExt](#signext)\].
-
-
 <a name="mappings-to-other-specifications"></a>
 ## 4. Mappings to Other Specifications
 
@@ -500,7 +458,7 @@ The following table defines a mapping from the SAML attribute names defined in "
 | Gender | urn:oid:1.3.6.1.5.5.7.9.3 (gender) | `gender` | \[[OpenID.Core](#openid-core)\] | \[OpenID.Core\] defines possible values to be `female` and `male`. \[[SC.AttrSpec](#sc-attrspec)\] defines the possible values to be `M`/`m`, `F`/`f` and `U`/`u` (for unspecified). |
 | Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | This specification | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish co-ordination number. This specification defines this claim to be `https://claims.oidc.se/1.0/coordinationNumber`. |
 | Date of birth | urn:oid:1.3.6.1.5.5.7.9.1 (dateOfBirth) | `birthdate` | \[[OpenID.Core](#openid-core)\] | The format (YYYY-MM-DD) is the same for both the dateOfBirth SAML-attribute and the `birthdate` claim. |
-| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | ``https://claims.oidc.se/`<br />`1.0/birthName`` | This specification | |
+| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | `https://claims.oidc.se/`<br />`1.0/birthName`` | This specification | |
 | Street address | urn:oid:2.5.4.9 (street) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
 | Post office box | urn:oid:2.5.4.18 (postOfficeBox) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. The `street_address` MAY include house number, street name, Post Office Box, and multi-line extended street address information.   |
 | Postal code | urn:oid:2.5.4.17 (postalCode) | `address.postal_code` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
@@ -521,8 +479,8 @@ The following table defines a mapping from the SAML attribute names defined in "
 | User certificate | urn:oid:1.2.752.201.3.10 (userCertificate) | `https://claims.oidc.se`<br />`/1.0/userCertificate` | This specification | |
 | User signature | urn:oid:1.2.752.201.3.11 (userSignature) | `https://claims.oidc.se/`<br />`1.0/userSignature` | This specification | |
 | Authentication server signature | urn:oid:1.2.752.201.3.13 (authServerSignature) | `https://claims.oidc.se/`<br />`1.0/authnEvidence` | This specification | |
-| Signature activation data | urn:oid:1.2.752.201.3.12 (sad) | `https://claims.oidc.se`<br />`1.0/sad` | This specification | |
-| Sign message digest | urn:oid:1.2.752.201.3.14 (signMessageDigest) | `https://claims.oidc.se/`<br />`1.0/signMessageDigest` | This specification | |
+| Signature activation data | urn:oid:1.2.752.201.3.12 (sad) | `https://claims.oidc.se`<br />`1.0/sad` | \[[SignExt](#signext)\] | |
+| Sign message digest | urn:oid:1.2.752.201.3.14 (signMessageDigest) | `https://claims.oidc.se/`<br />`1.0/signMessageDigest` | \[[SignExt](#signext)\] | |
 | Provisional identifier | urn:oid:1.2.752.201.3.4 (prid) | `https://claims.oidc.se/`<br />`1.0/eidas/prid` | This specification | eIDAS specific |
 | Provisional identifier persistence indicator | urn:oid:1.2.752.201.3.5 (pridPersistence) | `https://claims.oidc.se/`<br />`1.0/eidas/pridPersistence` | This specification | eIDAS specific |
 | Personal number binding URI | urn:oid:1.2.752.201.3.6 (personalIdentityNumberBinding) | `https://claims.oidc.se/1.0/`<br />`eidas/personalNumberBinding` | This specification | eIDAS specific |
@@ -607,10 +565,6 @@ The following table defines a mapping from the attribute names defined in "Freja
 <a name="sc-constructedattr"></a>
 **\[SC.ConstructedAttr\]**
 > [eIDAS Constructed Attributes Specification for the Swedish eID Framework - Version 1.1, 2020-01-17](https://docs.swedenconnect.se/technical-framework/latest/11_-_eIDAS_Constructed_Attributes_Specification_for_the_Swedish_eID_Framework.html).
-
-<a name="sc-sap"></a>
-**\[SC.SAP\]**
-[Signature Activation Protocol for Federated Signing - Version 1.1, 2020-01-17](https://docs.swedenconnect.se/technical-framework/latest/13_-_Signature_Activation_Protocol.html).
 
 <a name="sambi-attrspec"></a>
 **\[Sambi.AttrSpec\]**
