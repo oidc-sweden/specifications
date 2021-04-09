@@ -336,6 +336,9 @@ A Relying Party wishing to issue a request for signature MUST include either the
 
 A request for signature MUST contain the [Signature Request Parameter Claim](#the-signature-request parameter-claim) and its inclusion in the request MUST follow the requirements stated in sections [3.2.1](#placement-of-the-parameter-in-an-authentication-request), "[Placement of the Parameter in an Authentication Request](#placement-of-the-parameter-in-an-authentication-request)" and [3.2.2](#security-requirements), "[Security Requirements](#security-requirements)".
 
+The authentication request MUST contain the `prompt` parameter<sup>1</sup> and its value MUST be include the `login` parameter value.  The reason for this is that a signature must never be generated based on a previous authentication.
+
+> \[1\]: The `prompt` parameter can be provided either as an ordinary request parameter or as a field in a Request Object.
 
 <a name="requirements-on-signing-user"></a>
 #### 4.1.1. Requirements on Signing User
@@ -393,6 +396,8 @@ These OpenID providers can process signature requests exactly the same, independ
 This section defines requirements that apply to OpenID Providers that process requests for signature.
 
 An OpenID Provider receiving a request containing both the `https://scopes.oidc.se/1.0/delegatedSign` and the `https://scopes.oidc.se/1.0/federatedSign` scope MUST be respond with an error.
+
+An OpenID Provider that receives a request for signature MUST authenticate the user, even if the user has a previous authentication session at the OpenID Provider.
 
 TODO: 
 
