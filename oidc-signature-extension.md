@@ -1,6 +1,6 @@
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 01 - 2021-03-17
+### Version: 1.0 - draft 01 - 2021-04-09
 
 ## Abstract
 
@@ -259,7 +259,7 @@ The following is a non-normative example of the claims in a Request Object befor
   "https://claims.oidc.se/1.0/signRequest": {
     "tbs_data" : "VGhpcyBpcyB0aGUgZGF0YSB0aGF0IEkgd2FudCB0byBzaWdu",
     "sign_message" : {
-      "mime_type" : "test/plain",
+      "mime_type" : "text/plain",
       "message" : "VGhpcyBpcyB0ZXh0IGRpc3BsYXllZCBmb3IgdGhlIHVzZXI=",
       "require_consent" : true
     }
