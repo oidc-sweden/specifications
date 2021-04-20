@@ -20,10 +20,8 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
     2.1.1. [Swedish Personal Identity Number](#swedish-personal-identity-number)
     
     2.1.2. [Swedish co-ordination number](#swedish-coordination-number)
-    
-    2.1.3. [HSA-ID](#hsa-id)
 
-    2.1.4. [eIDAS Person Identity](#eidas-person-identity)
+    2.1.3. [eIDAS Person Identity](#eidas-person-identity)
     
     2.2. [Organizational Identity Claims](#organizational-identity-claims)
     
@@ -59,13 +57,11 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
     
     3.2. [Natural Person Identity - Personal Number](#natural-person-identity-personal-number)
     
-    3.3. [Natural Person Identity - eIDAS Identity](#natural-person-identity-eidas-identity)
+    3.3. [Natural Person Identity - eIDAS Identity](#natural-person-identity-eidas-identity)    
     
-    3.4. [Natural Person Identity - HSA-ID](#natural-person-identity-hsa-id)
-    
-    3.5. [Natural Person Organizational Identity](#natural-person-organizational-identity)
+    3.4. [Natural Person Organizational Identity](#natural-person-organizational-identity)
 
-    3.6. [Authentication Information](#authentication-information)
+    3.5. [Authentication Information](#authentication-information)
 
 4. [**Mappings to Other Specifications**](#mappings-to-other-specifications)
 
@@ -82,7 +78,7 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
 
 This specification aims to provide definitions of a common set of attributes (claims) that primarily is be used by Swedish OpenID Connect providers and clients, but can also be used in a pure OAuth2 context. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
 
-Special purpose attributes, such as the healthcare specific attributes defined in \[[Sambi.AttrSpec](#sambi-attrspec)\], are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
+Special purpose attributes, such as the healthcare specific attributes, are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -121,24 +117,15 @@ The claims defined in this specification are named in a collision-resistant mann
 
 > **Note:** The processes concerning the issuance of coordination numbers is currently being reviewed (see [Omstart av systemet med samordningsnummer](https://www.regeringen.se/pressmeddelanden/2020/01/omstart-av-systemet-med-samordningsnummer/)). The coordination numbers that are in use today will probably need an accomplishing attribute informing about the issuer and how trustworthy the number is.
 
-<a name="hsa-id"></a>
-#### 2.1.3. HSA-ID
-
-**Claim:** `https://claims.oidc.se/1.0/hsaid`
-
-**Description:** Person identifier used by Swedish health care organizations.
-
-**Type:** String with a format according to \[[Sambi.AttrSpec](#sambi-attrspec)\].
-
 <a name="eidas-person-identity"></a>
-#### 2.1.4. eIDAS Person Identity
+#### 2.1.3. eIDAS Person Identity
 
 When using the Swedish eIDAS node to obtain an identity from within the eIDAS federation a set of identity claims are received. 
 
 The Swedish eIDAS-node enriches attribute statements received from a member state eIDAS node with the provisional ID (prid) and provisional ID persistence (pridPersistence) attributes in order to make it easier for Swedish relying parties to handle foreign identities in an uniform manner, see section 3.3.1 of \[[SC.AttrSpec](#sc-attrspec)\].
 
 <a name="provisional-id"></a>
-##### 2.1.4.1. Provisional ID
+##### 2.1.3.1. Provisional ID
 
 **Claim:** `https://claims.oidc.se/1.0/eidas/prid`
 
@@ -147,7 +134,7 @@ The Swedish eIDAS-node enriches attribute statements received from a member stat
 **Type:** String (format according to \[[SC.ConstructedAttr](#sc-constructedattr)\]).
 
 <a name="provisional-id-persistence-indicator"></a>
-##### 2.1.4.2. Provisional ID Persistence Indicator
+##### 2.1.3.2. Provisional ID Persistence Indicator
 
 **Claim:** `https://claims.oidc.se/1.0/eidas/pridPersistence`
 
@@ -156,7 +143,7 @@ The Swedish eIDAS-node enriches attribute statements received from a member stat
 **Type:** String with the possible values `A`, `B` or `C` (see \[[SC.ConstructedAttr](#sc-constructedattr)\]).
 
 <a name="eidas-person-identifier"></a>
-##### 2.1.4.3. eIDAS Person Identifier
+##### 2.1.3.3. eIDAS Person Identifier
 
 **Claim:** `https://claims.oidc.se/1.0/eidas/personIdentifier`
 
@@ -164,7 +151,7 @@ The Swedish eIDAS-node enriches attribute statements received from a member stat
 
 **Type:** String
 
-##### 2.1.4.4. Personal Identity Number Binding
+##### 2.1.3.4. Personal Identity Number Binding
 
 **Claim:** `https://claims.oidc.se/1.0/eidas/personalNumberBinding`
 
@@ -392,23 +379,8 @@ The Swedish eIDAS node can also deliver additional claims that need to be explic
 - `gender` - Gender of the subject.
 - `address` - Current address of the subject.
 
-<a name="natural-person-identity-hsa-id"></a>
-### 3.4. Natural Person Identity - HSA-ID
-
-**Scope:** `https://scopes.oidc.se/1.0/naturalPersonHsaId`
-
-**Description:** The scope extends the `https://scopes.oidc.se/1.0/naturalPersonName` scope with a HSA-ID claim.
-
-| Claim | Description/comment | Requirement |
-| :--- | :--- | :--- |
-| `https://claims.oidc.se/`<br />`1.0/hsaid` | HSA-ID | Mandatory |
-| `family_name` | Surname/family name | Mandatory |
-| `given_name` | Given name | Mandatory |
-| `name` | Display name | Mandatory | 
-| `birthdate` | Date of birth | Optional | 
-
 <a name="natural-person-organizational-identity"></a>
-### 3.5. Natural Person Organizational Identity
+### 3.4. Natural Person Organizational Identity
 
 **Scope:** `https://scopes.oidc.se/1.0/naturalPersonOrgId`
 
@@ -422,7 +394,7 @@ The Swedish eIDAS node can also deliver additional claims that need to be explic
 | `https://claims.oidc.se/`<br />`1.0/orgNumber` | Swedish organization number. This number can always be derived from the mandatory orgAffiliation claim, but for simplicitly it is recommended that an attribute provider includes this claim. | Optional, but recommended | 
 
 <a name="authentication-information"></a>
-### 3.6. Authentication Information
+### 3.5. Authentication Information
 
 **Scope:** `https://scopes.oidc.se/1.0/authnInfo`
 
@@ -486,7 +458,7 @@ The following table defines a mapping from the SAML attribute names defined in "
 | Personal number binding URI | urn:oid:1.2.752.201.3.6 (personalIdentityNumberBinding) | `https://claims.oidc.se/1.0/`<br />`eidas/personalNumberBinding` | This specification | eIDAS specific |
 | eIDAS uniqueness identifier | urn:oid:1.2.752.201.3.7 (eidasPersonIdentifier) | `https://claims.oidc.se/`<br />`1.0/eidas/personIdentifier` | This specification | eIDAS specific |
 | eIDAS Natural Person Address | urn:oid:1.2.752.201.3.9 (eidasNaturalPersonAddress) | `address` | \[[OpenID.Core](#openid-core)\] | Mapping of the eIDAS CurrentAddress attribute. |
-| HSA-ID | urn:oid:1.2.752.29.6.2.1 (employeeHsaId) | `https://claims.oidc.se/`<br />`1.0/hsaid` | This specification | See also [[Sambi.AttrSpec](#sambi-attrspec)\]. |
+| HSA-ID | urn:oid:1.2.752.29.6.2.1 (employeeHsaId) | - | - | Sector specific attribute. Should be defined elsewhere. |
 
 
 <a name="bankid"></a>
@@ -565,10 +537,6 @@ The following table defines a mapping from the attribute names defined in "Freja
 <a name="sc-constructedattr"></a>
 **\[SC.ConstructedAttr\]**
 > [eIDAS Constructed Attributes Specification for the Swedish eID Framework - Version 1.1, 2020-01-17](https://docs.swedenconnect.se/technical-framework/latest/11_-_eIDAS_Constructed_Attributes_Specification_for_the_Swedish_eID_Framework.html).
-
-<a name="sambi-attrspec"></a>
-**\[Sambi.AttrSpec\]**
-> [Sambi Attributspecifikation, version 1.5](https://www.sambi.se/wordpress/wp-content/uploads/2019/05/Sambi_Attributspecifikation_1.5.pdf).
 
 <a name="bankid-api"></a>
 **\[BankID.API\]**
