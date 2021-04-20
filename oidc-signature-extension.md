@@ -1,6 +1,6 @@
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 01 - 2021-04-09
+### Version: 1.0 - draft 01 - 2021-04-20
 
 ## Abstract
 
@@ -467,7 +467,7 @@ TODO
 
 <a name="attr-spec"></a>
 **\[AttrSpec\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
+> [Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
 
 <a name="sc-dssext"></a>
 **\[SC.DssExt\]**

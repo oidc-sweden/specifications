@@ -1,10 +1,10 @@
-# Attribute Specification for the Swedish OpenID Connect Profile 
+# Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
 
-### Version: 1.0 - draft 01 - 2021-03-17
+### Version: 1.0 - draft 01 - 2021-04-20
 
 ## Abstract
 
-This specification defines claims (attributes) and scopes for the Swedish OpenID Connect profile.
+This specification defines claims (attributes) and scopes for the Swedish OAuth2 and OpenID Connect profiles.
 
 
 ## Table of Contents
@@ -80,7 +80,7 @@ This specification defines claims (attributes) and scopes for the Swedish OpenID
 <a name="introduction"></a>
 ## 1. Introduction
 
-This specification aims to provide definitions of a common set of attributes (claims) that may be used by Swedish OpenID Connect providers and clients. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
+This specification aims to provide definitions of a common set of attributes (claims) that primarily is be used by Swedish OpenID Connect providers and clients, but can also be used in a pure OAuth2 context. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
 
 Special purpose attributes, such as the healthcare specific attributes defined in \[[Sambi.AttrSpec](#sambi-attrspec)\], are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
 
