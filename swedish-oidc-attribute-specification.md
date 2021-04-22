@@ -1,6 +1,6 @@
 # Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
 
-### Version: 1.0 - draft 01 - 2021-04-20
+### Version: 1.0 - draft 01 - 2021-04-21
 
 ## Abstract
 
