@@ -1,6 +1,6 @@
 # Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
 
-### Version: 1.0 - draft 01 - 2021-04-21
+### Version: 1.0 - draft 01 - 2021-04-23
 
 ## Abstract
 
@@ -50,6 +50,8 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
     2.4.2. [Birth Name](#birth-name)
     
     2.4.3. [Place of Birth](#place-of-birth)
+
+    2.4.4. [Age](#age)
 
 3. [**Scopes**](#scopes)
 
@@ -302,6 +304,15 @@ This section contains definitions of general purpose claims that do not fit into
 **Description:** Claim representing the place of birth for the subject. This specification does not define "place". Depending on the context it may be "City" or "City, Country" or any other representation.
 
 **Type:** String 
+
+<a name="age"></a>
+#### 2.4.4. Age
+
+**Claim:** `https://claims.oidc.se/1.0/age`
+
+**Description:** Claim representing the age (in years) of the subject person. 
+
+**Type:** Integer
 
 <a name="scopes"></a>
 ## 3. Scopes

@@ -1,6 +1,6 @@
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 01 - 2021-04-21
+### Version: 1.0 - draft 01 - 2021-04-23
 
 ## Abstract
 
@@ -330,6 +330,7 @@ The "Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles"
 | `given_name` | Given name. | \[[OpenID.Core](#openid-core)\] |
 | `name` | Display name/full name. | \[[OpenID.Core](#openid-core)\] |
 | `birthdate` | Date of birth. | \[[OpenID.Core](#openid-core)\] |
+| `https://claims.oidc.se/`<br />`1.0/age` | Age of the subject (end-user). | \[[AttrSpec](#attr-spec)\] |
 | `txn` | Transaction identifier. | \[[RFC8417](#rfc8417)\] |
 
 <a name="mandatory-identity-scopes"></a>
