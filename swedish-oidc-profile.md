@@ -236,26 +236,14 @@ For client authentication requirements, see [3.1.1](#client-authentication) belo
 <a name="client-authentication"></a>
 #### 3.1.1. Client Authentication
 
-In order to support legacy solutions where mutual TLS is used for client authentication this profile allows two methods for client authentication at the Token endpoint; `private_key_jwt` ([3.1.1.1](#signed-jwt-private-key-jwt)) and `client_secret_basic` ([3.1.1.2](#mutual-tls-client-secret-basic)).
+OpenID Providers compliant with this profile MUST support the `private_key_jwt` method for client authentication at the Token endpoint, and MAY support other methods as specified in section 9 of \[[OpenID.Core](#openid-core)\].
 
-OpenID Providers compliant with this profile MUST support the `private_key_jwt` method and MAY support `client_secret_basic` method if all requirements in section [3.1.1.2](#mutual-tls-client-secret-basic) are fulfilled. Any other authentication methods MUST NOT be accepted.
+The `none` authentication method MAY be used in the cases where client authentication is performed by other means, for example by mutual TLS. In these cases the authentication process MUST resolve a registered `client_id`. Otherwise the `none` method MUST NOT be accepted or used.
 
-<a name="signed-jwt-private-key-jwt"></a>
-##### 3.1.1.1. Signed JWT - private\_key\_jwt
-
-An OpenID Provider MUST support the `private_key_jwt` authentication method according to section 9 of \[[OpenID.Core](#openid-core)\].
-
-A Relying Party that has not registered at an OpenID Provider that allows the Mutual TLS client secret method MUST use the `private_key_jwt` authentication method which means that the following claims MUST be included in the token request:
+A Relying Party SHOULD default to use the `private_key_jwt` method, and in these cases the following claims MUST be included in the token request:
 
 - `client_assertion_type` - Set to `urn:ietf:params:oauth:client-assertion-type:jwt-bearer`
 - `client_assertion` - The value of the signed client authentication JWT generated. The Relying Party must generate a new assertion JWT for each call to the token endpoint.
-
-<a name="mutual-tls-client-secret-basic"></a>
-##### 3.1.1.2. Mutual TLS - client\_secret\_basic
-
-If the OpenID Provider exposes its Token endpoint where mutual TLS<sup>1</sup> is used, and the Relying Party's identity can be established and mapped to a registered `client_id`, the provider MAY allow the `client_secret_basic` authentication method according to section 9 of \[[OpenID.Core](#openid-core)\] to be used. For all other cases the `client_secret_basic` method MUST NOT be allowed.
-
-> \[1\]: Client and server authenticates over TLS.
 
 <a name="token-responses-and-validation"></a>
 ### 3.2. Token Responses and Validation
@@ -408,7 +396,7 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | `acr_values_supported` | JSON array containing a list of the Authentication Context Class References that the OpenID Provider supports. | Mandatory |
 | `vot` | The vectors supported by the OpenID Provider.<br />Vectors of trust support will be added in future versions of this specification. | Optional | 
 | `subject_types_supported` | JSON array containing a list of the Subject Identifier types that the OpenID Provider supports. MUST contain `public` and SHOULD contain `pairwise` | Mandatory |
-| `token_endpoint_auth_`<br />`methods_supported` | JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain `private_key_jwt` and MAY contain `client_secret_basic` (if the conditions specified in section [3.1.1.2](#mutual-tls-client-secret-basic) are met). Any other method MUST NOT appear. | Mandatory |
+| `token_endpoint_auth_`<br />`methods_supported` | JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain `private_key_jwt` and MAY contain other authentication methods as specified in section 9 of \[[OpenID.Core](#openid-core)\]. | Mandatory |
 | `token_endpoint_auth_`<br />`signing_alg_values_supported` | JSON array containing a list of JWS signing algorithms supported by the Token Endpoint for the signature on the JWT used to authenticate the client at the Token Endpoint for the `private_key_jwt`. `RS256` MUST appear, and `none` MUST NOT appear. | Mandatory |
 | `claims_supported` | JSON array containing a list of the claim names of the claims that the OpenID Provider MAY be able to supply values for. This list MUST contain all mandatory claims listed in section [4.1](#mandatory-identity-claims). | Mandatory |
 | `claims_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `claims` request parameter. Since this profile requires support the value MUST be set to `true`. | Mandatory |
@@ -429,7 +417,7 @@ Section 2 of \[[OpenID.Registration](#openid-registration)\] defines a listing o
 | `grant_types` | The OAuth2 grant types the Relying Party uses. Must be set to `authorization_code`. | Mandatory |
 | `jwks` | The Relying Party's JSON Web Key Set [JWK] document, passed by value. | Mandatory<br />Except for those clients that authenticate according to section [3.1.1.2](#mutual-tls-client-secret-basic). |
 | `subject_type` | Subject type requested for responses to this Client. The `subject_types_supported` discovery parameter contains a list of the supported `subject_type` values for this server. Valid types include `pairwise` and `public`. The default SHOULD be `public`. See section [3.2.1.1](#the-sub-token-claim). | Optional |
-| `token_endpoint_auth_method` | Authentication method for accessing the Token endpoint. MUST be one of `client_secret_basic` and `private_key_jwt`. See section [3.1.1](#client-authentication). | Mandatory |
+| `token_endpoint_auth_method` | Authentication method for accessing the Token endpoint. See section [3.1.1](#client-authentication). | Mandatory |
 | `default_acr_values` | Default requested Authentication Context Class Reference values. | Optional |
 
 
