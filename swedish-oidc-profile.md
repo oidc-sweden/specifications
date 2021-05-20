@@ -1,6 +1,6 @@
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 01 - 2021-04-23
+### Version: 1.0 - draft 01 - 2021-05-20
 
 ## Abstract
 
@@ -327,11 +327,13 @@ The "Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles"
 | :--- | :--- | :--- |
 | `https://claims.oidc.se/`<br />`1.0/personalNumber` | Swedish Personal Identity Number. | \[[AttrSpec](#attr-spec)\] |
 | `family_name` | Family name. | \[[OpenID.Core](#openid-core)\] |
-| `given_name` | Given name. | \[[OpenID.Core](#openid-core)\] |
+| `given_name` | Given name<sup>1</sup>. | \[[OpenID.Core](#openid-core)\] |
 | `name` | Display name/full name. | \[[OpenID.Core](#openid-core)\] |
-| `birthdate` | Date of birth. | \[[OpenID.Core](#openid-core)\] |
-| `https://claims.oidc.se/`<br />`1.0/age` | Age of the subject (end-user). | \[[AttrSpec](#attr-spec)\] |
 | `txn` | Transaction identifier. | \[[RFC8417](#rfc8417)\] |
+
+**Note:** If an OpenID Provider has the ability to deliver the `birthdate` claim, defined in \[[OpenID.Core](#openid-core)\], it MUST support the `https://claims.oidc.se/1.0/age` claim (as defined in \[[AttrSpec](#attr-spec)\]).
+
+> \[1\]: In the rare cases when a person's record in the population register does not include a given name, and `given_name` is requested, directly or indirectly via a scope, the value `-` SHOULD be assigned to the `given_name` claim.
 
 <a name="mandatory-identity-scopes"></a>
 ### 4.2. Mandatory Identity Scopes
