@@ -353,20 +353,30 @@ An OpenID Provider compliant with this profile SHOULD support releasing claims f
 
 Responses from the UserInfo endpoint MUST be signed.
 
-The OpenID Provider MUST NOT release any user identity claims other than the mandatory `sub`claim if they are not explicitly requested in the original authentication request (via the `claims` parameter, see [2.1.6](#the-claims-parameter)).
+The OpenID Provider MUST NOT release any user identity claims other than the mandatory `sub` claim if they are not explicitly requested in the original authentication request via the `claims` parameter, see [2.1.6](#the-claims-parameter), or by a standard scope (see below).
 
 <a name="claims-release-requirements"></a>
 ### 4.4. Claims Release Requirements
 
-OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. If a specific claim is requested using the `claims` request parameter is marked as `essential` (see section 5.5 of [[OpenID.Core](#openid-core)\]) and the provider can not provide this claim, the OpenID Provider MUST respond with an error response. 
+OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. If a specific claim is requested using the `claims` request parameter is marked as `essential` (see section 5.5 of \[[OpenID.Core](#openid-core)\]) and the provider can not provide this claim, the OpenID Provider MUST respond with an error response. 
 
 An OpenID Provider compliant with this profile MUST NOT release any identity claims<sup>1</sup> in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via the `scope` and/or `claims` request parameters, or by a policy<sup>2</sup> known, and accepted, by the involved parties. 
 
-Relying Parties requesting the `profile` scope MAY provide a `claims` request parameter. If the claims request is omitted, the OpenID Provider SHOULD provide a default claims set that it has available for the end-user, in accordance with the policy that is used. However, the OpenID Provider MUST NOT include any claims not belonging to the `profile` scope.
+Section 5.4 of \[[OpenID.Core](#openid-core)\] states:
+
+> The Claims requested by the `profile`, `email`, `address`, and `phone` scope values are returned from the UserInfo Endpoint, as described in Section 5.3.2, when a `response_type` value is used that results in an Access Token being issued. However, when no Access Token is issued (which is the case for the `response_type` value `id_token`), the resulting Claims are returned in the ID Token.
+
+\[[OpenID.Core](#openid-core)\] basically assumes that the user identity is delivered in the `sub` claim that is part of the ID token, and all other attributes are complementary attributes that may be fetched in a later call to the UserInfo endpoint. 
+
+The Swedish OpenID Connect profile takes another approach regarding the primary user identity, and the primary user identity is most often represented by a claim delivered as part of a requested scope. Therefore, this profile, requires that if any of the scopes defined in section 3 of \[[AttrSpec](#attr-spec)\] are requested the corresponding claims MUST be delivered in the ID token<sup>3</sup>.
+
+Note: In order to be compliant with \[[OpenID.Core](#openid-core)\] it is RECOMMENDED that claims requested by the scope values `profile`, `email`, `address`, and `phone` are delivered from the UserInfo endpoint. However, there are some overlap between the `profile` scope and the  `https://scopes.oidc.se/1.0/naturalPersonName` and `https://scopes.oidc.se/1.0/naturalPersonPnr` scopes, and a Relying Party SHOULD use the latter scopes instead of the `profile` scope where applicable. 
 
 > \[1\]: Apart from the mandatory `sub` claim that also can be seen as an identity attribute.
 
 > \[2\]: Such a claims release policy is out of scope for this specification.
+
+> \[3\]: Unless a `claims` parameter has been supplied where delivery via the UserInfo endpoint has been ordered.
 
 <a name="discovery"></a>
 ## 5. Discovery
