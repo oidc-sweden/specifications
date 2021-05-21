@@ -1,6 +1,6 @@
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 01 - 2021-04-20
+### Version: 1.0 - draft 01 - 2021-05-21
 
 ## Abstract
 
@@ -165,9 +165,16 @@ The most obvious claim to use in an ID token after a signature operation, `https
 
 **Description:** The signMessageDigest claim is delivered as a proof that an identity provider displayed a sign message for the user and that the user actively confirmed acceptance of this sign message. See section 3.2.4 of \[[SC.AttrSpec](#sc-attrspec)\] for details.
 
+The attribute value format for the signMessageDigest claim is `digest-algorithm-identifier;sign-message-digest`, where `digest-algorithm-identifier` is the XML security algorithm URI<sup>1</sup> identifier of the selected digest algorithm and `sign-message-digest` is `base64(digest(msg))`. The `msg` is the UTF-8 encoded bytes of the sign message that was displayed. It equals the 
+`sign_message.message` field of the `https://claims.oidc.se/1.0/signRequest` (see [3.2](#the-signature-request-parameter-claim) below). 
+
+Entities compliant with this specification MUST use SHA-256 (using the identifier `http://www.w3.org/2001/04/xmlenc#sha256`) as the digest algorithm.
+
 **Type:** String (according to section 3.2.4 of \[[SC.AttrSpec](#sc-attrspec)\])
 
-> Note: For the federated signing model only.
+**Note:** For the federated signing model only.
+
+> \[1\]: The reason that the XML security algorithm URI identifier is used is that interoperability with SAML solutions is required.
 
 <a name="the-signature-request-parameter-claim"></a>
 ### 3.2. The Signature Request Parameter Claim
