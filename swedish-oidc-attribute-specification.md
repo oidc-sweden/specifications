@@ -2,7 +2,7 @@
 
 # Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
 
-### Version: 1.0 - draft 02 - 2023-03-08
+### Version: 1.0 - draft 02 - 2023-03-13
 
 ## Abstract
 
@@ -64,15 +64,7 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
 
     3.4. [Authentication Information](#authentication-information)
 
-4. [**Mappings to Other Specifications**](#mappings-to-other-specifications)
-
-    4.1. [Sweden Connect SAML Specifications](#sweden-connect-saml-specifications)
-    
-    4.2. [BankID](#bankid)
-    
-    4.3. [Freja eID](#freja-eid)
-
-5. [**Normative References**](#normative-references)
+4. [**Normative References**](#normative-references)
 
 <a name="introduction"></a>
 ## 1. Introduction
@@ -413,95 +405,8 @@ This specification declares all claims as optional. A profile specification exte
 
 Note: The `https://claims.oidc.se/1.0/authnEvidence` (authentication evidence) claim is not declared in the scope and need to be requested explicitly if required. The reason for this is that few relying parties are likely to be interested in that kind of detailed authentication information.
 
-<a name="mappings-to-other-specifications"></a>
-## 4. Mappings to Other Specifications
-
-During development of this specification it is useful to look at which types of attributes that are handled by different technologies in order to analyze the need of custom claims.
-
-<a name="sweden-connect-saml-specifications"></a>
-### 4.1. Sweden Connect SAML Specifications
-
-The following table defines a mapping from the SAML attribute names defined in "Attribute Specification for the Swedish eID Framework", \[[SC.AttrSpec](#sc-attrspec)\], to their corresponding attribute/claim.
-
-| Description | SAML attribute name<br>and abbreviation | Claim | Defined in | Comment | 
-| :--- | :--- | :--- | :--- | :--- |
-| Surname | urn:oid:2.5.4.4 (sn) | `family_name`| \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). | 
-| Given name | urn:oid:2.5.4.42 (givenName) | `given_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). | 
-| Display (full) name | urn:oid:2.16.840.1.<br/>113730.3.1.241 (displayName) | `name` | \[[OpenID.Core](#openid-core)\] |   |
-| Gender | urn:oid:1.3.6.1.5.5.7.9.3 (gender) | `gender` | \[[OpenID.Core](#openid-core)\] | \[OpenID.Core\] defines possible values to be `female` and `male`. \[[SC.AttrSpec](#sc-attrspec)\] defines the possible values to be `M`/`m`, `F`/`f` and `U`/`u` (for unspecified). |
-| Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | This specification | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish coordination number. This specification defines this claim to be `https://claims.oidc.se/1.0/coordinationNumber`. |
-| Date of birth | urn:oid:1.3.6.1.5.5.7.9.1 (dateOfBirth) | `birthdate` | \[[OpenID.Core](#openid-core)\] | The format (YYYY-MM-DD) is the same for both the dateOfBirth SAML-attribute and the `birthdate` claim. |
-| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | `https://claims.oidc.se/`<br />`1.0/birthName`` | This specification | |
-| Street address | urn:oid:2.5.4.9 (street) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Post office box | urn:oid:2.5.4.18 (postOfficeBox) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. The `street_address` MAY include house number, street name, Post Office Box, and multi-line extended street address information.   |
-| Postal code | urn:oid:2.5.4.17 (postalCode) | `address.postal_code` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Locality | urn:oid:2.5.4.7 (l) | `address.locality` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Country | urn:oid:2.5.4.6 (c) | `address.country` or<br />`https://claims.oidc.se/`<br />`1.0/country` | \[[OpenID.Core](#openid-core)\]<br />This specification | Depends on in which context country is to be represented. |
-| Place of birth | urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth) | `https://claims.oidc.se/`<br />`1.0/placeOfbirth` | This specification | |
-| Country of citizenship | urn:oid:1.3.6.1.5.5.7.9.4 (countryOfCitizenship) | - | - | No mapping exists at this moment. |
-| Country of Residence | urn:oid:1.3.6.1.5.5.7.9.5 (countryOfResidence) | - | - | No mapping exists at this moment. |
-| Telephone number | urn:oid:2.5.4.20 (telephoneNumber) | `phone_number` | \[[OpenID.Core](#openid-core)\] | See also `phone_number_verified`. |
-| Mobile number | urn:oid:0.9.2342.19200300.100.1.41 (mobile) | `phone_number` | \[[OpenID.Core](#openid-core)\] | No specific claim exists that make a difference between a landline phone and a mobile phone in \[[IANA-Reg](#iana-reg)\]. Is this necessary? |
-| E-mail address | urn:oid:0.9.2342.19200300.100.1.3 (mail) | `email` | \[[OpenID.Core](#openid-core)\] | See also `email_verified`. |
-| Organization name | urn:oid:2.5.4.10 (o) | `https://claims.oidc.se/`<br />`1.0/orgName` | This specification |  |
-| Organizational unit name | urn:oid:2.5.4.11 (ou) | `https://claims.oidc.se/`<br />`1.0/orgUnit` | This specification | |
-| Organizational identifier code | urn:oid:2.5.4.97 (organizationIdentifier) | `https://claims.oidc.se/`<br/>`1.0/orgNumber` | This specification | |
-| Organizational Affiliation | urn:oid:1.2.752.201.3.1 (orgAffiliation) | `https://claims.oidc.se/`<br/>`1.0/orgAffiliation` | This specification | |
-| Transaction identifier | urn:oid:1.2.752.201.3.2 (transactionIdentifier) | `txn` | \[[RFC8417](#rfc8417)\] |
-| Authentication Context Parameters | urn:oid:1.2.752.201.3.3 (authContextParams) | - |  | This attribute will not be represented as a claim. However, some of the data that are normally put in this attribute are not claims of their own (credentialValidFrom, ...).|
-| User certificate | urn:oid:1.2.752.201.3.10 (userCertificate) | `https://claims.oidc.se`<br />`/1.0/userCertificate` | This specification | |
-| User signature | urn:oid:1.2.752.201.3.11 (userSignature) | `https://claims.oidc.se/`<br />`1.0/userSignature` | This specification | |
-| Authentication server signature | urn:oid:1.2.752.201.3.13 (authServerSignature) | `https://claims.oidc.se/`<br />`1.0/authnEvidence` | This specification | |
-| Signature activation data | urn:oid:1.2.752.201.3.12 (sad) | `https://claims.oidc.se`<br />`1.0/sad` | \[[SignExt](#signext)\] | |
-| Sign message digest | urn:oid:1.2.752.201.3.14 (signMessageDigest) | `https://claims.oidc.se/`<br />`1.0/signMessageDigest` | \[[SignExt](#signext)\] | |
-| Provisional identifier | urn:oid:1.2.752.201.3.4 (prid) | `https://claims.oidc.se/`<br />`1.0/eidas/prid` | This specification | eIDAS specific |
-| Provisional identifier persistence indicator | urn:oid:1.2.752.201.3.5 (pridPersistence) | `https://claims.oidc.se/`<br />`1.0/eidas/pridPersistence` | This specification | eIDAS specific |
-| Personal number binding URI | urn:oid:1.2.752.201.3.6 (personalIdentityNumberBinding) | `https://claims.oidc.se/1.0/`<br />`eidas/personalNumberBinding` | This specification | eIDAS specific |
-| eIDAS uniqueness identifier | urn:oid:1.2.752.201.3.7 (eidasPersonIdentifier) | `https://claims.oidc.se/`<br />`1.0/eidas/personIdentifier` | This specification | eIDAS specific |
-| eIDAS Natural Person Address | urn:oid:1.2.752.201.3.9 (eidasNaturalPersonAddress) | `address` | \[[OpenID.Core](#openid-core)\] | Mapping of the eIDAS CurrentAddress attribute. |
-| HSA-ID | urn:oid:1.2.752.29.6.2.1 (employeeHsaId) | - | - | Sector specific attribute. Should be defined elsewhere. |
-
-
-<a name="bankid"></a>
-### 4.2. BankID
-
-The following table defines a mapping from the attribute names defined in "BankID Relying Party Guidelines", \[[BankID.API](#bankid-api)\], to their corresponding attribute/claim.
-
-| Description | BankID attribute | Claim | Defined in | Comment | 
-| :--- | :--- | :--- | :--- | :--- |
-| Swedish Personal Number | `user.personalNumber` | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | This specification | |
-| Display (full) name | `user.name` | `name` | \[[OpenID.Core](#openid-core)\] | |
-| Given name | `user.givenName` | `given_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). |
-| Surname | `user.surname` | `family_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). |
-| Device IP-address | `device.ipAddress` | `https://claims.oidc.se/`<br />`1.0/deviceIp` | This specification | |
-| Certificate notBefore time | `cert.notBefore` | `https://claims.oidc.se/`<br/>`1.0/credentialValidFrom` | This specification | See also `https://claims.oidc.se/1.0/userSignature`. |
-| Certificate notAfter time | `cert.notAfter` | `https://claims.oidc.se/`<br/>`1.0/credentialValidTo` | This specification | See also `https://claims.oidc.se/1.0/userSignature`. |
-| The BankID signature | `signature` | `https://claims.oidc.se/`<br/>`1.0/userSignature` | This specification |  |
-| BankID OCSP response | `ocspResponse` | `https://claims.oidc.se/`<br />`1.0/authnEvidence` | This specification | |
-
-<a name="freja-eid"></a>
-### 4.3. Freja eID
-
-The following table defines a mapping from the attribute names defined in "Freja eID Relying Party Developers' Documentation", \[[Freja.API](#freja-api)\], to their corresponding attribute/claim.
-
-| Description | Freja eID attribute | Claim | Defined in | Comment | 
-| :--- | :--- | :--- | :--- | :--- |
-| Swedish Personal Number | `ssnuserinfo.ssn` | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | This specification | Freja's way of delivering SSN attribute included information about the country (`ssnuserinfo.country=SE`). |
-| Given name | `basicUserInfo.name` | `given_name` | \[[OpenID.Core](#openid-core)\] | TODO: Does Freja's `basicUserInfo.name` mean given name of full name? |
-| Surname | `basicUserInfo.surname` | `family_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). |
-| E-mail address (primary) | `emailAddress` | `email` | \[[OpenID.Core](#openid-core)\] | See also `email_verified`. |
-| All e-mail addresses | `allEmailAddresses` | TBD | - | TBD |
-| Date of birth | `dateOfBirth` | `birthdate` | \[[OpenID.Core](#openid-core)\] | The format (YYY-MM-DD) is the same for both the dateOfBirth attribute and the `birthdate` claim. |
-| Country | `addresses[0].country` | `address.country` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| City | `addresses[0].city` | `address.locality` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Postal code | `addresses[0].postCode` | `address.postal_code` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Street address(es) | `addresses[0].address1`<br/>`addresses[0].address2`<br/>`addresses[0].address3` | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. The `address.street_address` MAY contain multiple lines, separated by newlines. |
-| Address valid from | `addresses[0].validFrom` | TBD | - | TBD |
-| Type of address | `addresses[0].type` | TDB | - | TBD |
-| Source of address information | `addresses[0].sourceType` | TBD | - | TBD |
-
 <a name="normative-references"></a>
-## 5. Normative References
+## 4. Normative References
 
 <a name="rfc2119"></a>
 **\[RFC2119\]**
@@ -526,26 +431,6 @@ The following table defines a mapping from the attribute names defined in "Freja
 <a name="iso3166"></a>
 **\[ISO3166\]**
 > Codes for the representation of names of countries and their subdivisions Part 1: Country codes, ISO standard, ISO 3166-1.
-
-<a name="signext"></a>
-**\[SignExt\]**
-> [Signature Extension for OpenID Connect](https://github.com/oidc-sweden/specifications/blob/main/oidc-signature-extension.md).
-
-<a name="sc-attrspec"></a>
-**\[SC.AttrSpec\]**
-> [Attribute Specification for the Swedish eID Framework - Version 1.6, 2020-01-17](https://docs.swedenconnect.se/technical-framework/latest/04_-_Attribute_Specification_for_the_Swedish_eID_Framework.html).
-
-<a name="sc-constructedattr"></a>
-**\[SC.ConstructedAttr\]**
-> [eIDAS Constructed Attributes Specification for the Swedish eID Framework - Version 1.1, 2020-01-17](https://docs.swedenconnect.se/technical-framework/latest/11_-_eIDAS_Constructed_Attributes_Specification_for_the_Swedish_eID_Framework.html).
-
-<a name="bankid-api"></a>
-**\[BankID.API\]**
-> [BankID Relying Party Guidelines - Version: 3.5, 2020-10-26](https://www.bankid.com/assets/bankid/rp/bankid-relying-party-guidelines-v3.5.pdf).
-
-<a name="freja-api"></a>
-**\[Freja.API\]**
-> [Freja eID Relying Party Developers' Documentation](https://frejaeid.com/rest-api/Freja%20eID%20Relying%20Party%20Developers'%20Documentation.html).
 
 <a name="skv704"></a>
 **\[SKV704\]**

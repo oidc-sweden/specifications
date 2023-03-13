@@ -9,6 +9,8 @@ The oidc-sweden/specifications repository is where the Working Group for the Swe
 
 * [Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 1.0 - draft](swedish-oidc-attribute-specification.md) - Claims and scopes.
 
+  * [How OpenID Connect Claims Map to other Specifications](claim-mappings-to-other-specs.md) - A non-normative listing of how OIDC claims map to some of the eID-systems in Sweden.
+
 * [Signature Extension for OpenID Connect 1.0 - draft](oidc-signature-extension.md) - A signature extension for OpenID Connect.
 
 
