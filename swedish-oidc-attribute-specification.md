@@ -1,6 +1,8 @@
+![Logo](docs/images/oidc-text-right.png)
+
 # Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
 
-### Version: 1.0 - draft 01 - 2021-04-23
+### Version: 1.0 - draft 02 - 2023-03-08
 
 ## Abstract
 
@@ -19,10 +21,10 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
     
     2.1.1. [Swedish Personal Identity Number](#swedish-personal-identity-number)
     
-    2.1.2. [Swedish co-ordination number](#swedish-coordination-number)
-
-    2.1.3. [eIDAS Person Identity](#eidas-person-identity)
+    2.1.2. [Swedish Coordination Number](#swedish-coordination-number)
     
+    2.1.3. [Previous Personal Identity Number](#previous-personal-identity-number)
+
     2.2. [Organizational Identity Claims](#organizational-identity-claims)
     
     2.2.1. [Swedish Organization Number](#swedish-organization-number)
@@ -51,19 +53,16 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
     
     2.4.3. [Place of Birth](#place-of-birth)
 
-    2.4.4. [Age](#age)
-
+    2.4.4. [Age](#age) 
 3. [**Scopes**](#scopes)
 
     3.1. [Natural Person Name Information](#natural-person-name-information)
     
     3.2. [Natural Person Identity - Personal Number](#natural-person-identity-personal-number)
-    
-    3.3. [Natural Person Identity - eIDAS Identity](#natural-person-identity-eidas-identity)    
-    
-    3.4. [Natural Person Organizational Identity](#natural-person-organizational-identity)
+        
+    3.3. [Natural Person Organizational Identity](#natural-person-organizational-identity)
 
-    3.5. [Authentication Information](#authentication-information)
+    3.4. [Authentication Information](#authentication-information)
 
 4. [**Mappings to Other Specifications**](#mappings-to-other-specifications)
 
@@ -80,7 +79,7 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
 
 This specification aims to provide definitions of a common set of attributes (claims) that primarily is be used by Swedish OpenID Connect providers and clients, but can also be used in a pure OAuth2 context. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
 
-Special purpose attributes, such as the healthcare specific attributes, are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
+Special purpose attributes, such as  healthcare specific attributes, are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -109,7 +108,7 @@ The claims defined in this specification are named in a collision-resistant mann
 **Type:** String where the format is 12 digits without hyphen.
 
 <a name="swedish-coordination-number"></a>
-#### 2.1.2. Swedish co-ordination number
+#### 2.1.2. Swedish Coordination Number
 
 **Claim:** `https://claims.oidc.se/1.0/coordinationNumber`
 
@@ -117,50 +116,65 @@ The claims defined in this specification are named in a collision-resistant mann
 
 **Type:** String where the format is 12 digits without hyphen.
 
-> **Note:** The processes concerning the issuance of coordination numbers is currently being reviewed (see [Omstart av systemet med samordningsnummer](https://www.regeringen.se/pressmeddelanden/2020/01/omstart-av-systemet-med-samordningsnummer/)). The coordination numbers that are in use today will probably need an accomplishing attribute informing about the issuer and how trustworthy the number is.
+> **Note:** See section [2.1.2.1](#coordination-number-level), [Coordination Number Level](#coordination-number-level),
+below for a claim definition that represents a coordination number level. This claim MAY be used in conjunction with
+the `coordinationNumber` claim.
 
-<a name="eidas-person-identity"></a>
-#### 2.1.3. eIDAS Person Identity
+<a name="coordination-number-level"></a>
+##### 2.1.2.1. Coordination Number Level
 
-When using the Swedish eIDAS node to obtain an identity from within the eIDAS federation a set of identity claims are received. 
+**Claim:** `https://claims.oidc.se/1.0/coordinationNumberLevel`
 
-The Swedish eIDAS-node enriches attribute statements received from a member state eIDAS node with the provisional ID (prid) and provisional ID persistence (pridPersistence) attributes in order to make it easier for Swedish relying parties to handle foreign identities in an uniform manner, see section 3.3.1 of \[[SC.AttrSpec](#sc-attrspec)\].
+**Description:** According to \[[2021/22:276](#2021-22-276)\] a Swedish coordination number is classified with a "level"
+that tells how well the holder has proven his or her identity in conjunction with the issuance of the number. Possible levels are:
 
-<a name="provisional-id"></a>
-##### 2.1.3.1. Provisional ID
+- `confirmed` - The identity of the holder is fully confirmed.
+- `probable` - The identity of the holder is probable, but not fully confirmed.
+- `uncertain` - The identity of the holder is uncertain.
 
-**Claim:** `https://claims.oidc.se/1.0/eidas/prid`
+The `coordinationNumberLevel` claim may be used to represent this level when a coordination number is released.
 
-**Description:** The prid claim is designed to provide one common unique attribute of the user in a common format regardless of the composition of the original attributes received from the authenticating source. The prid value is not stored in any registry, but derived from the received attributes at each authentication instant according to defined algorithms specified in \[[SC.ConstructedAttr](#sc-constructedattr)\]. The algorithm ensures that each prid is unique for each authenticated entity, but does not ensure persistence. If the attributes received for an entity changes over time, the prid claim may also change dependent on the defined prid generation algorithm for that attribute source.
+**Type:** String holding any of the three values listed above.
 
-**Type:** String (format according to \[[SC.ConstructedAttr](#sc-constructedattr)\]).
+> **Note (i):** \[[2021/22:276](#2021-22-276)\] is a government proposition that has been approved by the Swedish parliament
+and it will lead to a law update concerning the handling of coordination numbers.
 
-<a name="provisional-id-persistence-indicator"></a>
-##### 2.1.3.2. Provisional ID Persistence Indicator
+> **Note (ii):** The level of an assigned coordination number may changed over the lifetime of the number. For example, the
+level (trustworthiness) may be increased after a supplementary identification, or the level may be lowered after an audit
+where the original identification process was proved to be inadequate. This profile does not put any specific requirements
+on the issuer of this claim, for example that the current coordination number status must be checked before each time it is
+issued. This may be done by other profiles building upon this profile, but using the claim in the context of this profile
+alone implies that the consuming entity MUST ensure that status of the coordination number before it is used.
 
-**Claim:** `https://claims.oidc.se/1.0/eidas/pridPersistence`
+<a name="previous-personal-identity-number"></a>
+#### 2.1.3. Previous Personal Identity Number
 
-**Description:** The pridPersistence claim provides an indication of the expected persistence over time for a present prid value. The value of this attribute is determined from the selected prid generation algorithm in combination with the attribute source. For example, a prid derived from a Norwegian eIDAS unique identifier has longer persistence expectancy than a prid derived from the same attribute from the UK or Germany. This attribute helps relying parties to apply different UI and service functions for users with different persistence expectancy. This may assist users with low persistence expectancy to regain control of their user account, should their prid change in the future.
+**Claim:** `https://claims.oidc.se/1.0/previousPersonalNumber`
 
-**Type:** String with the possible values `A`, `B` or `C` (see \[[SC.ConstructedAttr](#sc-constructedattr)\]).
+**Description:** In most cases a Swedish individual's primary identity claim is the civic registration number (”personnummer”) as
+defined in section [2.1.1](#swedish-personal-identity-number) above, or a coordination number as defined in section [2.1.2](#swedish-coordination-number).
 
-<a name="eidas-person-identifier"></a>
-##### 2.1.3.3. eIDAS Person Identifier
+All individuals born in Sweden or moving to Sweden with the intention of staying one year or longer will be assigned a personal 
+identity number and registered in the population register. A coordination number (see [2.1.2](#swedish-coordination-number))
+may be assigned to a person that is not registered, but has the need to communicate with various government authorities, healthcare
+institutions, higher education and banks.
 
-**Claim:** `https://claims.oidc.se/1.0/eidas/personIdentifier`
+In some cases a person may hold a coordination number during a period before he or she is assigned a personal identity number.
+A typical use case is a person that seeks asylum and later is given a residence permit. In this case the person may first hold
+a coordination number and if a residence permit is given a personal identity number will be assigned.
 
-**Description:** A mapping of the eIDAS PersonIdentifier SAML attribute. A Swedish relying party should use the prid and pridPersistence claims in order to identify a person that has been authenticated via the Swedish eIDAS node, but in some cases the actual eIDAS person identifier (received from the foreign eIDAS node) may be required. A typical case may be when the relying party needs to refer to the person in communication with a foreign peer.
+For a service provider this may lead to problems since the primary identifier for an individual has changed. A login with the newly
+assigned identifier will not match the user account previously used by this individual.
 
-**Type:** String
+This profile defines the `previousPersonalNumber` claim to enable matching a previously held identity number to a newly assigned
+identity number. The `previousPersonalNumber` attribute is typically released together with the "new" `personalNumber` claim 
+in order to facilitate account matching at a service provider.
 
-##### 2.1.3.4. Personal Identity Number Binding
+**Type:** See [2.1.1](#swedish-personal-identity-number) and [2.1.2](#swedish-coordination-number) above.
 
-**Claim:** `https://claims.oidc.se/1.0/eidas/personalNumberBinding`
-
-**Description:** If the `https://claims.oidc.se/1.0/personalNumber` claim (a Swedish civic registration number) is delivered by the Swedish eIDAS node it means that the node was able to make a binding between a foreign ID and a Swedish personal number. The personalNumberBinding claim will then contain an URI that uniquely identifies the binding (i.e., the process under which the ID mapping was performed). See section 3.2.2 of \[[SC.AttrSpec](#sc-attrspec)\].
-
-**Type:** An URI
-
+> **Note:** This claim is a special-purpose claim that most likely only will be used in very specific use cases. Therefore it is not
+included in any scope definitions below. A service provider wishing to potentially receive this claim SHOULD request is explicitly 
+using the `claims` request parameter.
 
 <a name="organizational-identity-claims"></a>
 ### 2.2. Organizational Identity Claims
@@ -276,7 +290,7 @@ A relying party may wish to get information about the user's credentials used du
 <a name="general-purpose-claims"></a>
 ### 2.4. General Purpose Claims
 
-This section contains definitions of general purpose claims that do not fit into any of the above categories. For some of the attributes represented there should really be a standard claim defined (for example, country, place of birth, etc.).
+This section contains definitions of general purpose claims that do not fit into any of the above categories. 
 
 <a name="country"></a>
 #### 2.4.1. Country
@@ -344,9 +358,9 @@ For each scope defined below a set of claims is declared. Each declared claim ha
 
 | Claim | Description/comment | Requirement |
 | :--- | :--- | :--- |
-| `family_name` | Surname/family name | Mandatory |
-| `given_name` | Given name | Mandatory |
-| `name` | Display name | Mandatory |
+| `family_name` | Surname/family name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
+| `given_name` | Given name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
+| `name` | Display name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
 
 <a name="natural-person-identity-personal-number"></a>
 ### 3.2. Natural Person Identity - Personal Number
@@ -357,41 +371,17 @@ For each scope defined below a set of claims is declared. Each declared claim ha
 
 | Claim | Description/comment | Requirement |
 | :--- | :--- | :--- |
-| `https://claims.oidc.se/1.0/`<br />`personalNumber` | Swedish civic registration number | Mandatory |
-| `family_name` | Surname/family name | Mandatory |
-| `given_name` | Given name | Mandatory |
-| `name` | Display name | Mandatory | 
-| `birthdate` | Date of birth | Optional | 
+| `https://claims.oidc.se/1.0/`<br />`personalNumber` | Swedish civic registration number | Mandatory<sup>\*</sup> |
+| `https://claims.oidc.se/1.0/`<br />`coordinationNumber` | Swedish coordination number | Mandatory<sup>\*</sup> |
+| `family_name` | Surname/family name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
+| `given_name` | Given name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
+| `name` | Display name - \[[OpenID.Core](#openid-core)\]. | Mandatory | 
+| `birthdate` | Date of birth - \[[OpenID.Core](#openid-core)\]. | Optional | 
 
-<a name="natural-person-identity-eidas-identity"></a>
-### 3.3. Natural Person Identity - eIDAS Identity
-
-**Scope:** `https://scopes.oidc.se/1.0/naturalPersonEidas`
-
-**Description:** The scope provides personal identity information for a subject that has been authenticated via the eIDAS Framework.
-
-| Claim | Description/comment | Requirement |
-| :--- | :--- | :--- |
-| `https://claims.oidc.se/1.0/`<br />`eidas/prid` | Provisional ID | Mandatory |
-| `https://claims.oidc.se/1.0/`<br />`eidas/pridPersistence` | Provisional ID persistence indicator | Mandatory |
-| `https://claims.oidc.se/1.0/`<br />`eidas/personIdentifier` | Mapping of the eIDAS PersonIdentifier attribute | Mandatory |
-| `birthdate` | Date of birth | Mandatory | 
-| `family_name` | Surname/family name | Mandatory |
-| `given_name` | Given name | Mandatory |
-| `https://claims.oidc.se/1.0/country` | Country code for the eIDAS country that authenticated the subject. | Mandatory |
-| `txn` | ID of assertion issued by the member state node. | Mandatory |
-| `https://claims.oidc.se/`<br />`1.0/personalNumber` | The Swedish civic registration number of the subject. This claim is delivered if the Swedish eIDAS node can find a registered binding between the eIDAS person identifier and a Swedish civic registration number. | Optional |
-| `https://claims.oidc.se/1.0/`<br />`eidas/personalNumberBinding` | If the Swedish civic registration number is released, this claim is also included to indicate under which process the mapping between the eIDAS person identifier and the Swedish civic registration number was performed. | Optional |
-
-The Swedish eIDAS node can also deliver additional claims that need to be explicitly requested by the relying party. These claims are then delivered if available from the foreign member state node. The claims are:
-
-- `https://claims.oidc.se/1.0/birthName` - Birth name of the subject.
-- `https://claims.oidc.se/1.0/placeOfbirth` - Place of birth of the subject.
-- `gender` - Gender of the subject.
-- `address` - Current address of the subject.
+> **\[\*\]**: A `personalNumber` OR `coordinationNumber` claim MUST be delivered, but not both.
 
 <a name="natural-person-organizational-identity"></a>
-### 3.4. Natural Person Organizational Identity
+### 3.3. Natural Person Organizational Identity
 
 **Scope:** `https://scopes.oidc.se/1.0/naturalPersonOrgId`
 
@@ -399,13 +389,13 @@ The Swedish eIDAS node can also deliver additional claims that need to be explic
 
 | Claim | Description/comment | Requirement |
 | :--- | :--- | :--- |
-| `name` | Display name. The claim MAY contain personal information such as the given name or surname, but it MAY also be used as an anonymized display name, for example, "Administrator 123". This is decided by the issuing organization. | Mandatory |
-| `https://claims.oidc.se/`<br />`1.0/orgAffiliation` | Personal identifier and organizational number (`https://claims.oidc.se/1.0/orgNumber`). | Mandatory |
-| `https://claims.oidc.se/`<br />`1.0/orgName` | Organization name | Mandatory |
+| `name` | Display name. The claim MAY contain personal information such as the given name or surname, but it MAY also be used as an anonymized display name, for example, "Administrator 123". This is decided by the issuing organization (\[[OpenID.Core](#openid-core)\]). | Mandatory |
+| `https://claims.oidc.se/`<br />`1.0/orgAffiliation` | Personal identifier and organizational number. | Mandatory |
+| `https://claims.oidc.se/`<br />`1.0/orgName` | Organization name. | Mandatory |
 | `https://claims.oidc.se/`<br />`1.0/orgNumber` | Swedish organization number. This number can always be derived from the mandatory orgAffiliation claim, but for simplicitly it is recommended that an attribute provider includes this claim. | Optional, but recommended | 
 
 <a name="authentication-information"></a>
-### 3.5. Authentication Information
+### 3.4. Authentication Information
 
 **Scope:** `https://scopes.oidc.se/1.0/authnInfo`
 
@@ -415,7 +405,7 @@ This specification declares all claims as optional. A profile specification exte
 
 | Claim | Description/comment | Requirement |
 | :--- | :--- | :--- |
-| `txn` | Transaction identifier for the operation. | Optional |
+| `txn` | Transaction identifier for the operation. See \[[RFC8417](#rfc8417)\]. | Optional |
 | `https://claims.oidc.se/`<br />`1.0/userCertificate` | The certificate presented by the user during the authentication process. | Optional |
 | `https://claims.oidc.se/`<br />`1.0/credentialValidFrom` | The start time of the user credential's validity. | Optional |
 | `https://claims.oidc.se/`<br />`1.0/credentialValidTo` | The end time of the user credential's validity. | Optional |
@@ -439,7 +429,7 @@ The following table defines a mapping from the SAML attribute names defined in "
 | Given name | urn:oid:2.5.4.42 (givenName) | `given_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). | 
 | Display (full) name | urn:oid:2.16.840.1.<br/>113730.3.1.241 (displayName) | `name` | \[[OpenID.Core](#openid-core)\] |   |
 | Gender | urn:oid:1.3.6.1.5.5.7.9.3 (gender) | `gender` | \[[OpenID.Core](#openid-core)\] | \[OpenID.Core\] defines possible values to be `female` and `male`. \[[SC.AttrSpec](#sc-attrspec)\] defines the possible values to be `M`/`m`, `F`/`f` and `U`/`u` (for unspecified). |
-| Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | This specification | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish co-ordination number. This specification defines this claim to be `https://claims.oidc.se/1.0/coordinationNumber`. |
+| Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | This specification | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish coordination number. This specification defines this claim to be `https://claims.oidc.se/1.0/coordinationNumber`. |
 | Date of birth | urn:oid:1.3.6.1.5.5.7.9.1 (dateOfBirth) | `birthdate` | \[[OpenID.Core](#openid-core)\] | The format (YYYY-MM-DD) is the same for both the dateOfBirth SAML-attribute and the `birthdate` claim. |
 | Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | `https://claims.oidc.se/`<br />`1.0/birthName`` | This specification | |
 | Street address | urn:oid:2.5.4.9 (street) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
@@ -565,6 +555,10 @@ The following table defines a mapping from the attribute names defined in "Freja
 **\[SKV707\]**
 > [Skatteverket, SKV 707, Utgåva 2,
 > Samordningsnummer](https://docs.swedenconnect.se/technical-framework/mirror/skv/skv707-2.pdf).
+
+<a name="2021-22-276"></a>
+**\[2021/22:276\]**
+> [Stärkt system för samordningsnummer - Proposition 2021/22:276](https://www.riksdagen.se/sv/dokument-lagar/dokument/proposition/starkt-system-for-samordningsnummer_H903276).
 
 <a name="skv709"></a>
 **\[SKV709\]**
