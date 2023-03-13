@@ -1,4 +1,4 @@
-![Logo](docs/images/oidc-text-right.png)
+![Logo](docs/images/oidc-logo.png)
 
 # Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
 

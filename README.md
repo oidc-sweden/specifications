@@ -1,4 +1,4 @@
-![Logo](docs/images/oidc-text-right.png)
+![Logo](docs/images/oidc-logo.png)
 
 # Swedish OpenID Connect Profile Specifications
 
