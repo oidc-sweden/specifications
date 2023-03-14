@@ -10,8 +10,8 @@ The following table defines a mapping from the SAML attribute names defined in "
 
 | Description | SAML attribute name<br>and abbreviation | Claim | Defined in | Comment | 
 | :--- | :--- | :--- | :--- | :--- |
-| Surname | urn:oid:2.5.4.4 (sn) | `family_name`| \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). | 
-| Given name | urn:oid:2.5.4.42 (givenName) | `given_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). | 
+| Surname | urn:oid:2.5.4.4 (sn) | `family_name`| \[[OpenID.Core](#openid-core)\] |  | 
+| Given name | urn:oid:2.5.4.42 (givenName) | `given_name` | \[[OpenID.Core](#openid-core)\] |  | 
 | Display (full) name | urn:oid:2.16.840.1.<br/>113730.3.1.241 (displayName) | `name` | \[[OpenID.Core](#openid-core)\] |   |
 | Gender | urn:oid:1.3.6.1.5.5.7.9.3 (gender) | `gender` | \[[OpenID.Core](#openid-core)\] | \[OpenID.Core\] defines possible values to be `female` and `male`. \[[SC.AttrSpec](#sc-attrspec)\] defines the possible values to be `M`/`m`, `F`/`f` and `U`/`u` (for unspecified). |
 | Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish coordination number. \[[OIDC.Sweden](#oidc-sweden)\] defines this claim to be `https://claims.oidc.se/1.0/coordinationNumber`. |
