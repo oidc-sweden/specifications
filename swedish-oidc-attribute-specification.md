@@ -108,9 +108,14 @@ The claims defined in this specification are named in a collision-resistant mann
 
 **Type:** String where the format is 12 digits without hyphen.
 
-> **Note:** See section [2.1.2.1](#coordination-number-level), [Coordination Number Level](#coordination-number-level),
+> **Note (i):** See section [2.1.2.1](#coordination-number-level), [Coordination Number Level](#coordination-number-level),
 below for a claim definition that represents a coordination number level. This claim MAY be used in conjunction with
 the `coordinationNumber` claim.
+
+> **Note (ii):** A Swedish coordination number also has a "status" associated. This status can be active, on hold or
+> deregistered. This profile's definition of the `https://claims.oidc.se/1.0/coordinationNumber` claim does not
+> put any requirements regarding the number's status. However, this can be made when the claim is part of a scope,
+> see section [3.2](#natural-person-identity-personal-number), [Natural Person Identity - Personal Number](#natural-person-identity-personal-number) below.
 
 <a name="coordination-number-level"></a>
 ##### 2.1.2.1. Coordination Number Level
@@ -371,18 +376,24 @@ For each scope defined below a set of claims is declared. Each declared claim ha
 
 **Scope:** `https://scopes.oidc.se/1.0/naturalPersonPnr`
 
-**Description:** The scope extends the `https://scopes.oidc.se/1.0/naturalPersonName` scope with a Swedish civic registration number (personnummer).
+**Description:** The scope extends the `https://scopes.oidc.se/1.0/naturalPersonName` scope with a Swedish civic registration number (personnummer) or a Swedish coordination number (samordningsnummer).
 
 | Claim | Description/comment | Requirement |
 | :--- | :--- | :--- |
-| `https://claims.oidc.se/1.0/`<br />`personalNumber` | Swedish civic registration number | Mandatory<sup>\*</sup> |
-| `https://claims.oidc.se/1.0/`<br />`coordinationNumber` | Swedish coordination number | Mandatory<sup>\*</sup> |
+| `https://claims.oidc.se/1.0/`<br />`personalNumber` | Swedish civic registration number. | Mandatory<sup>\1</sup> |
+| `https://claims.oidc.se/1.0/`<br />`coordinationNumber` | Swedish coordination number. If delivered according to this scope, the coordination number SHOULD have a status of Active<sup>2</sup>. | Mandatory<sup>\1</sup> |
 | `family_name` | Surname/family name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
 | `given_name` | Given name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
 | `name` | Display name - \[[OpenID.Core](#openid-core)\]. | Mandatory | 
 | `birthdate` | Date of birth - \[[OpenID.Core](#openid-core)\]. | Optional | 
 
-> **\[\*\]**: A `personalNumber` OR `coordinationNumber` claim MUST be delivered, but not both.
+> **\[1\]**: A `personalNumber` OR `coordinationNumber` claim MUST be delivered, but not both.
+
+> **\[2\]**: A Swedish coordination number may be flagged as "not active", where the different statuses, apart from "Active", are
+> "on hold" (vilandeförklarat), "on hold - closed" (vilandeförklarat - stängt) and "deregistered" (avregistrerat). The reason that
+> this profile does not apply a "MUST"-requirement for an active status is that it is a too strict requirement to put on claims
+> issuers. In theory they would have to make controls against the Swedish population register every time an assertion or token would
+> be released. Therefore, a consumer of the `coordinationNumber` scope MUST always ensure that the number's status is acceptable.
 
 <a name="natural-person-organizational-identity"></a>
 ### 3.3. Natural Person Organizational Identity
