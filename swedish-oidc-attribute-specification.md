@@ -2,7 +2,7 @@
 
 # Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
 
-### Version: 1.0 - draft 02 - 2023-03-13
+### Version: 1.0 - draft 02 - 2023-03-17
 
 ## Abstract
 
@@ -71,7 +71,7 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
 
 This specification aims to provide definitions of a common set of attributes (claims) that primarily is be used by Swedish OpenID Connect providers and clients, but can also be used in a pure OAuth2 context. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
 
-Special purpose attributes, such as  healthcare specific attributes, are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
+Special purpose attributes, such as healthcare specific attributes, are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -187,9 +187,21 @@ This section defines a number of claims in the area of organizational identities
 
 **Claim:** `https://claims.oidc.se/1.0/orgAffiliation`
 
-**Description:** The personal identity at a Swedish organization (identified as a Swedish organizational number according to \[[SKV709](#skv709)\]).
+**Description:** The personal identity at a Swedish organization (identified as a Swedish organizational number according to \[[SKV709](#skv709)\]). The `orgAffiliation` claim is intended to be used as a primary identity claim for global personal organizational 
+identities. It consists of a personal identifier and an organizational identifier code (`orgNumber`).
+
+This specification does not impose any specific requirements concerning the personal identifier part of the claim other than that
+it MUST be unique for the given organization.
 
 **Type:** String on the format \<personal-id\>@\<org-number\> where the personal-id part determined by the organization and the org-number part is according to [2.2.1](#swedish-organization-number) above.
+
+> **Note (i)**: In the general case, a claims consumer MUST NOT assume a particular format or meaning of the personal identifier
+part since different organizations may use different formats. A claims consumer should also be aware that a personal identifier
+separated from its organizational identifier code can not be regarded as unique.
+
+> **Note (ii)**: In the description above we write "global personal organizational identities". With global we refer to
+an identity that is used outside of the issuing organization's scope/domain. The individual's identity within the organization
+may be the, but is not required to be, the "personal-id" part of the claim.  
 
 <a name="organization-name"></a>
 #### 2.2.3. Organization Name
