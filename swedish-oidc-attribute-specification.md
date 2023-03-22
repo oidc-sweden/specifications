@@ -23,8 +23,6 @@ This specification defines claims (attributes) and scopes for the Swedish OAuth2
     
     2.1.2. [Swedish Coordination Number](#swedish-coordination-number)
     
-    2.1.3. [Previous Personal Identity Number](#previous-personal-identity-number)
-
     2.2. [Organizational Identity Claims](#organizational-identity-claims)
     
     2.2.1. [Swedish Organization Number](#swedish-organization-number)
@@ -93,7 +91,7 @@ The claims defined in this specification are named in a collision-resistant mann
 <a name="swedish-personal-identity-number"></a>
 #### 2.1.1. Swedish Personal Identity Number
 
-**Claim:** `https://claims.oidc.se/1.0/personalNumber`
+**Claim:** `https://claims.oidc.se/1.0/personalIdentityNumber`
 
 **Description:** Swedish civic registration number (”personnummer”) according to \[[SKV704](#skv704)\].
 
@@ -143,35 +141,36 @@ on the issuer of this claim, for example that the current coordination number st
 issued. This may be done by other profiles building upon this profile, but using the claim in the context of this profile
 alone implies that the consuming entity MUST ensure that status of the coordination number before it is used.
 
-<a name="previous-personal-identity-number"></a>
-#### 2.1.3. Previous Personal Identity Number
+<a name="previous-coordination-number"></a>
+##### 2.1.2.2. Previous Coordination Number
 
-**Claim:** `https://claims.oidc.se/1.0/previousPersonalNumber`
+**Claim:** `https://claims.oidc.se/1.0/previousCoordinationNumber`
 
-**Description:** In most cases a Swedish individual's primary identity claim is the civic registration number (”personnummer”) as
-defined in section [2.1.1](#swedish-personal-identity-number) above, or a coordination number as defined in section [2.1.2](#swedish-coordination-number).
+**Description:**  All individuals born in Sweden or moving to Sweden with the intention of staying one year or longer will be
+assigned a personal identity number ("personnummer") and registered in the population register. Prior to being assigned a 
+Swedish personal identity number ("personnummer"), a coordination number (see [2.1.2](#swedish-coordination-number)) may be
+issued in order to enable communication with various government authorities, healthcare institutions, higher education and banks.
 
-All individuals born in Sweden or moving to Sweden with the intention of staying one year or longer will be assigned a personal 
-identity number and registered in the population register. A coordination number (see [2.1.2](#swedish-coordination-number))
-may be assigned to a person that is not registered, but has the need to communicate with various government authorities, healthcare
-institutions, higher education and banks.
-
-In some cases a person may hold a coordination number during a period before he or she is assigned a personal identity number.
-A typical use case is a person that seeks asylum and later is given a residence permit. In this case the person may first hold
-a coordination number and if a residence permit is given a personal identity number will be assigned.
+In most cases regarding people that move to Sweden, a person first holds a coordination number during a period before he or she
+is assigned a personal identity number. A typical use case is a person that seeks asylum and later is given a residence permit.
+In this case the person may first hold a coordination number and if a residence permit is given a personal identity number will
+be assigned.
 
 For a service provider this may lead to problems since the primary identifier for an individual has changed. A login with the newly
 assigned identifier will not match the user account previously used by this individual.
 
-This profile defines the `previousPersonalNumber` claim to enable matching a previously held identity number to a newly assigned
-identity number. The `previousPersonalNumber` attribute is typically released together with the "new" `personalNumber` claim 
-in order to facilitate account matching at a service provider.
+Therefore, this profile defines the `previousCoordinationNumber` claim to enable matching a previously held identity number to a
+newly assigned identity number. The `previousCoordinationNumber` claim is typically released together with the "new" 
+`personalIdentityNumber` claim in order to facilitate account matching at a service provider.
 
 **Type:** See [2.1.1](#swedish-personal-identity-number) and [2.1.2](#swedish-coordination-number) above.
 
-> **Note:** This claim is a special-purpose claim that most likely only will be used in very specific use cases. Therefore it is not
+> **Note (i):** This claim is a special-purpose claim that most likely only will be used in very specific use cases. Therefore it is not
 included in any scope definitions below. A service provider wishing to potentially receive this claim SHOULD request is explicitly 
 using the `claims` request parameter.
+
+> **Note (ii):** This profile does not put any requirements regarding the "status" associated with the coordination number
+represented. Since it has been superseded by a Swedish personal identity number ("personnummer") its status may be non-active.
 
 <a name="organizational-identity-claims"></a>
 ### 2.2. Organizational Identity Claims
@@ -380,16 +379,16 @@ For each scope defined below a set of claims is declared. Each declared claim ha
 
 | Claim | Description/comment | Requirement |
 | :--- | :--- | :--- |
-| `https://claims.oidc.se/1.0/`<br />`personalNumber` | Swedish civic registration number. | Mandatory<sup>\1</sup> |
+| `https://claims.oidc.se/1.0/`<br />`personalIdentityNumber` | Swedish civic registration number. | Mandatory<sup>\1</sup> |
 | `https://claims.oidc.se/1.0/`<br />`coordinationNumber` | Swedish coordination number. If delivered according to this scope, the coordination number SHOULD have a status of Active<sup>2</sup>. | Mandatory<sup>\1</sup> |
 | `family_name` | Surname/family name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
 | `given_name` | Given name - \[[OpenID.Core](#openid-core)\]. | Mandatory |
 | `name` | Display name - \[[OpenID.Core](#openid-core)\]. | Mandatory | 
 | `birthdate` | Date of birth - \[[OpenID.Core](#openid-core)\]. | Optional | 
 
-> **\[1\]**: A `personalNumber` OR `coordinationNumber` claim MUST be delivered, but not both.
+> **\[1\]**: A `personalIdentityNumber` OR `coordinationNumber` claim MUST be delivered, but not both.
 
-> **\[2\]**: A Swedish coordination number may be flagged as "not active", where the different statuses, apart from "Active", are
+> **\[2\]**: A Swedish coordination number has a status associated, where the different statuses are "active" (aktivt),
 > "on hold" (vilandeförklarat), "on hold - closed" (vilandeförklarat - stängt) and "deregistered" (avregistrerat). The reason that
 > this profile does not apply a "MUST"-requirement for an active status is that it is a too strict requirement to put on claims
 > issuers. In theory they would have to make controls against the Swedish population register every time an assertion or token would
@@ -407,7 +406,7 @@ For each scope defined below a set of claims is declared. Each declared claim ha
 | `name` | Display name. The claim MAY contain personal information such as the given name or surname, but it MAY also be used as an anonymized display name, for example, "Administrator 123". This is decided by the issuing organization (\[[OpenID.Core](#openid-core)\]). | Mandatory |
 | `https://claims.oidc.se/`<br />`1.0/orgAffiliation` | Personal identifier and organizational number. | Mandatory |
 | `https://claims.oidc.se/`<br />`1.0/orgName` | Organization name. | Mandatory |
-| `https://claims.oidc.se/`<br />`1.0/orgNumber` | Swedish organization number. This number can always be derived from the mandatory orgAffiliation claim, but for simplicitly it is recommended that an attribute provider includes this claim. | Optional, but recommended | 
+| `https://claims.oidc.se/`<br />`1.0/orgNumber` | Swedish organization number. This number can always be derived from the mandatory orgAffiliation claim, but for simplicity it is recommended that an attribute provider includes this claim. | Optional, but recommended | 
 
 <a name="authentication-information"></a>
 ### 3.4. Authentication Information
