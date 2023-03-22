@@ -90,7 +90,7 @@ The following table defines a mapping from the attribute names defined in "Freja
 
 <a name="oidc-sweden"></a>
 **\[OIDC.Sweden\]**
-> Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles.
+> Attribute Specification for the Swedish OpenID Connect Profile.
 
 <a name="openid-core"></a>
 **\[OpenID.Core\]**

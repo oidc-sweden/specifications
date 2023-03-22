@@ -1,12 +1,12 @@
 ![Logo](docs/images/oidc-logo.png)
 
-# Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles 
+# Attribute Specification for the Swedish OpenID Connect Profile
 
 ### Version: 1.0 - draft 02 - 2023-03-17
 
 ## Abstract
 
-This specification defines claims (attributes) and scopes for the Swedish OAuth2 and OpenID Connect profiles.
+This specification defines claims (attributes) and scopes for the Swedish OpenID Connect profile.
 
 
 ## Table of Contents
