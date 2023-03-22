@@ -2,7 +2,7 @@
 
 # Attribute Specification for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-03-17
+### Version: 1.0 - draft 02 - 2023-03-22
 
 ## Abstract
 
@@ -373,7 +373,7 @@ For each scope defined below a set of claims is declared. Each declared claim ha
 <a name="natural-person-identity-personal-number"></a>
 ### 3.2. Natural Person Identity - Personal Number
 
-**Scope:** `https://scopes.oidc.se/1.0/naturalPersonPnr`
+**Scope:** `https://scopes.oidc.se/1.0/naturalPersonNumber`
 
 **Description:** The scope extends the `https://scopes.oidc.se/1.0/naturalPersonName` scope with a Swedish civic registration number (personnummer) or a Swedish coordination number (samordningsnummer).
 
