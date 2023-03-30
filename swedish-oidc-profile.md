@@ -1,6 +1,8 @@
+![Logo](docs/images/oidc-logo.png)
+
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 01 - 2021-05-20
+### Version: 1.0 - draft 02 - 2023-03-30
 
 ## Abstract
 
@@ -306,7 +308,7 @@ Relying Parties MUST follow the requirements in section [3.1.3.7] of \[[OpenID.C
 <a name="claims-and-scopes"></a>
 ## 4. Claims and Scopes
 
-The "Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles" document, \[[AttrSpec](#attr-spec)\], defines claims and scopes to be used within the Swedish OpenID Connect profile. This specification defines claims and scopes for many different use cases, and some definitions may not be applicable for all entities. Therefore, sections [4.1](#mandatory-identity-claims) and [4.2](#mandatory-identity-scopes) lists the claims and scopes that MUST be supported by Relying Parties and OpenID Providers that are compliant with this profile. 
+The "Attribute Specification for the Swedish OpenID Connect Profile" document, \[[AttrSpec](#attr-spec)\], defines claims and scopes to be used within the Swedish OpenID Connect profile. This specification defines claims and scopes for many different use cases, and some definitions may not be applicable for all entities. Therefore, sections [4.1](#mandatory-identity-claims) and [4.2](#mandatory-identity-scopes) lists the claims and scopes that MUST be supported by Relying Parties and OpenID Providers that are compliant with this profile. 
 
 <a name="mandatory-identity-claims"></a>
 ### 4.1. Mandatory Identity Claims
@@ -417,7 +419,7 @@ The profile does not mandate OpenID Provider support for Dynamic registration of
 | `redirect_uris` | Array of redirection URI values used by the Relying Party. | Mandatory |
 | `response_types` | The response types that the Relying Party uses. Must be set to `code`. | Mandatory |
 | `grant_types` | The OAuth2 grant types the Relying Party uses. Must be set to `authorization_code`. | Mandatory |
-| `jwks` | The Relying Party's JSON Web Key Set [JWK] document, passed by value. | Mandatory<br />Except for those clients that authenticate according to section [3.1.1.2](#mutual-tls-client-secret-basic). |
+| `jwks` | The Relying Party's JSON Web Key Set [JWK] document, passed by value. | Mandatory<br />Except for those clients that authenticate according to the exceptions described in section [3.1.1](#client-authentication). |
 | `subject_type` | Subject type requested for responses to this Client. The `subject_types_supported` discovery parameter contains a list of the supported `subject_type` values for this server. Valid types include `pairwise` and `public`. The default SHOULD be `public`. See section [3.2.1.1](#the-sub-token-claim). | Optional |
 | `token_endpoint_auth_method` | Authentication method for accessing the Token endpoint. See section [3.1.1](#client-authentication). | Mandatory |
 | `default_acr_values` | Default requested Authentication Context Class Reference values. | Optional |
@@ -503,4 +505,4 @@ An entity processing a message in which an algorithm not listed below has been u
 
 <a name="attr-spec"></a>
 **\[AttrSpec\]**
-> [Attribute Specification for the Swedish OAuth2 and OpenID Connect Profiles](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
+> [Attribute Specification for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
