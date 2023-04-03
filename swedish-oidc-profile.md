@@ -69,6 +69,10 @@ This specification defines a profile for OpenID Connect for use within the Swedi
     5.1. [Discovery Requirements for a Relying Party](#discovery-requirements-for-a-relying-party)
 
     5.2. [Discovery Requirements for an OpenID Provider](#discovery-requirements-for-an-openid-provider)
+    
+    5.3. [Discovery Parameter Extensions](#discovery-parameter-extensions)
+
+    5.3.1. [User Message Capabilities](#user-message-capabilities)
 
 6. [**Client Registration**](#client-registration)
 
@@ -465,8 +469,10 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 
 Any other fields specified in \[[OpenID.Discovery](#openid-discovery)\] not appearing in the table above MAY also be used.
 
-<a href="discovery-parameter-extensions"></a>
+<a name="discovery-parameter-extensions"></a>
 ### 5.3. Discovery Parameter Extensions
+
+This section contains discovery parameter extensions defined by this profile.
 
 <a name="user-message-capabilities"></a>
 #### 5.3.1. User Message Capabilities
