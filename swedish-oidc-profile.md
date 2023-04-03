@@ -235,11 +235,14 @@ one language-message pair.
 
 * `mime_type` - The MIME type of the supplied message. This profile defines two possible values that are 
 `text/plain` (where `;charset=UTF-8` is an implicit condition) and `text/markdown`<sup>2</sup>. If no value
-is given for this field, `text/plain` MUST be assumed.
+is given for this field, `text/plain` MUST be assumed. Other profiles MAY add support for additional MIME 
+types. 
 
 The OpenID Provider MUST display the message matching the user interface locale that is in use. If no message
 matches that current locale, the OP MAY choose not to display any message, or select a message from the
 client provided map.
+
+An OpenID Provider MUST refuse to display a message if it does not support a given MIME type.
 
 Should a message contain illegal characters, or any other constructs not accepted by the provider, the OP
 MAY choose not to display the message, or filter the message before displaying it.
@@ -456,9 +459,41 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | `claims_supported` | JSON array containing a list of the claim names of the claims that the OpenID Provider MAY be able to supply values for. This list MUST contain all mandatory claims listed in section [4.1](#mandatory-identity-claims). | Mandatory |
 | `claims_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `claims` request parameter. Since this profile requires support the value MUST be set to `true`. | Mandatory |
 | `request_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `request` parameter for Request Objects. Since this profile requires support the value MUST be set to `true`. | Mandatory |
+| `https://id.oidc.se/`<br />`disco/userMessageSupported` | Boolean value specifying whether the OP supports the `https://id.oidc.se/param/userMessage` authentication request parameter, see [5.3.1.1](#user-message-supported) below. An OP that supports the request parameter MUST set this value to `true`.<br />If this parameter is not present it MUST be interpreted as that the OP does not support the request parameter. | Optional |
+| `https://id.oidc.se/disco/`<br />`userMessageSupportedMimeTypes` | JSON array containing the list of supported MIME types for the `https://id.oidc.se/param/userMessage` authentication request parameter, see [5.3.1.2](#user-message-supported-mime-types) below. <br />If the `https://id.oidc.se/disco/userMessageSupported` parameter is set to `true` and this field is not present, a default of `[ "text/plain" ]` MUST be assumed. | Optional |
 
 
 Any other fields specified in \[[OpenID.Discovery](#openid-discovery)\] not appearing in the table above MAY also be used.
+
+<a href="discovery-parameter-extensions"></a>
+### 5.3. Discovery Parameter Extensions
+
+<a name="user-message-capabilities"></a>
+#### 5.3.1. User Message Capabilities
+
+This profile defines two OpenID Discovery parameters that may be used by OpenID Providers to announce support for 
+the `https://id.oidc.se/param/userMessage` authentication request parameter, see section 
+[2.3.1](#client-provided-user-message), [Client Provided User Message](#client-provided-user-message), above.
+
+<a name="user-message-supported"></a>
+##### 5.3.1.1. User Message Supported
+
+**Parameter:** `https://id.oidc.se/disco/userMessageSupported`
+
+**Description:** A discovery parameter specifying whether the OpenID Provider supports the `https://id.oidc.se/param/userMessage` authentication request parameter, see section 
+[2.3.1](#client-provided-user-message), [Client Provided User Message](#client-provided-user-message), above.
+
+**Value type:** Boolean
+
+<a name="user-message-supported-mime-types"></a>
+##### 5.3.1.2. User Message Supported MIME Types
+
+**Parameter:** `https://id.oidc.se/disco/userMessageSupportedMimeTypes`
+
+**Description:** Holds the User Message MIME type(s) that is supported by the OpenID Provider. Its value is only
+relevant if `https://id.oidc.se/disco/userMessageSupported` is set to `true` (see above).
+
+**Value type:** A JSON array of strings 
 
 <a name="client-registration"></a>
 ## 6. Client Registration
