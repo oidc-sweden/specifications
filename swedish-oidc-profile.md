@@ -226,10 +226,6 @@ This section contains authentication request parameter extensions defined within
 **Description:** When the user message claim is included in an authentication request the issuing client requests
 that the OpenID Provider displays this message to the client in conjunction with the user authentication. 
 
-This profile does not specify how the message should be displayed by the OP, but if the `display` request parameter
-(see 3.1.2.1 of \[[OpenID.Core](#openid-core)\]) is included in the request, and supported by the OP, the provider
-SHOULD display the user message according to the value of the `display` parameter.
-
 **Value type:** The value for the user message request parameter claim is a JSON object<sup>1</sup> 
 with the following fields:
 
@@ -242,9 +238,13 @@ one language-message pair.
 is given for this field, `text/plain` MUST be assumed. Other profiles MAY add support for additional MIME 
 types. 
 
-An OpenID Provider SHOULD only process the "user message" request parameter if the user is being
-authenticated. Thus, if the request contains the `prompt` parameter with the value `none` (see 
+**Requirements:** An OpenID Provider MUST NOT display a "user message" unless the user is being authenticated.
+Thus, if the request contains the `prompt` parameter with the value `none` (see 
 section [2.1.4](#the-prompt-parameter) above), the OpenID Provider MUST NOT display the user message.
+
+This profile does not specify how the message should be displayed by the OpenID Provider, but if the `display`
+request parameter (see 3.1.2.1 of \[[OpenID.Core](#openid-core)\]) is included in the request, and supported
+by the OP, the provider SHOULD display the user message according to the value of the `display` parameter.
 
 The OpenID Provider MUST display the message matching the user interface locale that is in use. If no message
 matches that current locale, the OP MAY choose not to display any message, or select a message from the
