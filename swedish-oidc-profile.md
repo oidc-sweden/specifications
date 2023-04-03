@@ -242,6 +242,10 @@ one language-message pair.
 is given for this field, `text/plain` MUST be assumed. Other profiles MAY add support for additional MIME 
 types. 
 
+An OpenID Provider SHOULD only process the "user message" request parameter if the user is being
+authenticated. Thus, if the request contains the `prompt` parameter with the value `none` (see 
+section [2.1.4](#the-prompt-parameter) above), the OpenID Provider MUST NOT display the user message.
+
 The OpenID Provider MUST display the message matching the user interface locale that is in use. If no message
 matches that current locale, the OP MAY choose not to display any message, or select a message from the
 client provided map.
