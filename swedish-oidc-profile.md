@@ -217,7 +217,7 @@ This section contains authentication request parameter extensions defined within
 <a name="client-provided-user-message"></a>
 #### 2.3.1. Client Provided User Message
 
-**Parameter:** `https://claims.oidc.se/1.0/userMessage`
+**Parameter:** `https://id.oidc.se/param/userMessage`
 
 **Description:** When the user message claim is included in an authentication request the issuing client requests
 that the OpenID Provider displays this message to the client in conjunction with the user authentication. 
@@ -244,10 +244,10 @@ client provided map.
 Should a message contain illegal characters, or any other constructs not accepted by the provider, the OP
 MAY choose not to display the message, or filter the message before displaying it.
 
-**\[1\]:** The `https://claims.oidc.se/1.0/userMessage` parameter value is represented in an authentication request as 
+**\[1\]:** The `https://id.oidc.se/param/userMessage` parameter value is represented in an authentication request as 
 UTF-8 encoded JSON (which ends up being form-urlencoded when passed as a parameter). When used in a 
 Request Object value, per section 6.1 of \[[OpenID.Core](#openid-core)\], the JSON is used as the value of 
-the `https://claims.oidc.se/1.0/userMessage` member.
+the `https://id.oidc.se/param/userMessage` member.
 
 **\[2\]:** The Markdown dialect, and potential restrictions for tags, is not regulated in this specification.
 
@@ -255,7 +255,7 @@ the `https://claims.oidc.se/1.0/userMessage` member.
 
 ```
 ...
-"https://claims.oidc.se/1.0/userMessage" : {  
+"https://id.oidc.se/param/userMessage" : {  
   "message" : { 
     "sv" : "<Base64-encoded message in Swedish>",
     "en" : "<Base64-encoded message in English>"
