@@ -14,30 +14,30 @@ The following table defines a mapping from the SAML attribute names defined in "
 | Given name | urn:oid:2.5.4.42 (givenName) | `given_name` | \[[OpenID.Core](#openid-core)\] |  | 
 | Display (full) name | urn:oid:2.16.840.1.<br/>113730.3.1.241 (displayName) | `name` | \[[OpenID.Core](#openid-core)\] |   |
 | Gender | urn:oid:1.3.6.1.5.5.7.9.3 (gender) | `gender` | \[[OpenID.Core](#openid-core)\] | \[OpenID.Core\] defines possible values to be `female` and `male`. \[[SC.AttrSpec](#sc-attrspec)\] defines the possible values to be `M`/`m`, `F`/`f` and `U`/`u` (for unspecified). |
-| Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish coordination number. \[[OIDC.Sweden](#oidc-sweden)\] defines this claim to be `https://claims.oidc.se/1.0/coordinationNumber`. |
-| previousPersonal-<br/>IdentityNumber | urn:oid:1.2.752.201.3.15<br />(previousPersonalIdentityNumber) | `https://claims.oidc.se`<br />`/1.0/previousPersonalNumber` | [[OIDC.Sweden](#oidc-sweden)\] |
+| Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://id.oidc.se/claim/`<br/>`personalIdentityNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish coordination number. \[[OIDC.Sweden](#oidc-sweden)\] defines this claim to be `https://id.oidc.se/claim/coordinationNumber`. |
+| previousPersonal-<br/>IdentityNumber | urn:oid:1.2.752.201.3.15<br />(previousPersonalIdentityNumber) | `https://id.oidc.se/claim/`<br />`previousCoordinationNumber` | [[OIDC.Sweden](#oidc-sweden)\] | The OIDC-profile only handles coordination numbers. |
 | Date of birth | urn:oid:1.3.6.1.5.5.7.9.1 (dateOfBirth) | `birthdate` | \[[OpenID.Core](#openid-core)\] | The format (YYYY-MM-DD) is the same for both the dateOfBirth SAML-attribute and the `birthdate` claim. |
-| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | `https://claims.oidc.se/`<br />`1.0/birthName`` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | `https://id.oidc.se/claim/`<br />`birthName` | \[[OIDC.Sweden](#oidc-sweden)\] | |
 | Street address | urn:oid:2.5.4.9 (street) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
 | Post office box | urn:oid:2.5.4.18 (postOfficeBox) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. The `street_address` MAY include house number, street name, Post Office Box, and multi-line extended street address information.   |
 | Postal code | urn:oid:2.5.4.17 (postalCode) | `address.postal_code` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
 | Locality | urn:oid:2.5.4.7 (l) | `address.locality` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Country | urn:oid:2.5.4.6 (c) | `address.country` or<br />`https://claims.oidc.se/`<br />`1.0/country` | \[[OpenID.Core](#openid-core)\]<br />\[[OIDC.Sweden](#oidc-sweden)\] | Depends on in which context country is to be represented. |
-| Place of birth | urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth) | `https://claims.oidc.se/`<br />`1.0/placeOfbirth` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Country | urn:oid:2.5.4.6 (c) | `address.country` or<br />`https://id.oidc.se/claim/`<br />`country` | \[[OpenID.Core](#openid-core)\]<br />\[[OIDC.Sweden](#oidc-sweden)\] | Depends on in which context country is to be represented. |
+| Place of birth | urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth) | `https://id.oidc.se/claim/`<br />`placeOfbirth` | \[[OIDC.Sweden](#oidc-sweden)\] | |
 | Country of citizenship | urn:oid:1.3.6.1.5.5.7.9.4 (countryOfCitizenship) | - | - | No mapping exists at this moment. |
 | Country of Residence | urn:oid:1.3.6.1.5.5.7.9.5 (countryOfResidence) | - | - | No mapping exists at this moment. |
 | Telephone number | urn:oid:2.5.4.20 (telephoneNumber) | `phone_number` | \[[OpenID.Core](#openid-core)\] | See also `phone_number_verified`. |
 | Mobile number | urn:oid:0.9.2342.19200300.100.1.41 (mobile) | `phone_number` | \[[OpenID.Core](#openid-core)\] | No specific claim exists that make a difference between a landline phone and a mobile phone in \[[IANA-Reg](#iana-reg)\]. Is this necessary? |
 | E-mail address | urn:oid:0.9.2342.19200300.100.1.3 (mail) | `email` | \[[OpenID.Core](#openid-core)\] | See also `email_verified`. |
-| Organization name | urn:oid:2.5.4.10 (o) | `https://claims.oidc.se/`<br />`1.0/orgName` | \[[OIDC.Sweden](#oidc-sweden)\] |  |
-| Organizational unit name | urn:oid:2.5.4.11 (ou) | `https://claims.oidc.se/`<br />`1.0/orgUnit` | \[[OIDC.Sweden](#oidc-sweden)\] | |
-| Organizational identifier code | urn:oid:2.5.4.97 (organizationIdentifier) | `https://claims.oidc.se/`<br/>`1.0/orgNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | |
-| Organizational Affiliation | urn:oid:1.2.752.201.3.1 (orgAffiliation) | `https://claims.oidc.se/`<br/>`1.0/orgAffiliation` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Organization name | urn:oid:2.5.4.10 (o) | `https://id.oidc.se/claim/`<br />`orgName` | \[[OIDC.Sweden](#oidc-sweden)\] |  |
+| Organizational unit name | urn:oid:2.5.4.11 (ou) | `https://id.oidc.se/claim/`<br />`orgUnit` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Organizational identifier code | urn:oid:2.5.4.97 (organizationIdentifier) | `https://id.oidc.se/claim/`<br/>`orgNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Organizational Affiliation | urn:oid:1.2.752.201.3.1 (orgAffiliation) | `https://id.oidc.se/claim/`<br/>`orgAffiliation` | \[[OIDC.Sweden](#oidc-sweden)\] | |
 | Transaction identifier | urn:oid:1.2.752.201.3.2 (transactionIdentifier) | `txn` | \[[RFC8417](#rfc8417)\] |
 | Authentication Context Parameters | urn:oid:1.2.752.201.3.3 (authContextParams) | - |  | This attribute will not be represented as a claim. However, some of the data that are normally put in this attribute are not claims of their own (credentialValidFrom, ...).|
-| User certificate | urn:oid:1.2.752.201.3.10 (userCertificate) | `https://claims.oidc.se`<br />`/1.0/userCertificate` | \[[OIDC.Sweden](#oidc-sweden)\] | |
-| User signature | urn:oid:1.2.752.201.3.11 (userSignature) | `https://claims.oidc.se/`<br />`1.0/userSignature` | \[[OIDC.Sweden](#oidc-sweden)\] | |
-| Authentication server signature | urn:oid:1.2.752.201.3.13 (authServerSignature) | `https://claims.oidc.se/`<br />`1.0/authnEvidence` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| User certificate | urn:oid:1.2.752.201.3.10 (userCertificate) | `https://id.oidc.se/claim/`<br />`userCertificate` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| User signature | urn:oid:1.2.752.201.3.11 (userSignature) | `https://id.oidc.se/claim/`<br />`userSignature` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Authentication server signature | urn:oid:1.2.752.201.3.13 (authServerSignature) | `https://id.oidc.se/claim/`<br />`authnEvidence` | \[[OIDC.Sweden](#oidc-sweden)\] | |
 | Signature activation data | urn:oid:1.2.752.201.3.12 (sad) | - | - | No mapping exists - Will have to be handled in Sweden Connect's OpenID Connect profiles. |
 | Sign message digest | urn:oid:1.2.752.201.3.14 (signMessageDigest) | - | - | No mapping exists - Will have to be handled in Sweden Connect's OpenID Connect profiles. |
 | Provisional identifier | urn:oid:1.2.752.201.3.4 (prid) | - | - | eIDAS specific - Will have to be handled in Sweden Connect's OpenID Connect profiles. |
@@ -54,15 +54,15 @@ The following table defines a mapping from the attribute names defined in "BankI
 
 | Description | BankID attribute | Claim | Defined in | Comment | 
 | :--- | :--- | :--- | :--- | :--- |
-| Swedish Personal Number | `user.personalNumber` | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Swedish Personal Number | `user.personalNumber` | `https://id.oidc.se/claim/`<br/>`personalIdentityNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | |
 | Display (full) name | `user.name` | `name` | \[[OpenID.Core](#openid-core)\] | |
 | Given name | `user.givenName` | `given_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). |
 | Surname | `user.surname` | `family_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). |
-| Device IP-address | `device.ipAddress` | `https://claims.oidc.se/`<br />`1.0/deviceIp` | \[[OIDC.Sweden](#oidc-sweden)\] | |
-| Certificate notBefore time | `cert.notBefore` | `https://claims.oidc.se/`<br/>`1.0/credentialValidFrom` | \[[OIDC.Sweden](#oidc-sweden)\] | See also `https://claims.oidc.se/1.0/userSignature`. |
-| Certificate notAfter time | `cert.notAfter` | `https://claims.oidc.se/`<br/>`1.0/credentialValidTo` | \[[OIDC.Sweden](#oidc-sweden)\] | See also `https://claims.oidc.se/1.0/userSignature`. |
-| The BankID signature | `signature` | `https://claims.oidc.se/`<br/>`1.0/userSignature` | \[[OIDC.Sweden](#oidc-sweden)\] |  |
-| BankID OCSP response | `ocspResponse` | `https://claims.oidc.se/`<br />`1.0/authnEvidence` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Device IP-address | `device.ipAddress` | `https://id.oidc.se/claim/`<br />`deviceIp` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Certificate notBefore time | `cert.notBefore` | `https://id.oidc.se/claim/`<br/>`credentialValidFrom` | \[[OIDC.Sweden](#oidc-sweden)\] | See also `https://id.oidc.se/claim/userSignature`. |
+| Certificate notAfter time | `cert.notAfter` | `https://id.oidc.se/claim/`<br/>`credentialValidTo` | \[[OIDC.Sweden](#oidc-sweden)\] | See also `https://id.oidc.se/claim/userSignature`. |
+| The BankID signature | `signature` | `https://id.oidc.se/claim/`<br/>`userSignature` | \[[OIDC.Sweden](#oidc-sweden)\] |  |
+| BankID OCSP response | `ocspResponse` | `https://id.oidc.se/claim/`<br />`authnEvidence` | \[[OIDC.Sweden](#oidc-sweden)\] | |
 
 <a name="freja-eid"></a>
 ## 3. Freja eID
@@ -71,7 +71,7 @@ The following table defines a mapping from the attribute names defined in "Freja
 
 | Description | Freja eID attribute | Claim | Defined in | Comment | 
 | :--- | :--- | :--- | :--- | :--- |
-| Swedish Personal Number | `ssnuserinfo.ssn` | `https://claims.oidc.se/`<br/>`1.0/personalNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | Freja's way of delivering SSN attribute included information about the country (`ssnuserinfo.country=SE`). |
+| Swedish Personal Number | `ssnuserinfo.ssn` | `https://id.oidc.se/claim/`<br/>`personalIdentityNumber`<br />or<br />`https://id.oidc.se/claim/`<br/>`coordinationNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | Freja's way of delivering SSN attribute included information about the country (`ssnuserinfo.country=SE`). |
 | Given name | `basicUserInfo.name` | `given_name` | \[[OpenID.Core](#openid-core)\] | TODO: Does Freja's `basicUserInfo.name` mean given name of full name? |
 | Surname | `basicUserInfo.surname` | `family_name` | \[[OpenID.Core](#openid-core)\] | May be more than one name (separated by blank). |
 | E-mail address (primary) | `emailAddress` | `email` | \[[OpenID.Core](#openid-core)\] | See also `email_verified`. |

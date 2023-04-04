@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-03-30
+### Version: 1.0 - draft 02 - 2023-04-03
 
 ## Abstract
 
@@ -140,7 +140,7 @@ Below follows a table with request parameters that are mandatory according to th
 | `request` | Request Object JWT. See [2.1.7](#request-objects-request-and-request-uri-parameters). | Optional for RP<br />Mandatory for OP |
 | `request_uri` | Request Object JWT passed by reference. See [2.1.7](#request-objects-request-and-request-uri-parameters). | Optional |
 | `code_challenge`, `code_challenge_method` | Proof Key for Code Exchange (PKCE). See [2.1.8](#pkce-parameters) below. | Optional |
-| `https://claims.oidc.se/`<br />`1.0/userMessage` | Client provided user message. See [2.3.1](#client-provided-user-message) below. | Optional |
+| `https://id.oidc.se/`<br />`param/userMessage` | Client provided user message. See [2.3.1](#client-provided-user-message) below. | Optional |
 
 
 <a name="the-scope-parameter"></a>
@@ -372,20 +372,24 @@ Relying Parties MUST follow the requirements in section [3.1.3.7] of \[[OpenID.C
 <a name="claims-and-scopes"></a>
 ## 4. Claims and Scopes
 
-The "Attribute Specification for the Swedish OpenID Connect Profile" document, \[[AttrSpec](#attr-spec)\], defines claims and scopes to be used within the Swedish OpenID Connect profile. This specification defines claims and scopes for many different use cases, and some definitions may not be applicable for all entities. Therefore, sections [4.1](#mandatory-identity-claims) and [4.2](#mandatory-identity-scopes) lists the claims and scopes that MUST be supported by Relying Parties and OpenID Providers that are compliant with this profile. 
+The "Attribute Specification for the Swedish OpenID Connect Profile" document, \[[AttrSpec](#attr-spec)\], defines claims and
+scopes to be used within the Swedish OpenID Connect profile. This specification defines claims and scopes for many different
+use cases, and some definitions may not be applicable for all entities. Therefore, sections [4.1](#mandatory-identity-claims)
+and [4.2](#mandatory-identity-scopes) lists the claims and scopes that MUST be supported by Relying Parties and OpenID Providers
+that are compliant with this profile. 
 
 <a name="mandatory-identity-claims"></a>
 ### 4.1. Mandatory Identity Claims
 
 | Claim | Description | Reference |
 | :--- | :--- | :--- |
-| `https://claims.oidc.se/`<br />`1.0/personalNumber` | Swedish Personal Identity Number. | \[[AttrSpec](#attr-spec)\] |
+| `https://id.oidc.se/claim/`<br />`personalIdentityNumber` | Swedish Personal Identity Number. | \[[AttrSpec](#attr-spec)\] |
 | `family_name` | Family name. | \[[OpenID.Core](#openid-core)\] |
 | `given_name` | Given name<sup>1</sup>. | \[[OpenID.Core](#openid-core)\] |
 | `name` | Display name/full name. | \[[OpenID.Core](#openid-core)\] |
 | `txn` | Transaction identifier. | \[[RFC8417](#rfc8417)\] |
 
-**Note:** If an OpenID Provider has the ability to deliver the `birthdate` claim, defined in \[[OpenID.Core](#openid-core)\], it MUST support the `https://claims.oidc.se/1.0/age` claim (as defined in \[[AttrSpec](#attr-spec)\]).
+**Note:** If an OpenID Provider has the ability to deliver the `birthdate` claim, defined in \[[OpenID.Core](#openid-core)\], it MUST support the `https://id.oidc.se/claim/age` claim (as defined in \[[AttrSpec](#attr-spec)\]).
 
 > \[1\]: In the rare cases when a person's record in the population register does not include a given name, and `given_name` is requested, directly or indirectly via a scope, the value `-` SHOULD be assigned to the `given_name` claim.
 
@@ -394,8 +398,8 @@ The "Attribute Specification for the Swedish OpenID Connect Profile" document, \
 
 | Scope | Description | Reference |
 | :--- | :--- | :--- |
-| `https://scopes.oidc.se/`<br />`1.0/naturalPersonName` | Natural Person Name Information. | \[[AttrSpec](#attr-spec)\] |
-| `https://scopes.oidc.se/`<br />`1.0/naturalPersonPnr` | Natural Person Identity - Personal Number. | \[[AttrSpec](#attr-spec)\] |
+| `https://id.oidc.se/scope/`<br />`naturalPersonName` | Natural Person Name Information. | \[[AttrSpec](#attr-spec)\] |
+| `https://id.oidc.se/scope/`<br />`naturalPersonNumber` | Natural Person Identity - Personal Number. | \[[AttrSpec](#attr-spec)\] |
 | `profile` | OIDC default profile claims<sup>1</sup>. | \[[OpenID.Core](#openid-core)\] |
 
 > \[1\]: At least `family_name`, `given_name` and `name` MUST be supported.
@@ -424,7 +428,10 @@ Section 5.4 of \[[OpenID.Core](#openid-core)\] states:
 
 The Swedish OpenID Connect profile takes another approach regarding the primary user identity, and the primary user identity is most often represented by a claim delivered as part of a requested scope. Therefore, this profile, requires that if any of the scopes defined in section 3 of \[[AttrSpec](#attr-spec)\] are requested the corresponding claims MUST be delivered in the ID token<sup>3</sup>.
 
-Note: In order to be compliant with \[[OpenID.Core](#openid-core)\] it is RECOMMENDED that claims requested by the scope values `profile`, `email`, `address`, and `phone` are delivered from the UserInfo endpoint. However, there are some overlap between the `profile` scope and the  `https://scopes.oidc.se/1.0/naturalPersonName` and `https://scopes.oidc.se/1.0/naturalPersonPnr` scopes, and a Relying Party SHOULD use the latter scopes instead of the `profile` scope where applicable. 
+Note: In order to be compliant with \[[OpenID.Core](#openid-core)\] it is RECOMMENDED that claims requested by the scope values
+`profile`, `email`, `address`, and `phone` are delivered from the UserInfo endpoint. However, there are some overlap between the
+`profile` scope and the  `https://id.oidc.se/scope/naturalPersonName` and `https://id.oidc.se/scope/naturalPersonNumber` scopes,
+and a Relying Party SHOULD use the latter scopes instead of the `profile` scope where applicable. 
 
 > \[1\]: Apart from the mandatory `sub` claim that also can be seen as an identity attribute.
 
