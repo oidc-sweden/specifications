@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-04-03
+### Version: 1.0 - draft 02 - 2023-04-05
 
 ## Abstract
 
@@ -34,8 +34,6 @@ request where a "Signature Request" object is passed as a request parameter or a
     4.1. [Requests](#requests)
     
     4.1.1. [Requirements on Signing User](#requirements-on-signing-user)
-    
-    4.1.2. [Signature Service Requirements](#signature-service-requirements)
 
 5. [**OpenID Provider Requirements**](#openid-provider-requirements)
     
@@ -43,7 +41,7 @@ request where a "Signature Request" object is passed as a request parameter or a
     
     5.2. [Response Requirements](#response-requirements)
         
-    5.4. [Discovery](#discovery)
+    5.3. [Discovery](#discovery)
 
 6. [**Normative References**](#normative-references)
 
@@ -127,12 +125,6 @@ to request a user signature. The signature request parameter contains input for 
 
 - `sign_message` - A sign message is the human readable text snippet that is displayed to the user as part of the signature process<sup>2</sup>. The `sign_message` field is a JSON object according to the `https://id.oidc.se/param/userMessage` request
 parameter as defined in section 2.3.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. This field is mandatory.
-    
-> **\[1\]:** Depending on where in a request the parameter is placed, the value may be a JWT, see [section 3.1.1](#placement-of-the-
-parameter-in-an-authentication-request) below. 
-
-> **\[2\]:** Whether the contents of the sign message is part of the signature input data at the OpenID Provider or not is not regulated by this profile.
-
 
 **Example:**
 
@@ -151,10 +143,15 @@ parameter-in-an-authentication-request) below.
 ...
 ```
 
+> **\[1\]:** Depending on where in a request the parameter is placed, the value may be a JWT, see [section 3.1.1](#placement-of-the-
+parameter-in-an-authentication-request) below. 
+
+> **\[2\]:** Whether the contents of the sign message is part of the signature input data at the OpenID Provider or not is not regulated by this profile.
+
 <a name="placement-of-the-parameter-in-an-authentication-request"></a>
 #### 3.1.1. Placement of the Parameter in an Authentication Request
 
-The signature request parameter claim (`https://id.oidc.se/param/signRequest`), can be provided in an authentication
+The `https://id.oidc.se/param/signRequest` request parameter, can be provided in an authentication
 request in two ways; as a custom request parameter where its value is represented as a JWT, or as part of a Request Object 
 that is the value to the `request` (or `request_uri`) parameter.
 
@@ -295,6 +292,11 @@ The authentication request MUST contain the `prompt` parameter<sup>1</sup> and i
 `login` and `consent` parameter values.  The reason for this is that a signature must never be generated based on a previous authentication (`login`) and that the Relying Party wants to ensure that the user actually sees the sign message and understands
 that he or she is performing a signature operation (`consent`).
 
+The Relying Party SHOULD examine the discovery document regarding supported MIME types for the `sign_message` field of the
+`https://id.oidc.se/param/signRequest` request parameter value (see [section 5.3](#discovery)), and only use a MIME
+type supported by the OpenID Provider. If no such information is available in the OP discovery document, the Relying 
+Party SHOULD use the MIME type `text/plain` for the sign message. 
+
 > **\[1\]:** The `prompt` parameter can be provided either as an ordinary request parameter or as a field in a Request Object.
 
 <a name="requirements-on-signing-user"></a>
@@ -379,21 +381,39 @@ claim, MUST be delivered in the ID Token and never from the UserInfo endpoint.
 <a name="discovery"></a>
 ### 5.3. Discovery
 
-OpenID Providers that supports the OpenID Connect Discovery standard, \[[OpenID.Discovery](#openid-discovery)\] and are compliant with this specification, MUST meet the following requirements:
+OpenID Providers that supports the OpenID Connect Discovery standard, \[[OpenID.Discovery](#openid-discovery)\] and are compliant with this specification<sup>1</sup>, MUST meet the following requirements:
 
-The `scopes_supported` MUST be present in the provider's discovery document and it MUST contain at least one of the scopes `https://scopes.oidc.se/1.0/delegatedSign` and `https://scopes.oidc.se/1.0/federatedSign`.
+The `scopes_supported` MUST be present in the provider's discovery document and it MUST contain the scope 
+`https://id.oidc.se/scope/sign`.
 
-An OpenID provider that declares the `https://scopes.oidc.se/1.0/delegatedSign` scope MUST also declare the `https://scopes.oidc.se/1.0/federatedSign` scope.
+Also, it is RECOMMENDED that the `https://id.oidc.se/scope/authnInfo` scope is supported and declared. See \[[OIDC.Sweden.Attr](#attr-spec)\].
 
-Also, it is RECOMMENDED that the `https://scopes.oidc.se/1.0/authnInfo` scope is supported and declared. See \[[OIDC.Sweden.Attr](#attr-spec)\].
+The `claims_supported` field MUST be present and include at least the claims that are included in the scope definitions for all
+declared scopes (in the `scopes_supported`).
 
-The `claims_supported` MUST be present and include at least the claims that are included in the scope definitions for all declared scopes (in the `scopes_supported`).
+The `request_parameter_supported` MUST be present, and SHOULD be set to `true` (i.e., the OpenID Provider has support for 
+handling signature requests sent by value as Request Objects).
 
-The `request_parameter_supported` MUST be present, and SHOULD be set to `true` (i.e., the OpenID Provider has support for handling signature requests sent by value as Request Objects).
+The `request_uri_parameter_supported` MUST be present, and it is RECOMMENDED that it is set to `true` (i.e., the OpenID Provider
+has support for handling signature requests sent by reference as Request Objects).
 
-The `request_uri_parameter_supported` MUST be present, and it is RECOMMENDED that it is set to `true` (i.e., the OpenID Provider has support for handling signature requests sent by reference as Request Objects).
+As already stated in section 5.2 of \[[OIDC.Sweden.Profile](#oidc-profile)\], the `claims_parameter_supported` SHOULD be present
+and set to `true`.
 
-The `claims_parameter_supported` SHOULD be present and set to `true`. (TODO: elaborate).
+Support of sign messages during a signature operation is REQUIRED by this specification. It is RECOMMENDED that
+the OpenID Provider also supports displaying of "client provided user messages", as defined in section 2.3.1
+of \[[OIDC.Sweden.Profile](#oidc-profile)\]. This capability is declared using the discovery parameter
+`https://id.oidc.se/disco/userMessageSupported` (see section 5.3.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]).
+This effectively means that the OP supports displaying of user messages also when the user authenticates 
+(as opposed to signs).
+
+The `https://id.oidc.se/disco/userMessageSupportedMimeTypes` field, defined in section 5.3.1 of 
+\[[OIDC.Sweden.Profile](#oidc-profile)\], SHOULD be used to declare which MIME types that are supported regarding the 
+`sign_message` field of the `https://id.oidc.se/param/signRequest` parameter value. If not declared, `[ "text/plain" ]` 
+MUST be assumed.
+
+> **\[1\]:** An OpenID Provider compliant with this specification MUST also be compliant with 
+\[[OIDC.Sweden.Profile](#oidc-profile)\] and thus meet the requirements stated in section 5.2 of that profile.
 
 <a name="normative-references"></a>
 ## 6. Normative References
@@ -414,10 +434,6 @@ The `claims_parameter_supported` SHOULD be present and set to `true`. (TODO: ela
 **\[OpenID.Discovery\]**
 > [Sakimura, N., Bradley, J., Jones, M. and E. Jay, "OpenID Connect Discovery 1.0", August 2015](https://openid.net/specs/openid-connect-discovery-1_0.html).
 
-<a name="openid-igov"></a>
-**\[OpenID.iGov\]**
-> [M. Varley, P. Grassi, "International Government Assurance Profile (iGov) for OpenID Connect 1.0", October 05, 2018](https://openid.net/specs/openid-igov-openid-connect-1_0.html).
-
 <a name="rfc7515"></a>
 **\[RFC7515\]**
 > [Jones, M., Bradley, J., and N. Sakimura, “JSON Web Token (JWT)”, May 2015](https://tools.ietf.org/html/rfc7515).
@@ -430,11 +446,4 @@ The `claims_parameter_supported` SHOULD be present and set to `true`. (TODO: ela
 **\[OIDC.Sweden.Profile\]**
 > [The Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-profile.md).
 
-<a name="bankid-api"></a>
-**\[BankID.API\]**
-> [BankID Relying Party Guidelines - Version: 3.5, 2020-10-26](https://www.bankid.com/assets/bankid/rp/bankid-relying-party-guidelines-v3.5.pdf).
-
-<a name="freja-api"></a>
-**\[Freja.API\]**
-> [Freja eID Relying Party Developers' Documentation](https://frejaeid.com/rest-api/Freja%20eID%20Relying%20Party%20Developers'%20Documentation.html).
 
