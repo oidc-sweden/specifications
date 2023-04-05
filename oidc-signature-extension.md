@@ -6,7 +6,7 @@
 
 ## Abstract
 
-This specification defines an extension to OpenID Connect to facilitate the use cases where a Relying Party sends a
+This specification defines an extension to OpenID Connect to facilitate use cases where a Relying Party sends a
 "Signature Request" to an OpenID Provider. A signature request is an extension of an OpenID Connect authentication
 request where a "Signature Request" object is passed as a request parameter or a Request Object.
 
@@ -269,7 +269,7 @@ included is a "signature request", and it requests the claims declared in the ta
 | Claim | Description/comment | Reference | Requirement |
 | :--- | :--- | :--- | :--- |
 | `https://id.oidc.se/`<br />`claim/userSignature` | The signature that is the result of the user signing process at the OP. | \[[OIDC.Sweden.Attr](#attr-spec)\] | REQUIRED |
-| `auth_time` | The time where the signature was created. | \[[OpenID.Core](#openid-core)\] | REQUIRED |
+| `auth_time` | The time when the signature was created. | \[[OpenID.Core](#openid-core)\] | REQUIRED |
 
 **Note:** The `https://id.oidc.se/scope/sign` alone does not say anything about the identity of the signing end-user.
 A Relying Party wishing to get this information, which it most likely does, should include additional scopes in the 
@@ -288,7 +288,7 @@ A Relying Party wishing to issue a request for signature according to the specif
 A request for signature MUST contain the [Signature Request Parameter](#the-signature-request-parameter) and its
 inclusion in the request MUST follow the requirements stated in sections [3.1.1](#placement-of-the-parameter-in-an-authentication-request), [Placement of the Parameter in an Authentication Request](#placement-of-the-parameter-in-an-authentication-request) and [3.1.2](#security-requirements), [Security Requirements](#security-requirements).
 
-The authentication request MUST contain the `prompt` parameter<sup>1</sup> and its value MUST be include both the 
+The authentication request MUST contain the `prompt` parameter<sup>1</sup> and its value MUST include both the 
 `login` and `consent` parameter values.  The reason for this is that a signature must never be generated based on a previous authentication (`login`) and that the Relying Party wants to ensure that the user actually sees the sign message and understands
 that he or she is performing a signature operation (`consent`).
 
@@ -306,7 +306,7 @@ In most cases a user is already logged into the service that wants the user to s
 a document. The data that is to be signed can be sensitive, and the service will need to ensure that only the intended user
 can view this data.
 
-If a Relying Party wanting to bind a signature operation to a particular identity SHOULD assign the necessary identity
+A Relying Party wanting to bind a signature operation to a particular identity SHOULD assign the necessary identity
 claim(s) to the `claims` request parameter and for each claim set the `essential` field to `true` and the `value` field 
 to the required identity value. See chapter 5.5.1 of \[[OpenID.Core](#openid-core)\].
 
