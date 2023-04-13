@@ -305,7 +305,7 @@ to inform the user in detail about why a particular authentication failed. The R
 only receives an `access_denied` error code.
 
 One special case that is not handled by OpenID Connect (or SAML) is when an end user cancels an operation
-at the OP. This is shortcoming, since from the Relying Party's UX point of view this should often not be
+at the OP. This is a shortcoming, since from the Relying Party's UX point of view this should often not be
 seen as an error. Normally, the user should just be passed back to the application's login page. 
 A typical reason for cancelling a login attempt would be that the user selected the wrong login method
 (OP), and needs to get back to the application login page.
