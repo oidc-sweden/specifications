@@ -194,7 +194,7 @@ Section 5.5 of \[[OpenID.Core](#openid-core)\] specifies how individual claims c
 An OpenID Provider compliant with this profile MUST support the `claims` parameter, both when passed as an OAuth parameter and when included in a Request Object (see [2.1.7](#request-objects-request-and-request-uri-parameters)).
 
 Section [2.1.5](#the-login-hint-parameter) recommends that the `claims` parameter is used
-in favour on the `login_hint` parameter. 
+in favour of the `login_hint` parameter. 
 
 The example below illustrates a value to the `claims` parameter where the Relying Party specifies 
 a value for a specific claim. By doing this instead of specifying the value as a `login_hint`, the
@@ -212,7 +212,7 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.
 ```
 
 > By setting the `essential` parameter to `false`, or leaving it out, the RP can signal the
-value of a claim that necessarily wont be released.
+value of a claim that necessarily will not be released.
 
 <a name="request-objects-request-and-request-uri-parameters"></a>
 #### 2.1.7. Request Objects (request and request_uri parameters)
