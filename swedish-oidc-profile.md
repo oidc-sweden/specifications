@@ -608,7 +608,7 @@ An entity processing a message in which an algorithm not listed below has been u
 
 <a name="openid-unmet-authnreq"></a>
 **\[OpenID.Unmet-AuthnReq\]**
-> [T. Lodderstedt, "OpenID Connect Core Error Code unmet\_authentication\_requirements"](OpenID Connect Core Error Code unmet_authentication_requirements).
+> [T. Lodderstedt, "OpenID Connect Core Error Code unmet\_authentication\_requirements"](https://openid.net/specs/openid-connect-unmet-authentication-requirements-1_0.html).
 
 <a name="openid-discovery"></a>
 **\[OpenID.Discovery\]**
