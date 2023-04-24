@@ -38,7 +38,7 @@ This specification defines a profile for OpenID Connect for use within the Swedi
 	
 	2.2. [Authentication Request Parameter Extensions](#authentication-request-parameter-extensions)
 	
-    2.3.1. [Client Provided User Message](#client-provided-user-message)
+    2.2.1. [Client Provided User Message](#client-provided-user-message)
 	
     2.3. [Processing of Authentication Requests](#processing-of-authentication-requests)
     
@@ -142,7 +142,7 @@ Relying Party to include in a request, and required or optional for an OP to sup
 | `request` | Request Object JWT. See [2.1.7](#request-objects-request-and-request-uri-parameters). | OPTIONAL for RP<br />REQUIRED for OP |
 | `request_uri` | Request Object JWT passed by reference. See [2.1.7](#request-objects-request-and-request-uri-parameters). | OPTIONAL |
 | `code_challenge`, `code_challenge_method` | Proof Key for Code Exchange (PKCE). See [2.1.8](#pkce-parameters) below. | OPTIONAL for RP<br />REQUIRED for OP |
-| `https://id.oidc.se/`<br />`param/userMessage` | Client provided user message. See [2.3.1](#client-provided-user-message) below. | OPTIONAL |
+| `https://id.oidc.se/`<br />`param/userMessage` | Client provided user message. See [2.2.1](#client-provided-user-message) below. | OPTIONAL |
 
 
 <a name="the-scope-parameter"></a>
@@ -242,7 +242,7 @@ An OpenID Provider MUST NOT allow a Relying Party to use the `plain` code challe
 This section contains authentication request parameter extensions defined within the scope of this profile.
 
 <a name="client-provided-user-message"></a>
-#### 2.3.1. Client Provided User Message
+#### 2.2.1. Client Provided User Message
 
 **Parameter:** `https://id.oidc.se/param/userMessage`
 
@@ -302,7 +302,7 @@ the `https://id.oidc.se/param/userMessage` member.
 <a name="processing-of-authentication-requests"></a>
 ### 2.3. Processing of Authentication Requests
 
-An OpenID Provider compliant with this profile MUST follow the requirements stated in section 3.1.2.2 of \[[OpenID.Core](#openid-core)\].
+An OpenID Provider compliant with this profile MUST follow the requirements stated in section 3.1.2.2 of \[[OpenID.Core](#openid-core)\] and the requirements put in [section 2.1](#authentication-request-parameters) of this profile.
 
 Furthermore, the OpenID Provider MUST not proceed with the authentication if the request contains the `acr_values` request parameter and none of the specified Requested Authentication Context Class Reference values can be used to authenticate the end-user. In these cases the provider SHOULD respond with an `unmet_authentication_requirements` error as defined in \[[OpenID.Unmet-AuthnReq](#openid-unmet-authnreq)\].
 
@@ -536,7 +536,7 @@ This section contains discovery parameter extensions defined by this profile.
 
 This profile defines two OpenID Discovery parameters that may be used by OpenID Providers to announce support for 
 the `https://id.oidc.se/param/userMessage` authentication request parameter, see section 
-[2.3.1](#client-provided-user-message), [Client Provided User Message](#client-provided-user-message), above.
+[2.2.1](#client-provided-user-message), [Client Provided User Message](#client-provided-user-message), above.
 
 <a name="user-message-supported"></a>
 ##### 5.3.1.1. User Message Supported
@@ -544,7 +544,7 @@ the `https://id.oidc.se/param/userMessage` authentication request parameter, see
 **Parameter:** `https://id.oidc.se/disco/userMessageSupported`
 
 **Description:** A discovery parameter specifying whether the OpenID Provider supports the `https://id.oidc.se/param/userMessage` authentication request parameter, see section 
-[2.3.1](#client-provided-user-message), [Client Provided User Message](#client-provided-user-message), above.
+[2.2.1](#client-provided-user-message), [Client Provided User Message](#client-provided-user-message), above.
 
 **Value type:** Boolean
 

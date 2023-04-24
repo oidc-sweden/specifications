@@ -124,7 +124,7 @@ to request a user signature. The signature request parameter contains input for 
 - `tbs_data` - The data to be signed as a Base64-encoded string. This specification does not specify the format on the supplied data. It is regulated by the signature scheme being used. This field is mandatory.
 
 - `sign_message` - A sign message is the human readable text snippet that is displayed to the user as part of the signature process<sup>2</sup>. The `sign_message` field is a JSON object according to the `https://id.oidc.se/param/userMessage` request
-parameter as defined in section 2.3.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. This field is mandatory.
+parameter as defined in section 2.2.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. This field is mandatory.
 
 **Example:**
 
@@ -357,7 +357,7 @@ or initiate the signature operation before the user's identity has been proven t
 identity does not match the supplied value(s) in the `claims` parameter, an error response MUST be sent.
 
 The processing of the supplied signature message (`sign_message` field of the `https://id.oidc.se/param/signRequest` parameter)
-MUST follow the requirements stated in section 2.3.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. If the message for
+MUST follow the requirements stated in section 2.2.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. If the message for
 some reason can not be displayed<sup>2</sup>, the the signature operation MUST be rejected (and an error message sent).
 
 The OpenID Provider SHOULD NOT save the user's signature operation in its session at the OP for later re-use in SSO-scenarios.
@@ -401,7 +401,7 @@ As already stated in section 5.2 of \[[OIDC.Sweden.Profile](#oidc-profile)\], th
 and set to `true`.
 
 Support of sign messages during a signature operation is REQUIRED by this specification. It is RECOMMENDED that
-the OpenID Provider also supports displaying of "client provided user messages", as defined in section 2.3.1
+the OpenID Provider also supports displaying of "client provided user messages", as defined in section 2.2.1
 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. This capability is declared using the discovery parameter
 `https://id.oidc.se/disco/userMessageSupported` (see section 5.3.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]).
 This effectively means that the OP supports displaying of user messages also when the user authenticates 
