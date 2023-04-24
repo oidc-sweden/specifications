@@ -563,7 +563,9 @@ relevant if `https://id.oidc.se/disco/userMessageSupported` is set to `true` (se
 
 Section 2 of \[[OpenID.Registration](#openid-registration)\] defines a listing of the client metadata used for Client Registration at the OpenID Provider. This chapter adds extra requirements and clarifications for use according to this profile.  
 
-The profile does not mandate OpenID Provider support for Dynamic registration of Relying Parties (clients). However, an OpenID Provider compliant with this profile MUST still be able to handle the client registration parameters specified in this section and in section 2 of \[[OpenID.Registration](#openid-registration)\]. This means that if an OpenID Provider registers Relying Parties by other means, it still needs to gather and maintain this client information.
+The profile does not mandate OpenID Provider support for Dynamic registration of Relying Parties (clients). However, an OpenID Provider compliant with this profile MUST still be able to handle the client registration parameters specified in this section and in section 2 of \[[OpenID.Registration](#openid-registration)\]. This means that if an OpenID Provider
+registers Relying Parties by other means, it MUST gather and maintain all required client information parameters in the
+following table.
 
 | Parameter | Description | Requirement |
 | :--- | :--- | :--- |
