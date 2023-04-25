@@ -466,7 +466,7 @@ The OpenID Provider MUST NOT release any user identity claims other than the man
 <a name="claims-release-requirements"></a>
 ### 4.4. Claims Release Requirements
 
-OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. If a specific claim is requested using the `claims` request parameter is marked as `essential` (see section 5.5 of \[[OpenID.Core](#openid-core)\]) and the provider can not provide this claim, the OpenID Provider MUST respond with an error response. 
+OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. 
 
 An OpenID Provider compliant with this profile MUST NOT release any identity claims<sup>1</sup> in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via the `scope` and/or `claims` request parameters, or by a policy<sup>2</sup> known, and accepted, by the involved parties. 
 
