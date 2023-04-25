@@ -188,8 +188,9 @@ authenticate.
 This profile does not define which type of string that is passed as a value to the `login_hint` parameter. It is 
 context- and OpenID Provider specific. 
 
-A Relying Party SHOULD NOT use the `login_hint` to pass a desired, or requested, claim value to the OP. In these
-cases the `claims` request parameter SHOULD be used, see [2.1.6](the-claims-parameter) below.
+However, a Relying Party MUST NOT use the `login_hint` to pass a claim value that it requests to be delivered in
+the resulting ID token. In these cases the `claims` request parameter SHOULD be used, see [2.1.6](the-claims-parameter)
+below.
 
 <a name="the-claims-parameter"></a>
 #### 2.1.6. The claims Parameter
@@ -200,9 +201,9 @@ request parameter.
 An OpenID Provider compliant with this profile MUST support the `claims` parameter, both when passed as an OAuth
 parameter and when included in a Request Object (see [2.1.7](#request-objects-request-and-request-uri-parameters)).
 
-Section [2.1.5](#the-login-hint-parameter) states that the `claims` parameter should be used
-in favour of the `login_hint` parameter when the Relying Party needs to pass an identifier that is a claim
-value to the OP.
+Section [2.1.5](#the-login-hint-parameter) states that the `claims` parameter is to be used
+in favour of the `login_hint` parameter when the Relying Party needs to pass a value that it wants to be
+delivered as a claim in the resulting ID token.
 
 The example below illustrates the contents of the `claims` parameter where the Relying Party specifies 
 a value for a specific claim. By doing this instead of specifying the value as a `login_hint`, the
