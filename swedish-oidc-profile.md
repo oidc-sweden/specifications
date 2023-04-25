@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-04-21
+### Version: 1.0 - draft 02 - 2023-04-25
 
 ## Abstract
 
@@ -182,23 +182,29 @@ An OpenID Provider MUST support the `prompt` parameter according to the requirem
 <a name="the-login-hint-parameter"></a>
 #### 2.1.5. The login\_hint Parameter
 
-Section 3.1.2.1 of \[[OpenID.Core](#openid-core)\] states that a Relying Party MAY include the `login_hint` parameter in an authentication request, and that its value is an identifier of the end-user. 
+Section 3.1.2.1 of \[[OpenID.Core](#openid-core)\] states that a Relying Party MAY include the `login_hint` parameter in an authentication request, and that its value is a string that can help the OpenID Provider to select the end-user to
+authenticate.
 
-This profile does not define which type of identifier that is passed as a value to the `login_hint` parameter. It is context and OpenID Provider specific.
+This profile does not define which type of string that is passed as a value to the `login_hint` parameter. It is 
+context- and OpenID Provider specific. 
 
-It is RECOMMENDED that a Relying Party uses the `claims` request parameter in favour of the `login_hint` parameter, see [2.1.6](the-claims-parameter) below.
+A Relying Party SHOULD NOT use the `login_hint` to pass a desired, or requested, claim value to the OP. In these
+cases the `claims` request parameter SHOULD be used, see [2.1.6](the-claims-parameter) below.
 
 <a name="the-claims-parameter"></a>
 #### 2.1.6. The claims Parameter
 
-Section 5.5 of \[[OpenID.Core](#openid-core)\] specifies how individual claims can be requested using the `claims` request parameter.
+Section 5.5 of \[[OpenID.Core](#openid-core)\] specifies how individual claims can be requested using the `claims` 
+request parameter.
 
-An OpenID Provider compliant with this profile MUST support the `claims` parameter, both when passed as an OAuth parameter and when included in a Request Object (see [2.1.7](#request-objects-request-and-request-uri-parameters)).
+An OpenID Provider compliant with this profile MUST support the `claims` parameter, both when passed as an OAuth
+parameter and when included in a Request Object (see [2.1.7](#request-objects-request-and-request-uri-parameters)).
 
-Section [2.1.5](#the-login-hint-parameter) recommends that the `claims` parameter is used
-in favour of the `login_hint` parameter. 
+Section [2.1.5](#the-login-hint-parameter) states that the `claims` parameter should be used
+in favour of the `login_hint` parameter when the Relying Party needs to pass an identifier that is a claim
+value to the OP.
 
-The example below illustrates a value to the `claims` parameter where the Relying Party specifies 
+The example below illustrates the contents of the `claims` parameter where the Relying Party specifies 
 a value for a specific claim. By doing this instead of specifying the value as a `login_hint`, the
 RP gives the OpenID Provider a more exact view of the user being authenticated.
 
@@ -212,9 +218,6 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.
   }
 }
 ```
-
-> By setting the `essential` parameter to `false`, or leaving it out, the RP can signal the
-value of a claim that necessarily will not be released.
 
 <a name="request-objects-request-and-request-uri-parameters"></a>
 #### 2.1.7. Request Objects (request and request_uri parameters)
