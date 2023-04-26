@@ -510,7 +510,7 @@ The Swedish OpenID Connect profile takes another approach regarding the primary 
 
 "Authentication Information Claims" as defined in section 2.3 of \[[AttrSpec](#attr-spec)\] are claims
 describing an authentication event, and are not user identity claims. Therefore, any of these claims
-MUST be delivered in the ID token and not from the UserInfo endpoint.
+MUST be delivered in the ID token and MUST NOT be delivered from the UserInfo endpoint.
 
 Note: In order to be compliant with \[[OpenID.Core](#openid-core)\] it is RECOMMENDED that claims requested by the scope values
 `profile`, `email`, `address`, and `phone` are delivered from the UserInfo endpoint. However, there are some overlap between the
