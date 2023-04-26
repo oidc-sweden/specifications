@@ -2,11 +2,11 @@
 
 # Attribute Specification for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-04-03
+### Version: 1.0 - draft 02 - 2023-04-26
 
 ## Abstract
 
-This specification defines claims (attributes) and scopes for the Swedish OpenID Connect profile.
+This specification defines claims and scopes for the Swedish OpenID Connect profile.
 
 
 ## Table of Contents
@@ -15,7 +15,7 @@ This specification defines claims (attributes) and scopes for the Swedish OpenID
 
     1.1. [Requirements Notation and Conventions](#requirements-notation-and-conventions)
 
-2. [**Attributes and Claims**](#attributes-and-claims)
+2. [**Claims**](#claims)
 
     2.1. [User Identity Claims](#user-identity-claims)
     
@@ -42,6 +42,8 @@ This specification defines claims (attributes) and scopes for the Swedish OpenID
     2.3.3. [User Credentials Validity](#user-credentials-validity)
     
     2.3.4. [Authentication Evidence](#authentication-evidence)
+
+    2.3.5. [Authentication Provider](#authentication-provider)
     
     2.4. [General Purpose Claims](#general-purpose-claims)
 
@@ -67,9 +69,15 @@ This specification defines claims (attributes) and scopes for the Swedish OpenID
 <a name="introduction"></a>
 ## 1. Introduction
 
-This specification aims to provide definitions of a common set of attributes (claims) that primarily is be used by Swedish OpenID Connect providers and clients, but can also be used in a pure OAuth2 context. The goal is to facilitate interoperability by supplying definitions for attributes that are commonly used independently of the sector of operation.
+This specification aims to provide definitions of a common set of claims (attributes) that
+primarily is be used by Swedish OpenID Connect providers and clients, but can also be used
+in a pure OAuth2 context. The goal is to facilitate interoperability by supplying definitions
+for claims that are commonly used independently of the sector of operation.
 
-Special purpose attributes, such as healthcare specific attributes, are not covered by this specification. However, this specification may serve as the base line for more sector specific attribute specifications, and in that way ensure that common attributes do not have several different representations (as is the case for the different SAML attribute specifications in use today).
+Special purpose claims, such as healthcare specific claims, are not covered by this
+specification. However, this specification may serve as the base line for more sector specific
+specifications, and in that way ensure that common claims do not have several different
+representations (as is the case for the different SAML attribute specifications in use today).
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -78,7 +86,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 These keywords are capitalized when used to unambiguously specify requirements over protocol features and behavior that affect the interoperability and security of implementations. When these words are not capitalized, they are meant in their natural-language sense.
 
-<a name="attributes-and-claims"></a>
+<a name="claims"></a>
 ## 2. Attributes and Claims
 
 This specification defines a set of claims that extend the set of standard claims defined in \[[RFC7515](#rfc7515)\] and 
@@ -304,6 +312,29 @@ claim can hold the encoding of an OCSP response, a SAML assertion, or even a sig
 > Note: This specification does not further specify the contents of the claim.  
 
 **Type:** String (Base64 encoded)
+
+<a name="authentication-provider"></a>
+### 2.3.5. Authentication Provider
+
+**Claim:** `https://id.oidc.se/claim/authnProvider`
+
+**Description:** A claim representing the identity of an "authentication provider"<sup>1</sup>. 
+This claim is intended to be released by OpenID Providers that offers several authentication 
+mechanisms (providers). This includes OpenID Providers that delegate, or proxy, the user authentication
+to other services<sup>2</sup>. 
+
+By including this claim in an ID token the OP informs the Relying Party about the identity of 
+the provider (mechanism or authority) that authenticated the user.
+
+**Type:** String, preferably an URI
+ 
+> **\[1\]:** This maps to the "authenticating authority" from the 
+[SAML v2.0 core specification](https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf),
+where the element `<saml2:AuthenticatingAuthority>` is defined for the same purpose as
+we describe above. 
+
+> **\[2\]:** These services, or authorities, do not necessarily have to be OpenID Providers, but 
+can be SAML Identity Providers, or any other authentication service.
 
 <a name="general-purpose-claims"></a>
 ### 2.4. General Purpose Claims

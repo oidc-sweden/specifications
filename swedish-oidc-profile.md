@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-04-25
+### Version: 1.0 - draft 02 - 2023-04-26
 
 ## Abstract
 
@@ -39,6 +39,8 @@ This specification defines a profile for OpenID Connect for use within the Swedi
 	2.2. [Authentication Request Parameter Extensions](#authentication-request-parameter-extensions)
 	
     2.2.1. [Client Provided User Message](#client-provided-user-message)
+    
+    2.2.2. [Requested Authentication Provider](#requested-authentication-provider)
 	
     2.3. [Processing of Authentication Requests](#processing-of-authentication-requests)
     
@@ -75,6 +77,8 @@ This specification defines a profile for OpenID Connect for use within the Swedi
     5.3. [Discovery Parameter Extensions](#discovery-parameter-extensions)
 
     5.3.1. [User Message Capabilities](#user-message-capabilities)
+    
+    5.3.2. [Requested Authentication Authority Capabilities](#requested-authentication-provider-capabilities)
 
 6. [**Client Registration**](#client-registration)
 
@@ -143,7 +147,7 @@ Relying Party to include in a request, and required or optional for an OP to sup
 | `request_uri` | Request Object JWT passed by reference. See [2.1.7](#request-objects-request-and-request-uri-parameters). | OPTIONAL |
 | `code_challenge`, `code_challenge_method` | Proof Key for Code Exchange (PKCE). See [2.1.8](#pkce-parameters) below. | OPTIONAL for RP<br />REQUIRED for OP |
 | `https://id.oidc.se/`<br />`param/userMessage` | Client provided user message. See [2.2.1](#client-provided-user-message) below. | OPTIONAL |
-
+| `https://id.oidc.se/`<br />`param/authnProvider` | Requested Authentication Provider. See [2.2.2](#requested-authentication-provider) below. | OPTIONAL
 
 <a name="the-scope-parameter"></a>
 #### 2.1.1. The scope Parameter
@@ -302,6 +306,32 @@ the `https://id.oidc.se/param/userMessage` member.
 },
 ...
 ```
+
+<a name="requested-authentication-provider"></a>
+#### 2.2.2. Requested Authentication Provider
+
+**Parameter:** `https://id.oidc.se/param/authnProvider`
+
+**Description:** In cases where the OpenID Provider can delegate, or proxy, the user 
+authentication to multiple authentication services, or if the OP offers multiple authentication
+mechanisms, the `authnProvider` request parameter MAY be used to inform the OP about 
+which of the authentication services, or mechanisms, that the Relying Party requests the user 
+to be authenticated at/with.
+
+An OpenID Provider that offers several different mechanisms for end-user
+authentication normally displays a dialogue from where the user selects how to authenticate.
+When the `authnProvider` request parameter is used, this interaction may be skipped.
+
+How possible values for this request parameter is announced by the OpenID Provider is
+out of scope for this profile. 
+
+Section 2.3.5 of \[[AttrSpec](#attr-spec)\] defines the claim `https://id.oidc.se/claim/authnProvider` 
+that MAY be included in an ID token by an OpenID Provider. The value of this claim can be used by the
+Relying Party to request re-authentication of an end-user. By assigning the value to the `authnProvider`
+request parameter, the RP requests that the user is authenticated using the same authentication mechanism
+that he or she originally was authenticated with.
+
+**Value type:** String, preferably an URI
 
 <a name="processing-of-authentication-requests"></a>
 ### 2.3. Processing of Authentication Requests
@@ -472,18 +502,22 @@ An OpenID Provider compliant with this profile MUST NOT release any identity cla
 
 Section 5.4 of \[[OpenID.Core](#openid-core)\] states:
 
-> The Claims requested by the `profile`, `email`, `address`, and `phone` scope values are returned from the UserInfo Endpoint, as described in Section 5.3.2, when a `response_type` value is used that results in an Access Token being issued. However, when no Access Token is issued (which is the case for the `response_type` value `id_token`), the resulting Claims are returned in the ID Token.
+> The Claims requested by the `profile`, `email`, `address`, and `phone` scope values are returned from the UserInfo Endpoint, as described in Section 5.3.2, when a `response_type` value is used that results in an Access Token being issued. However, when no Access Token is issued (which is the case for the `response_type` value `id_token`), the resulting Claims are returned in the ID Token. 
 
 \[[OpenID.Core](#openid-core)\] basically assumes that the user identity is delivered in the `sub` claim that is part of the ID token, and all other attributes are complementary attributes that may be fetched in a later call to the UserInfo endpoint. 
 
 The Swedish OpenID Connect profile takes another approach regarding the primary user identity, and the primary user identity is most often represented by a claim delivered as part of a requested scope. Therefore, this profile, requires that if any of the scopes defined in section 3 of \[[AttrSpec](#attr-spec)\] are requested the corresponding claims MUST be delivered in the ID token<sup>3</sup>.
+
+"Authentication Information Claims" as defined in section 2.3 of \[[AttrSpec](#attr-spec)\] are claims
+describing an authentication event, and are not user identity claims. Therefore, any of these claims
+MUST be delivered in the ID token and not from the UserInfo endpoint.
 
 Note: In order to be compliant with \[[OpenID.Core](#openid-core)\] it is RECOMMENDED that claims requested by the scope values
 `profile`, `email`, `address`, and `phone` are delivered from the UserInfo endpoint. However, there are some overlap between the
 `profile` scope and the  `https://id.oidc.se/scope/naturalPersonName` and `https://id.oidc.se/scope/naturalPersonNumber` scopes,
 and a Relying Party SHOULD use the latter scopes instead of the `profile` scope where applicable. 
 
-> \[1\]: Apart from the mandatory `sub` claim that also can be seen as an identity attribute.
+> \[1\]: Apart from the mandatory `sub` claim that also can be seen as an identity attribute. 
 
 > \[2\]: Such a claims release policy is out of scope for this specification.
 
@@ -526,6 +560,7 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | `code_challenge_methods_supported` | JSON array containing a list of PKCE code challenge methods supported by this OP. The array MUST include the `S256` method and MUST NOT include the `plain` method.<br />The `code_challenge_methods_supported` parameter is defined in section 2 of \[[RFC8614](#rfc8614)\]. | REQUIRED |
 | `https://id.oidc.se/`<br />`disco/userMessageSupported` | Boolean value specifying whether the OP supports the `https://id.oidc.se/param/userMessage` authentication request parameter, see [5.3.1.1](#user-message-supported) below. An OP that supports the request parameter MUST set this value to `true`.<br />If this parameter is not present it MUST be interpreted as that the OP does not support the request parameter. | OPTIONAL |
 | `https://id.oidc.se/disco/`<br />`userMessageSupportedMimeTypes` | JSON array containing the list of supported MIME types for the `https://id.oidc.se/param/userMessage` authentication request parameter, see [5.3.1.2](#user-message-supported-mime-types) below. <br />If the `https://id.oidc.se/disco/userMessageSupported` parameter is set to `true` and this field is not present, a default of `[ "text/plain" ]` MUST be assumed. | OPTIONAL |
+| `https://id.oidc.se/disco/`<br />`authnProviderSupported` | Boolean value specifying whether the OP supports the `authnProvider` request parameter, see [5.3.2](#requested-authentication-provider-capabilities) below. | OPTIONAL |
 
 
 Any other fields specified in \[[OpenID.Discovery](#openid-discovery)\] not appearing in the table above MAY also be used.
@@ -561,6 +596,17 @@ the `https://id.oidc.se/param/userMessage` authentication request parameter, see
 relevant if `https://id.oidc.se/disco/userMessageSupported` is set to `true` (see above).
 
 **Value type:** A JSON array of strings 
+
+<a name="requested-authentication-provider-capabilities"></a>
+#### 5.3.2. Requested Authentication Provider Capabilities
+
+**Parameter:** `https://id.oidc.se/disco/authnProviderSupported`
+
+**Description:** A discovery parameter specifying whether the OpenID Provider supports the
+`https://id.oidc.se/param/authnProvider` authentication request parameter, see section
+[2.2.2](#requested-authentication-provider), [Requested Authentication Provider](#requested-authentication-provider).
+
+**Value type:** Boolean
 
 <a name="client-registration"></a>
 ## 6. Client Registration
