@@ -57,14 +57,10 @@ This specification defines a profile for OpenID Connect for use within the Swedi
     3.2.2. [ID Token Validation](#id-token-validation)
     
 4. [**Claims and Scopes**](#claims-and-scopes)
-
-    4.1. [Mandatory Identity Claims](#mandatory-identity-claims)
     
-    4.2. [Mandatory Identity Scopes](#mandatory-identity-scopes)
+    4.1. [UserInfo Endpoint](#userinfo-endpoint)
     
-    4.3. [UserInfo Endpoint](#userinfo-endpoint)
-    
-    4.4. [Claims Release Requirements](#claims-release-requirements)
+    4.2. [Claims Release Requirements](#claims-release-requirements)
 
 5. [**Discovery**](#discovery)
 
@@ -422,40 +418,19 @@ Relying Parties MUST follow the requirements in section [3.1.3.7] of \[[OpenID.C
 <a name="claims-and-scopes"></a>
 ## 4. Claims and Scopes
 
-The "Attribute Specification for the Swedish OpenID Connect Profile" document, \[[AttrSpec](#attr-spec)\], defines claims and
-scopes to be used within the Swedish OpenID Connect profile. This specification defines claims and scopes for many different
-use cases, and some definitions may not be applicable for all entities. Therefore, sections [4.1](#mandatory-identity-claims)
-and [4.2](#mandatory-identity-scopes) lists the claims and scopes that MUST be supported by Relying Parties and OpenID Providers
-that are compliant with this profile. 
+The "Attribute Specification for the Swedish OpenID Connect Profile" document, \[[AttrSpec](#attr-spec)\], defines
+claims and scopes to be used by entities compliant with the Swedish OpenID Connect profile. 
 
-<a name="mandatory-identity-claims"></a>
-### 4.1. Mandatory Identity Claims
+Additional claims and scopes may be defined in profiles extending this profile, but to stay compliant and thus ensure
+interoperability, a claim that represents an identity value that already has a definition in \[[AttrSpec](#attr-spec)\]
+MUST NOT be re-defined with a new claim name in profiles extending the Swedish OpenID Connect profile.
 
-| Claim | Description | Reference |
-| :--- | :--- | :--- |
-| `https://id.oidc.se/claim/`<br />`personalIdentityNumber` | Swedish Personal Identity Number. | \[[AttrSpec](#attr-spec)\] |
-| `family_name` | Family name. | \[[OpenID.Core](#openid-core)\] |
-| `given_name` | Given name<sup>1</sup>. | \[[OpenID.Core](#openid-core)\] |
-| `name` | Display name/full name. | \[[OpenID.Core](#openid-core)\] |
-| `txn` | Transaction identifier. | \[[RFC8417](#rfc8417)\] |
-
-**Note:** If an OpenID Provider has the ability to deliver the `birthdate` claim, defined in \[[OpenID.Core](#openid-core)\], it MUST support the `https://id.oidc.se/claim/age` claim (as defined in \[[AttrSpec](#attr-spec)\]).
-
-> \[1\]: In the rare cases when a person's record in the population register does not include a given name, and `given_name` is requested, directly or indirectly via a scope, the value `-` SHOULD be assigned to the `given_name` claim.
-
-<a name="mandatory-identity-scopes"></a>
-### 4.2. Mandatory Identity Scopes
-
-| Scope | Description | Reference |
-| :--- | :--- | :--- |
-| `https://id.oidc.se/scope/`<br />`naturalPersonName` | Natural Person Name Information. | \[[AttrSpec](#attr-spec)\] |
-| `https://id.oidc.se/scope/`<br />`naturalPersonNumber` | Natural Person Identity - Personal Number. | \[[AttrSpec](#attr-spec)\] |
-| `profile` | OIDC default profile claims<sup>1</sup>. | \[[OpenID.Core](#openid-core)\] |
-
-> \[1\]: At least `family_name`, `given_name` and `name` MUST be supported.
+> As an example: An OpenID Provider compliant with this profile MUST not invent its own claim definition of a Swedish
+personal identity number. It MUST use the `https://id.oidc.se/claim/personalIdentityNumber` defined in 
+\[[AttrSpec](#attr-spec)\].
 
 <a name="userinfo-endpoint"></a>
-### 4.3. UserInfo Endpoint
+### 4.1. UserInfo Endpoint
 
 An OpenID Provider compliant with this profile SHOULD support releasing claims from the UserInfo endpoint. If supported the OpenID Provider MUST follow the requirements from section 5.3 of \[[OpenID.Core](#openid-core)\].
 
@@ -464,7 +439,7 @@ Responses from the UserInfo endpoint MUST be signed.
 The OpenID Provider MUST NOT release any user identity claims other than the mandatory `sub` claim if they are not explicitly requested in the original authentication request via the `claims` parameter, see [2.1.6](#the-claims-parameter), or by a standard scope (see below).
 
 <a name="claims-release-requirements"></a>
-### 4.4. Claims Release Requirements
+### 4.2. Claims Release Requirements
 
 OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. 
 
@@ -514,13 +489,13 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | :--- | :--- | :--- |
 | `token_endpoint` | Fully qualified URL of the OpenID Provider's OAuth 2.0 Token Endpoint. | REQUIRED |
 | `userinfo_endpoint` | Fully qualified URL of the OpenID Provider's UserInfo Endpoint. | OPTIONAL |
-| `scopes_supported` | JSON array containing a list of the scope values that this provider supports. MUST contain `openid` value and the mandatory scopes listed in section [4.2](#mandatory-identity-scopes). | REQUIRED |
+| `scopes_supported` | JSON array containing a list of the scope values that this provider supports. MUST contain the `openid` value. | REQUIRED |
 | `response_types_supported` | JSON array containing a list of the OAuth 2.0 `response_type` values that the OpenID Provider supports. MUST contain the `code` type. | REQUIRED |
 | `acr_values_supported` | JSON array containing a list of the Authentication Context Class References that the OpenID Provider supports. | REQUIRED |
 | `subject_types_supported` | JSON array containing a list of the Subject Identifier types that the OpenID Provider supports. MUST contain `public` and SHOULD contain `pairwise` | REQUIRED |
 | `token_endpoint_auth_`<br />`methods_supported` | JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain `private_key_jwt` and MAY contain other authentication methods as specified in section 9 of \[[OpenID.Core](#openid-core)\]. | REQUIRED |
 | `token_endpoint_auth_`<br />`signing_alg_values_supported` | JSON array containing a list of JWS signing algorithms supported by the Token Endpoint for the signature on the JWT used to authenticate the client at the Token Endpoint for the `private_key_jwt`. `RS256` MUST appear, and `none` MUST NOT appear. | REQUIRED |
-| `claims_supported` | JSON array containing a list of the claim names of the claims that the OpenID Provider MAY be able to supply values for. This list MUST contain all mandatory claims listed in section [4.1](#mandatory-identity-claims). | REQUIRED |
+| `claims_supported` | JSON array containing a list of the claim names of the claims that the OpenID Provider MAY be able to supply values for. | REQUIRED |
 | `claims_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `claims` request parameter. Since this profile requires support the value MUST be set to `true`. | REQUIRED |
 | `request_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `request` parameter for Request Objects. Since this profile requires support the value MUST be set to `true`. | REQUIRED |
 | `code_challenge_methods_supported` | JSON array containing a list of PKCE code challenge methods supported by this OP. The array MUST include the `S256` method and MUST NOT include the `plain` method.<br />The `code_challenge_methods_supported` parameter is defined in section 2 of \[[RFC8614](#rfc8614)\]. | REQUIRED |
