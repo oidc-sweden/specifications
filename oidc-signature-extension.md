@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-04-05
+### Version: 1.0 - draft 02 - 2023-04-27
 
 ## Abstract
 
@@ -116,15 +116,20 @@ use case defined in this specification.
 
 **Parameter:** `https://id.oidc.se/param/signRequest`
 
-**Description:** The signature request parameter is included in an authentication request by the Relying Party in order
-to request a user signature. The signature request parameter contains input for this signature operation.
+**Description:** The signature request parameter is included in an authentication request by the 
+Relying Party in order to request a user signature. The signature request parameter contains input
+for this signature operation.
 
-**Value type:** The value for the signature request parameter claim is a JSON object<sup>1</sup> with the following fields:
+**Value type:** The value for the signature request parameter claim is a JSON object<sup>1</sup> 
+with the following fields:
 
-- `tbs_data` - The data to be signed as a Base64-encoded string. This specification does not specify the format on the supplied data. It is regulated by the signature scheme being used. This field is mandatory.
+- `tbs_data` - The data to be signed as a Base64-encoded string. This specification does not specify the
+format on the supplied data. It is regulated by the signature scheme being used. This field is mandatory.
 
-- `sign_message` - A sign message is the human readable text snippet that is displayed to the user as part of the signature process<sup>2</sup>. The `sign_message` field is a JSON object according to the `https://id.oidc.se/param/userMessage` request
-parameter as defined in section 2.2.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. This field is mandatory.
+- `sign_message` - A sign message is the human readable text snippet that is displayed to the user as
+part of the signature process<sup>2</sup>. The `sign_message` field is a JSON object according to the
+`https://id.oidc.se/param/userMessage` request parameter as defined in section 2.1 of 
+\[[OIDC.Sweden.Param](#request-ext)\]. This field is mandatory.
 
 **Example:**
 
@@ -367,7 +372,7 @@ not be mixed.
 > **\[1\]:** See section 4.1.2.1 of \[[RFC6749](#rfc6749)\].
 
 > **\[2\]:** An OpenID Provider compliant with this specification MUST also be compliant with 
-\[[OIDC.Sweden.Profile](#oidc-profile)\], and \[[OIDC.Sweden.Profile](#oidc-profile)\] requires OpenID Providers to 
+\[[OIDC.Sweden.Profile](#oidc-profile)\], and that profile requires OpenID Providers to 
 support the `claims` request parameter.
 
 > **\[3\]:** For example an unsupported MIME type was specified.
@@ -381,7 +386,7 @@ claim, MUST be delivered in the ID Token and never from the UserInfo endpoint.
 <a name="discovery"></a>
 ### 5.3. Discovery
 
-OpenID Providers that supports the OpenID Connect Discovery standard, \[[OpenID.Discovery](#openid-discovery)\] and are compliant with this specification<sup>1</sup>, MUST meet the following requirements:
+OpenID Providers that are compliant with this specification<sup>1</sup>, MUST meet the following requirements discovery requirements:
 
 The `scopes_supported` MUST be present in the provider's discovery document and it MUST contain the scope 
 `https://id.oidc.se/scope/sign`.
@@ -400,17 +405,17 @@ has support for handling signature requests sent by reference as Request Objects
 As already stated in section 5.2 of \[[OIDC.Sweden.Profile](#oidc-profile)\], the `claims_parameter_supported` SHOULD be present
 and set to `true`.
 
-Support of sign messages during a signature operation is REQUIRED by this specification. It is RECOMMENDED that
-the OpenID Provider also supports displaying of "client provided user messages", as defined in section 2.2.1
-of \[[OIDC.Sweden.Profile](#oidc-profile)\]. This capability is declared using the discovery parameter
-`https://id.oidc.se/disco/userMessageSupported` (see section 5.3.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]).
-This effectively means that the OP supports displaying of user messages also when the user authenticates 
-(as opposed to signs).
+Support of sign messages during a signature operation is REQUIRED by this specification. It is 
+RECOMMENDED that the OpenID Provider also supports displaying of "client provided user messages", 
+as defined in section 2.1 of \[[OIDC.Sweden.Param](#request-ext)\]. This capability is declared 
+using the discovery parameter `https://id.oidc.se/disco/userMessageSupported` (see section 3.1.1 of 
+\[[OIDC.Sweden.Param](#request-ext)\]). This effectively means that the OP supports displaying of
+user messages also when the user authenticates (as opposed to signs).
 
-The `https://id.oidc.se/disco/userMessageSupportedMimeTypes` field, defined in section 5.3.1 of 
-\[[OIDC.Sweden.Profile](#oidc-profile)\], SHOULD be used to declare which MIME types that are supported regarding the 
-`sign_message` field of the `https://id.oidc.se/param/signRequest` parameter value. If not declared, `[ "text/plain" ]` 
-MUST be assumed.
+The `https://id.oidc.se/disco/userMessageSupportedMimeTypes` field, defined in section 3.1.2 of 
+\[[OIDC.Sweden.Param](#request-ext)\], SHOULD be used to declare which MIME types that are supported
+regarding the `sign_message` field of the `https://id.oidc.se/param/signRequest` parameter value.
+If not declared, `[ "text/plain" ]` MUST be assumed.
 
 > **\[1\]:** An OpenID Provider compliant with this specification MUST also be compliant with 
 \[[OIDC.Sweden.Profile](#oidc-profile)\] and thus meet the requirements stated in section 5.2 of that profile.
@@ -438,12 +443,17 @@ MUST be assumed.
 **\[RFC7515\]**
 > [Jones, M., Bradley, J., and N. Sakimura, “JSON Web Token (JWT)”, May 2015](https://tools.ietf.org/html/rfc7515).
 
+<a name="oidc-profile"></a>
+**\[OIDC.Sweden.Profile\]**
+> [The Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-profile.md).
+
+<a name="request-ext"></a>
+**\[OIDC.Sweden.Params\]**
+> [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/request-parameter-extensions.md).
+
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
 > [Attribute Specification for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
 
-<a name="oidc-profile"></a>
-**\[OIDC.Sweden.Profile\]**
-> [The Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-profile.md).
 
 
