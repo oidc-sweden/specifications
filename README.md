@@ -13,6 +13,9 @@ The oidc-sweden/specifications repository is where the Working Group for the Swe
 
 * [Signature Extension for OpenID Connect 1.0 - draft](oidc-signature-extension.md) - A signature extension for OpenID Connect.
 
+* [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile 1.0 - draft](request-parameter-extensions.md) - Authentication request parameter extensions for the Swedish
+OpenID Connect Profile.
+
 
 
 
