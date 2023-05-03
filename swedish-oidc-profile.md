@@ -480,25 +480,25 @@ Entities conforming to this profile MUST support algorithms according to "JSON W
 \[[RFC7518](#rfc7518)\], with the following additions:
 
 - `RS256`, RSASSA-PKCS1-v1_5 using SHA-256, is listed as recommended in \[[RFC7518](#rfc7518)\], but is
-REQUIRED by this profile.
+REQUIRED to support by this profile.
 
 - `RS384`, RSASSA-PKCS1-v1_5 using SHA-384, is listed as optional in \[[RFC7518](#rfc7518)\],
-but is RECOMMENDED by this profile.
+but is RECOMMENDED to support by this profile.
 
 - `RS512`, RSASSA-PKCS1-v1_5 using SHA-512, is listed as optional in \[[RFC7518](#rfc7518)\],
-but is RECOMMENDED by this profile.
+but is RECOMMENDED to support by this profile.
 
 - `ES256`, ECDSA using P-256 and SHA-256, is listed as recommended in \[[RFC7518](#rfc7518)\], but
-is REQUIRED by this profile.
+is REQUIRED to support by this profile.
 
 - `ES384`, ECDSA using P-384 and SHA-384, is listed as optional in \[[RFC7518](#rfc7518)\], but is 
-RECOMMENDED by this profile.
+RECOMMENDED to support by this profile.
 
 - `ES512`, ECDSA using P-521 and SHA-512, is listed as optional in \[[RFC7518](#rfc7518)\], but is
-RECOMMENDED by this profile.
+RECOMMENDED to support by this profile.
 
-- `RSA-OAEP`, RSAES OAEP using default parameters, is listed as recommended in \[[RFC7518](#rfc7518)\], but
-is REQUIRED by this profile.
+- `RSA-OAEP`, RSAES OAEP using default parameters, is listed as recommended in \[[RFC7518](#rfc7518)\],
+but is REQUIRED to support by this profile.
 
 - `A128GCM` and `A256GCM`, AES GCM using 128/256-bit key, are listed as recommended in \[[RFC7518](#rfc7518)\],
 but are REQUIRED by this profile.
