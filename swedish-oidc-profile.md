@@ -1,4 +1,4 @@
-![Logo](docs/images/oidc-logo.png)
+![Logo](img/oidc-logo.png)
 
 # The Swedish OpenID Connect Profile
 
@@ -572,7 +572,7 @@ considered broken and MUST NOT be used or accepted.
 
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
+> [Attribute Specification for the Swedish OpenID Connect Profile](https://oidc.se/specifications/swedish-oidc-attribute-specification.html).
 
 <a name="nist800-52"></a>
 **\[NIST.800-52.Rev2\]**

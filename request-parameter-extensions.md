@@ -227,8 +227,8 @@ If this parameter is not set by the OP, a default of `[ "text/plain" ]` MUST be 
 
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.md).
+> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html).
 
 <a name="oidc-profile"></a>
 **\[OIDC.Sweden.Profile\]**
-> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.md).
+> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.html).

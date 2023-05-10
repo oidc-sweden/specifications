@@ -445,15 +445,15 @@ If not declared, `[ "text/plain" ]` MUST be assumed.
 
 <a name="oidc-profile"></a>
 **\[OIDC.Sweden.Profile\]**
-> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.md).
+> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.html).
 
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.md).
+> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html).
 
 <a name="request-ext"></a>
 **\[OIDC.Sweden.Params\]**
-> [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/request-parameter-extensions.md).
+> [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/request-parameter-extensions.html).
 
 
 
