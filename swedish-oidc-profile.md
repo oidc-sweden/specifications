@@ -6,7 +6,7 @@
 
 ## Abstract
 
-This specification defines a profile for OpenID Connect for use within the Swedish public and private sector. It profiles the OpenID Connect protocol to get a baseline security and to facilitate interoperability between relying parties and OpenID providers.
+This specification defines a profile for OpenID Connect for use within the Swedish public and private sectors. It profiles the OpenID Connect protocol to get a baseline security and to facilitate interoperability between relying parties and OpenID providers.
 
 ## Table of Contents
 
