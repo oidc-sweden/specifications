@@ -1,4 +1,4 @@
-![Logo](docs/images/oidc-logo.png)
+![Logo](img/oidc-logo.png)
 
 # Signature Extension for OpenID Connect
 
@@ -445,15 +445,16 @@ If not declared, `[ "text/plain" ]` MUST be assumed.
 
 <a name="oidc-profile"></a>
 **\[OIDC.Sweden.Profile\]**
-> [The Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-profile.md).
-
-<a name="request-ext"></a>
-**\[OIDC.Sweden.Params\]**
-> [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/request-parameter-extensions.md).
+> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.html).
 
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
+> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html).
+
+<a name="request-ext"></a>
+**\[OIDC.Sweden.Params\]**
+> [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/request-parameter-extensions.html).
+
 
 
 

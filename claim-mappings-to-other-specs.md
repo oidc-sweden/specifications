@@ -1,4 +1,4 @@
-![Logo](docs/images/oidc-logo.png)
+![Logo](img/oidc-logo.png)
 
 # How OpenID Connect Claims Map to other Specifications
 
@@ -90,7 +90,7 @@ The following table defines a mapping from the attribute names defined in "Freja
 
 <a name="oidc-sweden"></a>
 **\[OIDC.Sweden\]**
-> Attribute Specification for the Swedish OpenID Connect Profile.
+> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html).
 
 <a name="openid-core"></a>
 **\[OpenID.Core\]**
@@ -110,7 +110,7 @@ The following table defines a mapping from the attribute names defined in "Freja
 
 <a name="bankid-api"></a>
 **\[BankID.API\]**
-> [BankID Relying Party Guidelines - Version: 3.5, 2020-10-26](https://www.bankid.com/assets/bankid/rp/bankid-relying-party-guidelines-v3.5.pdf).
+> [BankID Relying Party Guidelines](https://www.bankid.com/en/utvecklare/guider/teknisk-integrationsguide).
 
 <a name="freja-api"></a>
 **\[Freja.API\]**

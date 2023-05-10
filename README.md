@@ -1,6 +1,6 @@
-![Logo](docs/images/oidc-logo.png)
+![Logo](img/oidc-logo.png)
 
-# Swedish OpenID Connect Profile Specifications
+# Swedish OpenID Connect Specifications
 
 The oidc-sweden/specifications repository is where the Working Group for the Swedish OpenID Connect Profile develops the specifications for the Swedish OpenID Connect Profile.
 

@@ -1,4 +1,4 @@
-![Logo](docs/images/oidc-logo.png)
+![Logo](img/oidc-logo.png)
 
 # Attribute Specification for the Swedish OpenID Connect Profile
 

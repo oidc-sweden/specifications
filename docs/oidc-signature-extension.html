@@ -1,0 +1,403 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signature Extension for OpenID Connect</title>
+    <link type="text/css" rel="stylesheet" href="assets/css/github-markdown.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/pilcrow.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/oidc-portrait.css" media="print" >
+    <link type="text/css" rel="stylesheet" href="assets/css/oidc-custom.css" media="print" >
+  </head>
+  <body>
+    <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
+<h1 id="signature-extension-for-openid-connect">Signature Extension for OpenID Connect</h1>
+<h3 id="version-10---draft-02---2023-04-27">Version: 1.0 - draft 02 - 2023-04-27</h3>
+<h2 id="abstract">Abstract</h2>
+<p>This specification defines an extension to OpenID Connect to facilitate use cases where a Relying Party sends a
+&quot;Signature Request&quot; to an OpenID Provider. A signature request is an extension of an OpenID Connect authentication
+request where a &quot;Signature Request&quot; object is passed as a request parameter or a Request Object.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol class="list">
+<li><p><a href="#introduction"><strong>Introduction</strong></a></p>
+<p> 1.1. <a href="#requirements-notation-and-conventions">Requirements Notation and Conventions</a></p>
+</li>
+<li><p><a href="#the-use-case"><strong>The Use Case</strong></a></p>
+</li>
+<li><p><a href="#identifiers"><strong>Identifiers</strong></a></p>
+<p> 3.1. <a href="#the-signature-request-parameter">The Signature Request Parameter</a></p>
+<p> 3.1.1. <a href="#placement-of-the-parameter-in-an-authentication-request">Placement of the Parameter in an Authentication Request</a></p>
+<p> 3.1.2. <a href="#security-requirements">Security Requirements</a></p>
+<p> 3.2. <a href="#signature-scope">Signature Scope</a></p>
+</li>
+<li><p><a href="#relying-party-requirements"><strong>Relying Party Requirements</strong></a></p>
+<p> 4.1. <a href="#requests">Requests</a></p>
+<p> 4.1.1. <a href="#requirements-on-signing-user">Requirements on Signing User</a></p>
+</li>
+<li><p><a href="#openid-provider-requirements"><strong>OpenID Provider Requirements</strong></a></p>
+<p> 5.1. <a href="#processing-requirements">Processing Requirements</a></p>
+<p> 5.2. <a href="#response-requirements">Response Requirements</a></p>
+<p> 5.3. <a href="#discovery">Discovery</a></p>
+</li>
+<li><p><a href="#normative-references"><strong>Normative References</strong></a></p>
+</li>
+</ol>
+<hr>
+<p><a name="introduction"></a></p>
+<h2 id="1-introduction">1. Introduction</h2>
+<p>This specification defines an extension to OpenID Connect to facilitate that a user digitally signs data provided by
+a Relying Party at the OpenID Provider.</p>
+<p>The rationale behind this specification is that the OIDC Sweden Working Group has seen the need to offer a standardized
+OpenID Connect way of handling both authentication and signature since most eID providers in Sweden supports both
+authentication and signing.</p>
+<p>This specification should not be seen as a competitor to any of the full-blown signature specifications such as
+<a href="https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=dss">OASIS DSS</a>, but instead as the OpenID Connect-equivalent
+to the proprietary API:s offered by eID providers. In fact, this specification says nothing about signature formats,
+validation or any other part of the complex world of digital signatures. </p>
+<p><strong>Note:</strong> This specification is written in the context of the <a href="#oidc-profile">The Swedish OpenID Connect Profile</a>, 
+[<a href="#oidc-profile">OIDC.Sweden.Profile</a>], and therefore compliance with this specification also requires
+compliance with [<a href="#oidc-profile">OIDC.Sweden.Profile</a>].</p>
+<p><a name="requirements-notation-and-conventions"></a></p>
+<h3 id="11-requirements-notation-and-conventions">1.1. Requirements Notation and Conventions</h3>
+<p>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and
+“OPTIONAL” are to be interpreted as described in [<a href="#rfc2119">RFC2119</a>].</p>
+<p>These keywords are capitalized when used to unambiguously specify requirements over protocol features and behavior that
+affect the interoperability and security of implementations. When these words are not capitalized, they are meant in 
+their natural-language sense.</p>
+<p><a name="the-use-case"></a></p>
+<h2 id="2-the-use-case">2. The Use Case</h2>
+<p>The use case that this profile seeks to find an OpenID Connect solution to is as follows:</p>
+<p>The Relying Party delegates the signing operation to the OpenID Provider by sending an authentication request with a
+sign extension. The flow below illustrates each step in for this delegated signing model.</p>
+<p class="img-container"><img src="img/delegated-signing.png" alt="Delegated signing"></p>
+<ol class="list">
+<li><p>The user wants to sign something at the Relying Party, for example a form, and clicks &quot;Sign&quot;.</p>
+</li>
+<li><p>The Relying Party (client) initiates an &quot;authentication for signature&quot; by redirecting the user to the OpenID Provider
+along with an authentication request containing a sign extension (see <a href="#the-signature-request-parameter">section 3.1</a> below).</p>
+</li>
+<li><p>During the authentication/signing the user actually performs a signature of the &quot;to-be-signed&quot; data that was
+supplied as an extension to the authentication request. In this step the OpenID Provider also displays a summary of what
+is being signed.</p>
+</li>
+<li><p>After a completed signature operation the user agent is redirected back to the client along with an authorization code.</p>
+</li>
+<li><p>Next, the client obtains an ID token that contains information about the signee along with the signed data.</p>
+</li>
+<li><p>Finally, the completed signature operation is acknowledged to the user.</p>
+</li>
+</ol>
+<p>The advantage with this use case is that it is simple and straightforward. The disadvantage is that only OpenID Providers
+that actually supports eID:s that support creating signatures can be used.</p>
+<p><a name="identifiers"></a></p>
+<h2 id="3-identifiers">3. Identifiers</h2>
+<p>This section extends [<a href="#attr-spec">OIDC.Sweden.Attr</a>] with definitions of parameter claims and scopes used for the signing
+use case defined in this specification.</p>
+<p><a name="the-signature-request-parameter"></a></p>
+<h3 id="31-the-signature-request-parameter">3.1. The Signature Request Parameter</h3>
+<p><strong>Parameter:</strong> <code>https://id.oidc.se/param/signRequest</code></p>
+<p><strong>Description:</strong> The signature request parameter is included in an authentication request by the 
+Relying Party in order to request a user signature. The signature request parameter contains input
+for this signature operation.</p>
+<p><strong>Value type:</strong> The value for the signature request parameter claim is a JSON object<sup>1</sup> 
+with the following fields:</p>
+<ul class="list">
+<li><p><code>tbs_data</code> - The data to be signed as a Base64-encoded string. This specification does not specify the
+format on the supplied data. It is regulated by the signature scheme being used. This field is mandatory.</p>
+</li>
+<li><p><code>sign_message</code> - A sign message is the human readable text snippet that is displayed to the user as
+part of the signature process<sup>2</sup>. The <code>sign_message</code> field is a JSON object according to the
+<code>https://id.oidc.se/param/userMessage</code> request parameter as defined in section 2.1 of 
+[<a href="#request-ext">OIDC.Sweden.Param</a>]. This field is mandatory.</p>
+</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre class="hljs"><code>...
+<span class="hljs-string">&quot;https://id.oidc.se/param/signRequest&quot;</span> : {
+  <span class="hljs-string">&quot;tbs_data&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded data&gt;&quot;</span>,
+  <span class="hljs-string">&quot;sign_message&quot;</span> : {
+    <span class="hljs-string">&quot;message&quot;</span> : { 
+      <span class="hljs-string">&quot;sv&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded sign message in Swedish&gt;&quot;</span>,
+      <span class="hljs-string">&quot;en&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded sign message in English&gt;&quot;</span>
+    },
+    <span class="hljs-string">&quot;mime_type&quot;</span> : <span class="hljs-string">&quot;text/plain&quot;</span>
+  }
+},
+...</code></pre><blockquote>
+<p><strong>[1]:</strong> Depending on where in a request the parameter is placed, the value may be a JWT, see [section 3.1.1](#placement-of-the-
+parameter-in-an-authentication-request) below. </p>
+</blockquote>
+<blockquote>
+<p><strong>[2]:</strong> Whether the contents of the sign message is part of the signature input data at the OpenID Provider or not is not regulated by this profile.</p>
+</blockquote>
+<p><a name="placement-of-the-parameter-in-an-authentication-request"></a></p>
+<h4 id="311-placement-of-the-parameter-in-an-authentication-request">3.1.1. Placement of the Parameter in an Authentication Request</h4>
+<p>The <code>https://id.oidc.se/param/signRequest</code> request parameter, can be provided in an authentication
+request in two ways; as a custom request parameter where its value is represented as a JWT, or as part of a Request Object 
+that is the value to the <code>request</code> (or <code>request_uri</code>) parameter.</p>
+<p><a name="as-a-custom-request-parameter"></a></p>
+<h5 id="3111-as-a-custom-request-parameter">3.1.1.1. As a Custom Request Parameter</h5>
+<p>If the sign request parameter is included as a custom request parameter its value MUST be represented as a JWT following 
+the security requirements specified in <a href="#security-requirements">section 3.1.2</a> below.</p>
+<p>Below follows a minimal, and non-normative, example redirect by the client, which triggers the user agent to make a
+&quot;signature&quot;<sup>1</sup> request to the authorization endpoint: </p>
+<pre class="hljs"><code>HTTP/<span class="hljs-number">1.1</span> <span class="hljs-number">302</span> Found
+Location: https:<span class="hljs-comment">//server.example.com/authorize?</span>
+  response_type=code
+  &amp;scope=openid%20https%3A%2F%2Fid.oidc.se%2Fscope%2Fsign
+  &amp;client_id=exampleclientid
+  &amp;state=af0ifjsldkj
+  &amp;prompt=login%20consent
+  &amp;redirect_uri=https%3A%2F%2Fclient.example.org%2Fcb
+  &amp;https%3A%2F%2Fid.oidc.se%2Fclaim%2FsignRequest=eyJhbjIn0.ew0...MbpL<span class="hljs-number">-2</span>QgwUsAlMGzw</code></pre><p>The scopes requested are <code>openid</code> (always) and <code>https://id.oidc.se/scope/sign</code> (see <a href="#signature-scope">section 3.2</a>, 
+<a href="#signature-scope">Signature Scope</a>)  that instructs the OpenID Provider that this is a signature request. 
+In a real-life scenario, the Relying Party would probably request additional claims using additional scopes, for example,
+ <code>https://id.oidc.se/scope/naturalPersonNumber</code> and <code>https://id.oidc.se/scope/authnInfo</code> (see [<a href="#attr-spec">OIDC.Sweden.Attr</a>]).</p>
+<p>The parameter <code>https://id.oidc.se/param/signRequest</code> is among the parameters and its value is a JWT
+(abbreviated for readability). This parameter value holds the input to the signature operation.</p>
+<blockquote>
+<p><strong>[1]:</strong> There is no such thing as an OpenID signature request. The example is really an authentication request
+carrying the signature request parameter.</p>
+</blockquote>
+<p><a name="placed-in-a-request-object"></a></p>
+<h5 id="3112-placed-in-a-request-object">3.1.1.2. Placed in a Request Object</h5>
+<p>The signature request parameter and value can also be part of a Request Object JWT that is the value for the <code>request</code> (or <code>request_uri</code>) parameter. </p>
+<p>Since the Request Object is a JWT, the value for the signature request parameter is in these cases a JSON object.</p>
+<p>See section 6, &quot;Passing Request Parameters as JWTs&quot;, in [<a href="#openid-core">OpenID.Core</a>] for details. </p>
+<p><strong>Note:</strong> It is perfectly legal to create a request where some parameters are assigned as regular request parameters 
+and some are included in the Request Object. However, since the Request Object MUST be signed (see below) the <code>iss</code> 
+(issuer) and <code>aud</code> (audience) claims MUST be included in the Request Object. </p>
+<p>The following is a non-normative example of the claims in a Request Object before Base64, URL-encoding (and signing): </p>
+<pre class="hljs"><code>{
+  <span class="hljs-attr">&quot;iss&quot;</span>: <span class="hljs-string">&quot;exampleclientid&quot;</span>,
+  <span class="hljs-attr">&quot;aud&quot;</span>: <span class="hljs-string">&quot;https://server.example.com&quot;</span>,
+  <span class="hljs-attr">&quot;response_type&quot;</span>: <span class="hljs-string">&quot;code&quot;</span>,
+  <span class="hljs-attr">&quot;redirect_uri&quot;</span>: <span class="hljs-string">&quot;https://client.example.org/cb&quot;</span>,
+  <span class="hljs-attr">&quot;scope&quot;</span>: <span class="hljs-string">&quot;openid https://id.oidc.se/scope/sign&quot;</span>,
+  <span class="hljs-attr">&quot;prompt&quot;</span>: <span class="hljs-string">&quot;login consent&quot;</span>
+  <span class="hljs-string">&quot;https://id.oidc.se/param/signRequest&quot;</span>: {
+    <span class="hljs-attr">&quot;tbs_data&quot;</span> : <span class="hljs-string">&quot;VGhpcyBpcyB0aGUgZGF0YSB0aGF0IEkgd2FudCB0byBzaWdu&quot;</span>,
+    <span class="hljs-attr">&quot;sign_message&quot;</span> : {
+      <span class="hljs-attr">&quot;message&quot;</span> : { 
+        <span class="hljs-attr">&quot;sv&quot;</span> : <span class="hljs-string">&quot;RGVubmEgdGV4dCB2aXNhcyBmw7ZyIGFudsOkbmRhcmVu&quot;</span>,
+        <span class="hljs-attr">&quot;en&quot;</span> : <span class="hljs-string">&quot;VGhpcyBpcyB0ZXh0IGRpc3BsYXllZCBmb3IgdGhlIHVzZXI=&quot;</span>
+      },
+      <span class="hljs-attr">&quot;mime_type&quot;</span> : <span class="hljs-string">&quot;text/plain&quot;</span>
+    }
+  }
+}
+</code></pre><p>When the client creates a redirect response, which triggers the user agent to make an &quot;signature&quot;<sup>1</sup> request
+to the authorization endpoint it looks like:</p>
+<pre class="hljs"><code>HTTP/<span class="hljs-number">1.1</span> <span class="hljs-number">302</span> Found
+<span class="hljs-symbol">https:</span><span class="hljs-comment">//server.example.com/authorize?</span>
+  response_type=code
+  <span class="hljs-variable">&amp;client_id</span>=exampleclientid
+  <span class="hljs-variable">&amp;scope</span>=openid%<span class="hljs-number">20</span>https%<span class="hljs-number">3</span>A%<span class="hljs-number">2F</span>%<span class="hljs-number">2F</span>id.oidc.se%<span class="hljs-number">2F</span>scope%<span class="hljs-number">2F</span>sign
+  <span class="hljs-variable">&amp;state</span>=af0ifjsldkj
+  <span class="hljs-variable">&amp;nonce</span>=n<span class="hljs-number">-0</span>S6_WzA2Mj
+  <span class="hljs-variable">&amp;request</span>=eyJhbGciOiJSUzI1NiIsImtpZCI6ImsyYmRjIn0.ew0KICJpc3MiOiAiczZCaGRSa3...xMbpL<span class="hljs-number">-2</span>QgwUsAlMGzw</code></pre><p>The example illustrates how a Request Object is passed by value. See section 6.2, &quot;Passing a Request Object by Reference&quot;, in [<a href="#openid-core">OpenID.Core</a>] for how to use the <code>request_uri</code> instead.</p>
+<blockquote>
+<p><strong>[1]:</strong> There is no such thing as an OpenID signature request. The example is really an authentication request
+carrying the signature request parameter.</p>
+</blockquote>
+<p><a name="security-requirements"></a></p>
+<h4 id="312-security-requirements">3.1.2. Security Requirements</h4>
+<p>The contents of the <code>https://id.oidc.se/param/signRequest</code> parameter hold the data to be signed, and it is essential
+that no party can alter this while the request message is in transit. Therefore, the following security requirements
+apply for Relying Parties and OpenID Providers that are compliant with this specification:</p>
+<ul class="list">
+<li><p>If the signature request parameter is included as a custom request parameter (see <a href="#as-a-custom-request-parameter">3.1.1.1</a> 
+above), its value represented as a JWT MUST be signed by the client&#39;s registered key, and MAY be encrypted to the recipient&#39;s
+registered public key.</p>
+</li>
+<li><p>If the signature request parameter is part of a Request Object according to section <a href="#placed-in-a-request-object">3.1.1.2</a>
+above, the entire Request Object JWT MUST be signed by the client&#39;s registered key, and MAY be encrypted to the recipient&#39;s
+registered public key. </p>
+</li>
+</ul>
+<p><a name="signature-scope"></a></p>
+<h3 id="32-signature-scope">3.2. Signature Scope</h3>
+<p><strong>Scope:</strong> <code>https://id.oidc.se/scope/sign</code></p>
+<p><strong>Description:</strong> The scope has two purposes; it indicates for the OpenID Provider that the request in which the scope is
+included is a &quot;signature request&quot;, and it requests the claims declared in the table below.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Claim</th>
+<th align="left">Description/comment</th>
+<th align="left">Reference</th>
+<th align="left">Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>https://id.oidc.se/</code><br /><code>claim/userSignature</code></td>
+<td align="left">The signature that is the result of the user signing process at the OP.</td>
+<td align="left">[<a href="#attr-spec">OIDC.Sweden.Attr</a>]</td>
+<td align="left">REQUIRED</td>
+</tr>
+<tr>
+<td align="left"><code>auth_time</code></td>
+<td align="left">The time when the signature was created.</td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">REQUIRED</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong> The <code>https://id.oidc.se/scope/sign</code> alone does not say anything about the identity of the signing end-user.
+A Relying Party wishing to get this information, which it most likely does, should include additional scopes in the 
+request that declares which identity claims that are wanted. </p>
+<p><a name="relying-party-requirements"></a></p>
+<h2 id="4-relying-party-requirements">4. Relying Party Requirements</h2>
+<p><a name="requests"></a></p>
+<h3 id="41-requests">4.1. Requests</h3>
+<p>A Relying Party wishing to issue a request for signature according to the specification MUST include 
+<code>https://id.oidc.se/scope/sign</code> along with the mandatory <code>openid</code> as values to the <code>scope</code> request parameter. </p>
+<p>A request for signature MUST contain the <a href="#the-signature-request-parameter">Signature Request Parameter</a> and its
+inclusion in the request MUST follow the requirements stated in sections <a href="#placement-of-the-parameter-in-an-authentication-request">3.1.1</a>, <a href="#placement-of-the-parameter-in-an-authentication-request">Placement of the Parameter in an Authentication Request</a> and <a href="#security-requirements">3.1.2</a>, <a href="#security-requirements">Security Requirements</a>.</p>
+<p>The authentication request MUST contain the <code>prompt</code> parameter<sup>1</sup> and its value MUST include both the 
+<code>login</code> and <code>consent</code> parameter values.  The reason for this is that a signature must never be generated based on a previous authentication (<code>login</code>) and that the Relying Party wants to ensure that the user actually sees the sign message and understands
+that he or she is performing a signature operation (<code>consent</code>).</p>
+<p>The Relying Party SHOULD examine the discovery document regarding supported MIME types for the <code>sign_message</code> field of the
+<code>https://id.oidc.se/param/signRequest</code> request parameter value (see <a href="#discovery">section 5.3</a>), and only use a MIME
+type supported by the OpenID Provider. If no such information is available in the OP discovery document, the Relying 
+Party SHOULD use the MIME type <code>text/plain</code> for the sign message. </p>
+<blockquote>
+<p><strong>[1]:</strong> The <code>prompt</code> parameter can be provided either as an ordinary request parameter or as a field in a Request Object.</p>
+</blockquote>
+<p><a name="requirements-on-signing-user"></a></p>
+<h4 id="411-requirements-on-signing-user">4.1.1. Requirements on Signing User</h4>
+<p>In most cases a user is already logged into the service that wants the user to sign some data, for example an approval or 
+a document. The data that is to be signed can be sensitive, and the service will need to ensure that only the intended user
+can view this data.</p>
+<p>A Relying Party wanting to bind a signature operation to a particular identity SHOULD assign the necessary identity
+claim(s) to the <code>claims</code> request parameter and for each claim set the <code>essential</code> field to <code>true</code> and the <code>value</code> field 
+to the required identity value. See chapter 5.5.1 of [<a href="#openid-core">OpenID.Core</a>].</p>
+<p>Request Object example of how we request that the signature is for the given user having the supplied personal identity 
+number (URL-encoding not applied for readability reasons): </p>
+<pre class="hljs"><code>{
+  ...
+  <span class="hljs-string">&quot;claims&quot;</span> : {
+    <span class="hljs-string">&quot;id_token&quot;</span> : {
+      <span class="hljs-string">&quot;https://id.oidc.se/claim/personalIdentityNumber&quot;</span> : {
+        <span class="hljs-string">&quot;essential&quot;</span> : <span class="hljs-literal">true</span>,
+        <span class="hljs-string">&quot;value&quot;</span> : <span class="hljs-string">&quot;196903261687&quot;</span>
+      }
+    }
+  },
+} </code></pre><p><a name="openid-provider-requirements"></a></p>
+<h2 id="5-openid-provider-requirements">5. OpenID Provider Requirements</h2>
+<p>This section contains requirements for OpenID Providers compliant with this specification.</p>
+<p><a name="processing-requirements"></a></p>
+<h3 id="51-processing-requirements">5.1. Processing Requirements</h3>
+<p>An OpenID Provider receiving a request containing the <code>https://id.oidc.se/scope/sign</code> value among the <code>scope</code> request
+parameter values MUST ensure the following:</p>
+<ul class="list">
+<li><p>That the request also contains the <code>https://id.oidc.se/param/signRequest</code> request parameter.</p>
+</li>
+<li><p>That the <code>https://id.oidc.se/param/signRequest</code> value is signed and that the signature can be successfully verified. See
+<a href="security-requirements">section 3.1.2</a>, <a href="#security-requirements">Security Requirements</a>.</p>
+</li>
+<li><p>That the <code>prompt</code> parameter is present and contains the <code>login</code> and <code>consent</code> values.</p>
+</li>
+</ul>
+<p>If any of the above requirements fail, an error response where the error code is <code>invalid_request</code><sup>1</sup> MUST be sent.</p>
+<p>If the OpenID Provider receives an authentication request containing the <code>https://id.oidc.se/param/signRequest</code> request
+parameter and the <code>scope</code> parameter does not include the <code>https://id.oidc.se/scope/sign</code> value, the OP MAY ignore
+the <code>https://id.oidc.se/param/signRequest</code> request parameter, or respond with an error.</p>
+<p>If the request for signature contains a <code>claims</code> parameter<sup>2</sup> holding identity value(s) marked as <code>essential</code> (see 
+<a href="#requirements-on-signing-user">section 4.1.1</a> above), the OpenID Provider MUST NOT display the supplied sign message
+or initiate the signature operation before the user&#39;s identity has been proven to match these value(s). If the user
+identity does not match the supplied value(s) in the <code>claims</code> parameter, an error response MUST be sent.</p>
+<p>The processing of the supplied signature message (<code>sign_message</code> field of the <code>https://id.oidc.se/param/signRequest</code> parameter)
+MUST follow the requirements stated in section 2.2.1 of [<a href="#oidc-profile">OIDC.Sweden.Profile</a>]. If the message for
+some reason can not be displayed<sup>2</sup>, the the signature operation MUST be rejected (and an error message sent).</p>
+<p>The OpenID Provider SHOULD NOT save the user&#39;s signature operation in its session at the OP for later re-use in SSO-scenarios.
+The reason for this is that a signature operation is inheritely non-SSO, and authentication and signature operations should
+not be mixed.</p>
+<blockquote>
+<p><strong>[1]:</strong> See section 4.1.2.1 of [<a href="#rfc6749">RFC6749</a>].</p>
+</blockquote>
+<blockquote>
+<p><strong>[2]:</strong> An OpenID Provider compliant with this specification MUST also be compliant with 
+[<a href="#oidc-profile">OIDC.Sweden.Profile</a>], and that profile requires OpenID Providers to 
+support the <code>claims</code> request parameter.</p>
+</blockquote>
+<blockquote>
+<p><strong>[3]:</strong> For example an unsupported MIME type was specified.</p>
+</blockquote>
+<p><a name="response-requirements"></a></p>
+<h3 id="52-response-requirements">5.2. Response Requirements</h3>
+<p>Claims that are representing the result of a signature operation, such as the <code>https://id.oidc.se/claim/userSignature</code>
+claim, MUST be delivered in the ID Token and never from the UserInfo endpoint.</p>
+<p><a name="discovery"></a></p>
+<h3 id="53-discovery">5.3. Discovery</h3>
+<p>OpenID Providers that are compliant with this specification<sup>1</sup>, MUST meet the following requirements discovery requirements:</p>
+<p>The <code>scopes_supported</code> MUST be present in the provider&#39;s discovery document and it MUST contain the scope 
+<code>https://id.oidc.se/scope/sign</code>.</p>
+<p>Also, it is RECOMMENDED that the <code>https://id.oidc.se/scope/authnInfo</code> scope is supported and declared. See [<a href="#attr-spec">OIDC.Sweden.Attr</a>].</p>
+<p>The <code>claims_supported</code> field MUST be present and include at least the claims that are included in the scope definitions for all
+declared scopes (in the <code>scopes_supported</code>).</p>
+<p>The <code>request_parameter_supported</code> MUST be present, and SHOULD be set to <code>true</code> (i.e., the OpenID Provider has support for 
+handling signature requests sent by value as Request Objects).</p>
+<p>The <code>request_uri_parameter_supported</code> MUST be present, and it is RECOMMENDED that it is set to <code>true</code> (i.e., the OpenID Provider
+has support for handling signature requests sent by reference as Request Objects).</p>
+<p>As already stated in section 5.2 of [<a href="#oidc-profile">OIDC.Sweden.Profile</a>], the <code>claims_parameter_supported</code> SHOULD be present
+and set to <code>true</code>.</p>
+<p>Support of sign messages during a signature operation is REQUIRED by this specification. It is 
+RECOMMENDED that the OpenID Provider also supports displaying of &quot;client provided user messages&quot;, 
+as defined in section 2.1 of [<a href="#request-ext">OIDC.Sweden.Param</a>]. This capability is declared 
+using the discovery parameter <code>https://id.oidc.se/disco/userMessageSupported</code> (see section 3.1.1 of 
+[<a href="#request-ext">OIDC.Sweden.Param</a>]). This effectively means that the OP supports displaying of
+user messages also when the user authenticates (as opposed to signs).</p>
+<p>The <code>https://id.oidc.se/disco/userMessageSupportedMimeTypes</code> field, defined in section 3.1.2 of 
+[<a href="#request-ext">OIDC.Sweden.Param</a>], SHOULD be used to declare which MIME types that are supported
+regarding the <code>sign_message</code> field of the <code>https://id.oidc.se/param/signRequest</code> parameter value.
+If not declared, <code>[ &quot;text/plain&quot; ]</code> MUST be assumed.</p>
+<blockquote>
+<p><strong>[1]:</strong> An OpenID Provider compliant with this specification MUST also be compliant with 
+[<a href="#oidc-profile">OIDC.Sweden.Profile</a>] and thus meet the requirements stated in section 5.2 of that profile.</p>
+</blockquote>
+<p><a name="normative-references"></a></p>
+<h2 id="6-normative-references">6. Normative References</h2>
+<p><a name="rfc2119"></a>
+<strong>[RFC2119]</strong></p>
+<blockquote>
+<p><a href="https://www.ietf.org/rfc/rfc2119.txt">Bradner, S., Key words for use in RFCs to Indicate Requirement Levels, March 1997</a>.</p>
+</blockquote>
+<p><a name="rfc6749"></a>
+<strong>[RFC6749]</strong></p>
+<blockquote>
+<p><a href="https://www.rfc-editor.org/rfc/rfc6749">RFC6749 - The OAuth 2.0 Authorization Framework, October 2012</a>.</p>
+</blockquote>
+<p><a name="openid-core"></a>
+<strong>[OpenID.Core]</strong></p>
+<blockquote>
+<p><a href="https://openid.net/specs/openid-connect-core-1_0.html">Sakimura, N., Bradley, J., Jones, M., de Medeiros, B. and C. Mortimore, &quot;OpenID Connect Core 1.0&quot;, August 2015</a>.</p>
+</blockquote>
+<p><a name="openid-discovery"></a>
+<strong>[OpenID.Discovery]</strong></p>
+<blockquote>
+<p><a href="https://openid.net/specs/openid-connect-discovery-1_0.html">Sakimura, N., Bradley, J., Jones, M. and E. Jay, &quot;OpenID Connect Discovery 1.0&quot;, August 2015</a>.</p>
+</blockquote>
+<p><a name="rfc7515"></a>
+<strong>[RFC7515]</strong></p>
+<blockquote>
+<p><a href="https://tools.ietf.org/html/rfc7515">Jones, M., Bradley, J., and N. Sakimura, “JSON Web Token (JWT)”, May 2015</a>.</p>
+</blockquote>
+<p><a name="oidc-profile"></a>
+<strong>[OIDC.Sweden.Profile]</strong></p>
+<blockquote>
+<p><a href="https://www.oidc.se/specifications/swedish-oidc-profile.html">The Swedish OpenID Connect Profile</a>.</p>
+</blockquote>
+<p><a name="attr-spec"></a>
+<strong>[OIDC.Sweden.Attr]</strong></p>
+<blockquote>
+<p><a href="https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html">Attribute Specification for the Swedish OpenID Connect Profile</a>.</p>
+</blockquote>
+<p><a name="request-ext"></a>
+<strong>[OIDC.Sweden.Params]</strong></p>
+<blockquote>
+<p><a href="https://www.oidc.se/specifications/request-parameter-extensions.html">Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile</a>.</p>
+</blockquote>
+    </article>
+  </body>
+</html>
