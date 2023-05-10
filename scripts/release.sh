@@ -2,7 +2,7 @@
 #
 # release.sh
 #
-# Author: Martin Lindström, Litsec AB
+# Author: Martin Lindström
 #
 
 INSTALL_DIR=$(dirname $0)
@@ -26,38 +26,30 @@ fi
 INPUT_DIR=${1%/}
 OUTPUT_DIR=${2%/}
 
-declare -a SPECIFICATIONS=("00 - Tekniskt ramverk - Introduktion"
-    "00 - Swedish eID Framework - Introduction"
-    "02 - Deployment Profile for the Swedish eID Framework"
-    "03 - Registry for Identifiers"
-    "04 - Attribute Specification for the Swedish eID Framework"
-    "06 - Entity Categories for the Swedish eID Framework"
-    "07 - Implementation Profile for using DSS in Central Signing Services"
-    "08 - Certificate Profile for Central Signing Services"
-    "09 - DSS Extension for Federated Signing Services"
-    "11 - eIDAS Constructed Attributes Specification for the Swedish eID Framework"
-    "12 - BankID Profile for the Swedish eID Framework"
-    "13 - Signature Activation Protocol"
-    "14 - Principal Selection in SAML Authentication Requests")
+declare -a SPECIFICATIONS=("swedish-oidc-profile.md"
+    "swedish-oidc-attribute-specification.md"
+    "request-parameter-extensions.md"
+    "oidc-signature-extension.md"
+    "claim-mappings-to-other-specs.md")
 
 #
 # Produce HTML
 #
 for spec in "${SPECIFICATIONS[@]}"
 do
-    echo "Processing ${spec}.md ..."
+    echo "Processing ${spec} ..."
     ORIENTATION="p"
-    if [ "${spec}" == "03 - Registry for Identifiers" ] || [ "${spec}" == "04 - Attribute Specification for the Swedish eID Framework" ];
+    if [ "${spec}" == "xxx" ] || [ "${spec}" == "yyy" ];
     then
 	ORIENTATION="l"
     fi
-    ${INSTALL_DIR}/tohtml.sh ${INPUT_DIR}/"${spec}.md" ${OUTPUT_DIR} -o $ORIENTATION
+    ${INSTALL_DIR}/tohtml.sh ${INPUT_DIR}/"${spec}" ${OUTPUT_DIR} -o $ORIENTATION
 done
 
 #
 # Create the template for the index.html file
 #
-${INSTALL_DIR}/tohtml.sh ${INSTALL_DIR}/templates/index.md ${OUTPUT_DIR} -o p
+#${INSTALL_DIR}/tohtml.sh ${INSTALL_DIR}/templates/index.md ${OUTPUT_DIR} -o p
 
 exit 0
 

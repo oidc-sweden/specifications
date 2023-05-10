@@ -1,0 +1,502 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How OpenID Connect Claims Map to other Specifications</title>
+    <link type="text/css" rel="stylesheet" href="assets/css/github-markdown.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/pilcrow.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/oidc-portrait.css" media="print" >
+    <link type="text/css" rel="stylesheet" href="assets/css/oidc-custom.css" media="print" >
+  </head>
+  <body>
+    <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
+<h1 id="how-openid-connect-claims-map-to-other-specifications">How OpenID Connect Claims Map to other Specifications</h1>
+<p>This is a non-normative paper that lists the attributes/claims used in Swedish eID-systems, and states how they map to OpenID Connect claims (defined in our specification or elsewhere).</p>
+<h2 id="1-sweden-connect-saml-specifications">1. Sweden Connect SAML Specifications</h2>
+<p>The following table defines a mapping from the SAML attribute names defined in &quot;Attribute Specification for the Swedish eID Framework&quot;, [<a href="#sc-attrspec">SC.AttrSpec</a>], to their corresponding attribute/claim.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Description</th>
+<th align="left">SAML attribute name<br>and abbreviation</th>
+<th align="left">Claim</th>
+<th align="left">Defined in</th>
+<th align="left">Comment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Surname</td>
+<td align="left">urn:oid:2.5.4.4 (sn)</td>
+<td align="left"><code>family_name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Given name</td>
+<td align="left">urn:oid:2.5.4.42 (givenName)</td>
+<td align="left"><code>given_name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Display (full) name</td>
+<td align="left">urn:oid:2.16.840.1.<br/>113730.3.1.241 (displayName)</td>
+<td align="left"><code>name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Gender</td>
+<td align="left">urn:oid:1.3.6.1.5.5.7.9.3 (gender)</td>
+<td align="left"><code>gender</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">[OpenID.Core] defines possible values to be <code>female</code> and <code>male</code>. [<a href="#sc-attrspec">SC.AttrSpec</a>] defines the possible values to be <code>M</code>/<code>m</code>, <code>F</code>/<code>f</code> and <code>U</code>/<code>u</code> (for unspecified).</td>
+</tr>
+<tr>
+<td align="left">Swedish Personal Number</td>
+<td align="left">urn:oid:1.2.752.29.4.13 (personalIdentityNumber)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>personalIdentityNumber</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left">[<a href="#sc-attrspec">SC.AttrSpec</a>] also uses the same attribute for a Swedish coordination number. [<a href="#oidc-sweden">OIDC.Sweden</a>] defines this claim to be <code>https://id.oidc.se/claim/coordinationNumber</code>.</td>
+</tr>
+<tr>
+<td align="left">previousPersonal-<br/>IdentityNumber</td>
+<td align="left">urn:oid:1.2.752.201.3.15<br />(previousPersonalIdentityNumber)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>previousCoordinationNumber</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left">The OIDC-profile only handles coordination numbers.</td>
+</tr>
+<tr>
+<td align="left">Date of birth</td>
+<td align="left">urn:oid:1.3.6.1.5.5.7.9.1 (dateOfBirth)</td>
+<td align="left"><code>birthdate</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">The format (YYYY-MM-DD) is the same for both the dateOfBirth SAML-attribute and the <code>birthdate</code> claim.</td>
+</tr>
+<tr>
+<td align="left">Name at the time of birth</td>
+<td align="left">urn:oid:1.2.752.201.3.8 (birthName)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>birthName</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Street address</td>
+<td align="left">urn:oid:2.5.4.9 (street)</td>
+<td align="left"><code>address.street_address</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim.</td>
+</tr>
+<tr>
+<td align="left">Post office box</td>
+<td align="left">urn:oid:2.5.4.18 (postOfficeBox)</td>
+<td align="left"><code>address.street_address</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim. The <code>street_address</code> MAY include house number, street name, Post Office Box, and multi-line extended street address information.</td>
+</tr>
+<tr>
+<td align="left">Postal code</td>
+<td align="left">urn:oid:2.5.4.17 (postalCode)</td>
+<td align="left"><code>address.postal_code</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim.</td>
+</tr>
+<tr>
+<td align="left">Locality</td>
+<td align="left">urn:oid:2.5.4.7 (l)</td>
+<td align="left"><code>address.locality</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim.</td>
+</tr>
+<tr>
+<td align="left">Country</td>
+<td align="left">urn:oid:2.5.4.6 (c)</td>
+<td align="left"><code>address.country</code> or<br /><code>https://id.oidc.se/claim/</code><br /><code>country</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]<br />[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left">Depends on in which context country is to be represented.</td>
+</tr>
+<tr>
+<td align="left">Place of birth</td>
+<td align="left">urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>placeOfbirth</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Country of citizenship</td>
+<td align="left">urn:oid:1.3.6.1.5.5.7.9.4 (countryOfCitizenship)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">No mapping exists at this moment.</td>
+</tr>
+<tr>
+<td align="left">Country of Residence</td>
+<td align="left">urn:oid:1.3.6.1.5.5.7.9.5 (countryOfResidence)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">No mapping exists at this moment.</td>
+</tr>
+<tr>
+<td align="left">Telephone number</td>
+<td align="left">urn:oid:2.5.4.20 (telephoneNumber)</td>
+<td align="left"><code>phone_number</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">See also <code>phone_number_verified</code>.</td>
+</tr>
+<tr>
+<td align="left">Mobile number</td>
+<td align="left">urn:oid:0.9.2342.19200300.100.1.41 (mobile)</td>
+<td align="left"><code>phone_number</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">No specific claim exists that make a difference between a landline phone and a mobile phone in [<a href="#iana-reg">IANA-Reg</a>]. Is this necessary?</td>
+</tr>
+<tr>
+<td align="left">E-mail address</td>
+<td align="left">urn:oid:0.9.2342.19200300.100.1.3 (mail)</td>
+<td align="left"><code>email</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">See also <code>email_verified</code>.</td>
+</tr>
+<tr>
+<td align="left">Organization name</td>
+<td align="left">urn:oid:2.5.4.10 (o)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>orgName</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Organizational unit name</td>
+<td align="left">urn:oid:2.5.4.11 (ou)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>orgUnit</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Organizational identifier code</td>
+<td align="left">urn:oid:2.5.4.97 (organizationIdentifier)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>orgNumber</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Organizational Affiliation</td>
+<td align="left">urn:oid:1.2.752.201.3.1 (orgAffiliation)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>orgAffiliation</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Transaction identifier</td>
+<td align="left">urn:oid:1.2.752.201.3.2 (transactionIdentifier)</td>
+<td align="left"><code>txn</code></td>
+<td align="left">[<a href="#rfc8417">RFC8417</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Authentication Context Parameters</td>
+<td align="left">urn:oid:1.2.752.201.3.3 (authContextParams)</td>
+<td align="left">-</td>
+<td align="left"></td>
+<td align="left">This attribute will not be represented as a claim. However, some of the data that are normally put in this attribute are not claims of their own (credentialValidFrom, ...).</td>
+</tr>
+<tr>
+<td align="left">User certificate</td>
+<td align="left">urn:oid:1.2.752.201.3.10 (userCertificate)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>userCertificate</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">User signature</td>
+<td align="left">urn:oid:1.2.752.201.3.11 (userSignature)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>userSignature</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Authentication server signature</td>
+<td align="left">urn:oid:1.2.752.201.3.13 (authServerSignature)</td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>authnEvidence</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Signature activation data</td>
+<td align="left">urn:oid:1.2.752.201.3.12 (sad)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">No mapping exists - Will have to be handled in Sweden Connect&#39;s OpenID Connect profiles.</td>
+</tr>
+<tr>
+<td align="left">Sign message digest</td>
+<td align="left">urn:oid:1.2.752.201.3.14 (signMessageDigest)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">No mapping exists - Will have to be handled in Sweden Connect&#39;s OpenID Connect profiles.</td>
+</tr>
+<tr>
+<td align="left">Provisional identifier</td>
+<td align="left">urn:oid:1.2.752.201.3.4 (prid)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">eIDAS specific - Will have to be handled in Sweden Connect&#39;s OpenID Connect profiles.</td>
+</tr>
+<tr>
+<td align="left">Provisional identifier persistence indicator</td>
+<td align="left">urn:oid:1.2.752.201.3.5 (pridPersistence)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">eIDAS specific - Will have to be handled in Sweden Connect&#39;s OpenID Connect profiles.</td>
+</tr>
+<tr>
+<td align="left">Personal number binding URI</td>
+<td align="left">urn:oid:1.2.752.201.3.6 (personalIdentityNumberBinding)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">eIDAS specific - Will have to be handled in Sweden Connect&#39;s OpenID Connect profiles.</td>
+</tr>
+<tr>
+<td align="left">eIDAS uniqueness identifier</td>
+<td align="left">urn:oid:1.2.752.201.3.7 (eidasPersonIdentifier)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">eIDAS specific - Will have to be handled in Sweden Connect&#39;s OpenID Connect profiles.</td>
+</tr>
+<tr>
+<td align="left">eIDAS Natural Person Address</td>
+<td align="left">urn:oid:1.2.752.201.3.9 (eidasNaturalPersonAddress)</td>
+<td align="left"><code>address</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Mapping of the eIDAS CurrentAddress attribute.</td>
+</tr>
+<tr>
+<td align="left">HSA-ID</td>
+<td align="left">urn:oid:1.2.752.29.6.2.1 (employeeHsaId)</td>
+<td align="left">-</td>
+<td align="left">-</td>
+<td align="left">Sector specific attribute. Should be defined elsewhere.</td>
+</tr>
+</tbody></table>
+<p><a name="bankid"></a></p>
+<h2 id="2-bankid">2. BankID</h2>
+<p>The following table defines a mapping from the attribute names defined in &quot;BankID Relying Party Guidelines&quot;, [<a href="#bankid-api">BankID.API</a>], to their corresponding attribute/claim.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Description</th>
+<th align="left">BankID attribute</th>
+<th align="left">Claim</th>
+<th align="left">Defined in</th>
+<th align="left">Comment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Swedish Personal Number</td>
+<td align="left"><code>user.personalNumber</code></td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>personalIdentityNumber</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Display (full) name</td>
+<td align="left"><code>user.name</code></td>
+<td align="left"><code>name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Given name</td>
+<td align="left"><code>user.givenName</code></td>
+<td align="left"><code>given_name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">May be more than one name (separated by blank).</td>
+</tr>
+<tr>
+<td align="left">Surname</td>
+<td align="left"><code>user.surname</code></td>
+<td align="left"><code>family_name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">May be more than one name (separated by blank).</td>
+</tr>
+<tr>
+<td align="left">Device IP-address</td>
+<td align="left"><code>device.ipAddress</code></td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>deviceIp</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Certificate notBefore time</td>
+<td align="left"><code>cert.notBefore</code></td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>credentialValidFrom</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left">See also <code>https://id.oidc.se/claim/userSignature</code>.</td>
+</tr>
+<tr>
+<td align="left">Certificate notAfter time</td>
+<td align="left"><code>cert.notAfter</code></td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>credentialValidTo</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left">See also <code>https://id.oidc.se/claim/userSignature</code>.</td>
+</tr>
+<tr>
+<td align="left">The BankID signature</td>
+<td align="left"><code>signature</code></td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>userSignature</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">BankID OCSP response</td>
+<td align="left"><code>ocspResponse</code></td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>authnEvidence</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><a name="freja-eid"></a></p>
+<h2 id="3-freja-eid">3. Freja eID</h2>
+<p>The following table defines a mapping from the attribute names defined in &quot;Freja eID Relying Party Developers&#39; Documentation&quot;, [<a href="#freja-api">Freja.API</a>], to their corresponding attribute/claim.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Description</th>
+<th align="left">Freja eID attribute</th>
+<th align="left">Claim</th>
+<th align="left">Defined in</th>
+<th align="left">Comment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Swedish Personal Number</td>
+<td align="left"><code>ssnuserinfo.ssn</code></td>
+<td align="left"><code>https://id.oidc.se/claim/</code><br/><code>personalIdentityNumber</code><br />or<br /><code>https://id.oidc.se/claim/</code><br/><code>coordinationNumber</code></td>
+<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left">Freja&#39;s way of delivering SSN attribute included information about the country (<code>ssnuserinfo.country=SE</code>).</td>
+</tr>
+<tr>
+<td align="left">Given name</td>
+<td align="left"><code>basicUserInfo.name</code></td>
+<td align="left"><code>given_name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">TODO: Does Freja&#39;s <code>basicUserInfo.name</code> mean given name of full name?</td>
+</tr>
+<tr>
+<td align="left">Surname</td>
+<td align="left"><code>basicUserInfo.surname</code></td>
+<td align="left"><code>family_name</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">May be more than one name (separated by blank).</td>
+</tr>
+<tr>
+<td align="left">E-mail address (primary)</td>
+<td align="left"><code>emailAddress</code></td>
+<td align="left"><code>email</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">See also <code>email_verified</code>.</td>
+</tr>
+<tr>
+<td align="left">All e-mail addresses</td>
+<td align="left"><code>allEmailAddresses</code></td>
+<td align="left">TBD</td>
+<td align="left">-</td>
+<td align="left">TBD</td>
+</tr>
+<tr>
+<td align="left">Date of birth</td>
+<td align="left"><code>dateOfBirth</code></td>
+<td align="left"><code>birthdate</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">The format (YYY-MM-DD) is the same for both the dateOfBirth attribute and the <code>birthdate</code> claim.</td>
+</tr>
+<tr>
+<td align="left">Country</td>
+<td align="left"><code>addresses[0].country</code></td>
+<td align="left"><code>address.country</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim.</td>
+</tr>
+<tr>
+<td align="left">City</td>
+<td align="left"><code>addresses[0].city</code></td>
+<td align="left"><code>address.locality</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim.</td>
+</tr>
+<tr>
+<td align="left">Postal code</td>
+<td align="left"><code>addresses[0].postCode</code></td>
+<td align="left"><code>address.postal_code</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim.</td>
+</tr>
+<tr>
+<td align="left">Street address(es)</td>
+<td align="left"><code>addresses[0].address1</code><br/><code>addresses[0].address2</code><br/><code>addresses[0].address3</code></td>
+<td align="left"><code>address.street_address</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
+<td align="left">Field of the <code>address</code> claim. The <code>address.street_address</code> MAY contain multiple lines, separated by newlines.</td>
+</tr>
+<tr>
+<td align="left">Address valid from</td>
+<td align="left"><code>addresses[0].validFrom</code></td>
+<td align="left">TBD</td>
+<td align="left">-</td>
+<td align="left">TBD</td>
+</tr>
+<tr>
+<td align="left">Type of address</td>
+<td align="left"><code>addresses[0].type</code></td>
+<td align="left">TDB</td>
+<td align="left">-</td>
+<td align="left">TBD</td>
+</tr>
+<tr>
+<td align="left">Source of address information</td>
+<td align="left"><code>addresses[0].sourceType</code></td>
+<td align="left">TBD</td>
+<td align="left">-</td>
+<td align="left">TBD</td>
+</tr>
+</tbody></table>
+<p><a name="normative-references"></a></p>
+<h2 id="4-references">4. References</h2>
+<p><a name="oidc-sweden"></a>
+<strong>[OIDC.Sweden]</strong></p>
+<blockquote>
+<p>Attribute Specification for the Swedish OpenID Connect Profile.</p>
+</blockquote>
+<p><a name="openid-core"></a>
+<strong>[OpenID.Core]</strong></p>
+<blockquote>
+<p><a href="https://openid.net/specs/openid-connect-core-1_0.html">Sakimura, N., Bradley, J., Jones, M., de Medeiros, B. and C. Mortimore, &quot;OpenID Connect Core 1.0&quot;, August 2015</a>.</p>
+</blockquote>
+<p><a name="iana-reg"></a>
+<strong>[IANA-Reg]</strong></p>
+<blockquote>
+<p><a href="https://www.iana.org/assignments/jwt/jwt.xhtml#claims">IANA JSON Web Token Claims Registry</a>.</p>
+</blockquote>
+<p><a name="rfc8417"></a>
+<strong>[RFC8417]</strong></p>
+<blockquote>
+<p><a href="https://tools.ietf.org/html/rfc8417">P. Hunt, M. Jones, W. Denniss, M. Ansari, &quot;Security Event Token (SET)&quot;, July 2018</a>.</p>
+</blockquote>
+<p><a name="sc-attrspec"></a>
+<strong>[SC.AttrSpec]</strong></p>
+<blockquote>
+<p><a href="https://docs.swedenconnect.se/technical-framework/latest/04_-_Attribute_Specification_for_the_Swedish_eID_Framework.html">Attribute Specification for the Swedish eID Framework - Version 1.6, 2020-01-17</a>.</p>
+</blockquote>
+<p><a name="bankid-api"></a>
+<strong>[BankID.API]</strong></p>
+<blockquote>
+<p><a href="https://www.bankid.com/en/utvecklare/guider/teknisk-integrationsguide">BankID Relying Party Guidelines</a>.</p>
+</blockquote>
+<p><a name="freja-api"></a>
+<strong>[Freja.API]</strong></p>
+<blockquote>
+<p><a href="https://frejaeid.com/rest-api/Freja%20eID%20Relying%20Party%20Developers'%20Documentation.html">Freja eID Relying Party Developers&#39; Documentation</a>.</p>
+</blockquote>
+    </article>
+  </body>
+</html>

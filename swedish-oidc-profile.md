@@ -1,4 +1,4 @@
-![Logo](docs/images/oidc-logo.png)
+![Logo](img/oidc-logo.png)
 
 # The Swedish OpenID Connect Profile
 
@@ -544,4 +544,4 @@ An entity processing a message in which an algorithm not listed below has been u
 
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
+> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.md).
