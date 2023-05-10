@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-04-27
+### Version: 1.0 - draft 02 - 2023-05-02
 
 ## Abstract
 
@@ -346,8 +346,6 @@ If no `acr_values` parameter was received in the authentication request the Open
 
 Relying Parties MUST follow the requirements in section [3.1.3.7] of \[[OpenID.Core](#openid-core)\].
 
-> TODO: Add some clarifications regarding `acr`.
-
 <a name="claims-and-scopes"></a>
 ## 4. Claims and Scopes
 
@@ -461,31 +459,57 @@ following table.
 <a name="security-requirements"></a>
 ## 7. Security Requirements
 
-All transactions MUST be protected in transit by TLS (TODO: include reference).
+All transactions MUST be protected in transit by TLS as described in \[[NIST.800-52.Rev2](#nist800-52)\]. 
 
 All parties MUST conform to applicable recommendations in section 16, "Security Considerations" of \[[OAuth2.RFC6749](#oauth2-rfc6749)\] and those found in "OAuth 2.0 Threat Model and Security Considerations", \[[RFC6819](#rfc6819)\].
-
-> **To discuss:** Is this too vague?
 
 <a name="cryptographic-algorithms"></a>
 ### 7.1. Cryptographic Algorithms
 
 This section lists the requirements for crypto algorithm support for being compliant with this profile.
 
-For signature and encryption keys the following requirements apply:
+All entities compliant with this profile MUST follow the guidelines in \[[NIST.800-131A.Rev2](#nist800-131)\]
+regarding use of algorithms and key lengths<sup>1</sup>. Specifically, for signature and encryption keys the
+following requirements apply:
 
-- RSA public keys MUST be at least 2048 bits in length. 3072 bits or more is RECOMMENDED.
-- EC public keys MUST be at least 256 bits in length (signature only). The curves NIST Curve P-256, NIST Curve P-384 and NIST Curve P-521 MUST be supported (\[[RFC5480](#rfc5480)\]).
+- RSA public keys MUST be at least 2048 bits in length.
+- EC public keys MUST be at least 256 bits in length (signature only). The curve NIST Curve P-256 MUST be 
+supported (\[[RFC5480](#rfc5480)\]), and NIST Curve P-384 and NIST Curve P-521 SHOULD be supported.
 
-Entities conforming to this profile MUST support the mandatory algorithms below, and SHOULD support the algorithms listed as optional.
+Entities conforming to this profile MUST support algorithms according to "JSON Web Algorithms (JWA)", 
+\[[RFC7518](#rfc7518)\], with the following additions:
 
-The sender of a secure message MUST NOT use an algorithm that is not listed as mandatory in the sections below, unless it is explicitly declared by the peer in its metadata (Discovery document or Client Registration metadata).
+- `RS256`, RSASSA-PKCS1-v1_5 using SHA-256, is listed as recommended in \[[RFC7518](#rfc7518)\], but is
+REQUIRED to support by this profile.
 
-An entity processing a message in which an algorithm not listed below has been used MUST refuse to accept the message and respond with an error, unless this algorithm has been declared as preferred or supported by the service in its metadata entry.
+- `RS384`, RSASSA-PKCS1-v1_5 using SHA-384, is listed as optional in \[[RFC7518](#rfc7518)\],
+but is RECOMMENDED to support by this profile.
 
-> This profile does not specify a complete list of blacklisted algorithms. However, there is a need to explicitly point out that the commonly used algorithm SHA-1 for digests is considered broken and SHOULD not be used or accepted.
+- `RS512`, RSASSA-PKCS1-v1_5 using SHA-512, is listed as optional in \[[RFC7518](#rfc7518)\],
+but is RECOMMENDED to support by this profile.
 
-> **TODO:** Specify mandatory and optional signature and encryption algorithms ...
+- `ES256`, ECDSA using P-256 and SHA-256, is listed as recommended in \[[RFC7518](#rfc7518)\], but
+is REQUIRED to support by this profile.
+
+- `ES384`, ECDSA using P-384 and SHA-384, is listed as optional in \[[RFC7518](#rfc7518)\], but is 
+RECOMMENDED to support by this profile.
+
+- `ES512`, ECDSA using P-521 and SHA-512, is listed as optional in \[[RFC7518](#rfc7518)\], but is
+RECOMMENDED to support by this profile.
+
+- `RSA-OAEP`, RSAES OAEP using default parameters, is listed as recommended in \[[RFC7518](#rfc7518)\],
+but is REQUIRED to support by this profile.
+
+- `A128GCM` and `A256GCM`, AES GCM using 128/256-bit key, are listed as recommended in \[[RFC7518](#rfc7518)\],
+but are REQUIRED by this profile.
+
+The sender of a secure message MUST NOT use an algorithm that is not set as REQUIRED in \[[RFC7518](#rfc7518)\]
+or in the listing above, unless it is explicitly declared by the peer in its metadata (Discovery document
+or Client Registration metadata).
+
+> \[1\]: \[[NIST.800-131A.Rev2](#nist800-131)\] contains a listing of algorithms that must not be used.
+However, there is a need to explicitly point out that the commonly used algorithm SHA-1 for digests is 
+considered broken and MUST NOT be used or accepted.
 
 <a name="normative-references"></a>
 ## 8. Normative References
@@ -542,6 +566,14 @@ An entity processing a message in which an algorithm not listed below has been u
 **\[RFC5480\]**
 > [IETF RFC 5480, Elliptic Curve Cryptography Subject Public Key Information, March 2009](https://www.ietf.org/rfc/rfc5480.txt).
 
+<a name="rfc7518"></a>
+**\[RFC7518\]**
+> [Jones, M., "JSON Web Algorithms (JWA)", May 2015](https://www.rfc-editor.org/rfc/rfc7518.txt).
+
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
 > [Attribute Specification for the Swedish OpenID Connect Profile](https://github.com/oidc-sweden/specifications/blob/main/swedish-oidc-attribute-specification.md).
+
+<a name="nist800-52"></a>
+**\[NIST.800-52.Rev2\]**
+> [NIST Special Publication 800-52, Revision 2, "Guidelines for the Selection, Configuration, and Use of Transport Layer Security (TLS) Implementations"](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf). 
