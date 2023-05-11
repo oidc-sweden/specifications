@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-05-02
+### Version: 1.0 - draft 02 - 2023-05-11
 
 ## Abstract
 
@@ -542,9 +542,13 @@ considered broken and MUST NOT be used or accepted.
 **\[OpenID.iGov\]**
 > [M. Varley, P. Grassi, "International Government Assurance Profile (iGov) for OpenID Connect 1.0", October 05, 2018](https://openid.net/specs/openid-igov-openid-connect-1_0.html).
 
+<a name="rfc7519"></a>
+**\[RFC7519\]**
+> [Jones, M., Bradley, J. and N. Sakimura, "JSON Web Token (JWT)", May 2015](https://datatracker.ietf.org/doc/html/rfc7519).
+
 <a name="rfc7515"></a>
 **\[RFC7515\]**
-> [Jones, M., Bradley, J., and N. Sakimura, “JSON Web Token (JWT)”, May 2015](https://tools.ietf.org/html/rfc7515).
+> [Jones, M., Bradley, J., and N. Sakimura, “JSON Web Signature (JWS)”, May 2015](https://tools.ietf.org/html/rfc7515).
 
 <a name="rfc8614"></a>
 **\[RFC8614\]**
