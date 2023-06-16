@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-05-11
+### Version: 1.0 - draft 02 - 2023-06-16
 
 ## Abstract
 
@@ -433,7 +433,7 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | `claims_supported` | JSON array containing a list of the claim names of the claims that the OpenID Provider MAY be able to supply values for. | REQUIRED |
 | `claims_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `claims` request parameter. Since this profile requires support the value MUST be set to `true`. | REQUIRED |
 | `request_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `request` parameter for Request Objects. Since this profile requires support the value MUST be set to `true`. | REQUIRED |
-| `code_challenge_methods_supported` | JSON array containing a list of PKCE code challenge methods supported by this OP. The array MUST include the `S256` method and MUST NOT include the `plain` method.<br />The `code_challenge_methods_supported` parameter is defined in section 2 of \[[RFC8614](#rfc8614)\]. | REQUIRED |
+| `code_challenge_methods_supported` | JSON array containing a list of PKCE code challenge methods supported by this OP. The array MUST include the `S256` method and MUST NOT include the `plain` method.<br />The `code_challenge_methods_supported` parameter is defined in section 2 of \[[RFC8414](#rfc8414)\]. | REQUIRED |
 
 Any other fields specified in \[[OpenID.Discovery](#openid-discovery)\] not appearing in the table above MAY also be used.
 
@@ -451,7 +451,7 @@ following table.
 | `redirect_uris` | Array of redirection URI values used by the Relying Party. | REQUIRED |
 | `response_types` | The response types that the Relying Party uses. Must be set to `code`. | REQUIRED |
 | `grant_types` | The OAuth2 grant types the Relying Party uses. Must be set to `authorization_code`. | REQUIRED |
-| `jwks` | The Relying Party's JSON Web Key Set [JWK] document, passed by value. | REQUIRED<br />Except for those clients that authenticate according to the exceptions described in section [3.1.1](#client-authentication). |
+| `jwks` | The Relying Party's JSON Web Key Set [JWK] document, passed by value. See \[[RFC7517](#rfc7517)\]. | REQUIRED<br />Except for those clients that authenticate according to the exceptions described in section [3.1.1](#client-authentication). |
 | `subject_type` | Subject type requested for responses to this Client. The `subject_types_supported` discovery parameter contains a list of the supported `subject_type` values for this server. Valid types include `pairwise` and `public`. The default SHOULD be `public`. See section [3.2.1.1](#the-sub-token-claim). | OPTIONAL |
 | `token_endpoint_auth_method` | Authentication method for accessing the Token endpoint. See section [3.1.1](#client-authentication). | REQUIRED |
 | `default_acr_values` | Default requested Authentication Context Class Reference values. | OPTIONAL |
@@ -542,16 +542,24 @@ considered broken and MUST NOT be used or accepted.
 **\[OpenID.iGov\]**
 > [M. Varley, P. Grassi, "International Government Assurance Profile (iGov) for OpenID Connect 1.0", October 05, 2018](https://openid.net/specs/openid-igov-openid-connect-1_0.html).
 
-<a name="rfc7519"></a>
-**\[RFC7519\]**
-> [Jones, M., Bradley, J. and N. Sakimura, "JSON Web Token (JWT)", May 2015](https://datatracker.ietf.org/doc/html/rfc7519).
-
 <a name="rfc7515"></a>
 **\[RFC7515\]**
 > [Jones, M., Bradley, J., and N. Sakimura, “JSON Web Signature (JWS)”, May 2015](https://tools.ietf.org/html/rfc7515).
 
-<a name="rfc8614"></a>
-**\[RFC8614\]**
+<a name="rfc7517"></a>
+**\[RFC7517\]**
+> [Jones, M., "JSON Web Key (JWK)", May 2015](https://datatracker.ietf.org/doc/html/rfc7517).
+
+<a name="rfc7518"></a>
+**\[RFC7518\]**
+> [Jones, M., "JSON Web Algorithms (JWA)", May 2015](https://www.rfc-editor.org/rfc/rfc7518.txt).
+
+<a name="rfc7519"></a>
+**\[RFC7519\]**
+> [Jones, M., Bradley, J. and N. Sakimura, "JSON Web Token (JWT)", May 2015](https://datatracker.ietf.org/doc/html/rfc7519).
+
+<a name="rfc8414"></a>
+**\[RFC8414\]**
 > [Jones, M., Bradley, J., and N. Sakimura, "OAuth 2.0 Authorization Server Metadata", June 2018](https://www.rfc-editor.org/rfc/rfc8414.html).
 
 <a name="rfc6819"></a>
@@ -569,10 +577,6 @@ considered broken and MUST NOT be used or accepted.
 <a name="rfc5480"></a>
 **\[RFC5480\]**
 > [IETF RFC 5480, Elliptic Curve Cryptography Subject Public Key Information, March 2009](https://www.ietf.org/rfc/rfc5480.txt).
-
-<a name="rfc7518"></a>
-**\[RFC7518\]**
-> [Jones, M., "JSON Web Algorithms (JWA)", May 2015](https://www.rfc-editor.org/rfc/rfc7518.txt).
 
 <a name="attr-spec"></a>
 **\[OIDC.Sweden.Attr\]**
