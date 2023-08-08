@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 03 - 2023-07-06
+### Version: 1.0 - draft 03 - 2023-08-08
 
 ## Abstract
 
