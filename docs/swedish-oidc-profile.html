@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="the-swedish-openid-connect-profile">The Swedish OpenID Connect Profile</h1>
-<h3 id="version-10---draft-02---2023-05-11">Version: 1.0 - draft 02 - 2023-05-11</h3>
+<h3 id="version-10---draft-03---2023-08-08">Version: 1.0 - draft 03 - 2023-08-08</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines a profile for OpenID Connect for use within the Swedish public and private sectors. It profiles the OpenID Connect protocol to get a baseline security and to facilitate interoperability between relying parties and OpenID providers.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
@@ -359,28 +359,22 @@ personal identity number. It MUST use the <code>https://id.oidc.se/claim/persona
 <p><a name="claims-release-requirements"></a></p>
 <h3 id="42-claims-release-requirements">4.2. Claims Release Requirements</h3>
 <p>OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. </p>
-<p>An OpenID Provider compliant with this profile MUST NOT release any identity claims<sup>1</sup> in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via the <code>scope</code> and/or <code>claims</code> request parameters, or by a policy<sup>2</sup> known, and accepted, by the involved parties. </p>
+<p>An OpenID Provider compliant with this profile MUST NOT release any identity claims<sup>1</sup> in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via the <code>scope</code> and/or <code>claims</code> request parameters, or by a policy known, and accepted, by the involved parties. Furthermore, an OpenID Provider MUST NOT release any claims to a Relying Party that has not been authorized to receive
+them. </p>
 <p>Section 5.4 of [<a href="#openid-core">OpenID.Core</a>] states:</p>
 <blockquote>
 <p>The Claims requested by the <code>profile</code>, <code>email</code>, <code>address</code>, and <code>phone</code> scope values are returned from the UserInfo Endpoint, as described in Section 5.3.2, when a <code>response_type</code> value is used that results in an Access Token being issued. However, when no Access Token is issued (which is the case for the <code>response_type</code> value <code>id_token</code>), the resulting Claims are returned in the ID Token. </p>
 </blockquote>
-<p>[<a href="#openid-core">OpenID.Core</a>] basically assumes that the user identity is delivered in the <code>sub</code> claim that is part of the ID token, and all other attributes are complementary attributes that may be fetched in a later call to the UserInfo endpoint. </p>
-<p>The Swedish OpenID Connect profile takes another approach regarding the primary user identity, and the primary user identity is most often represented by a claim delivered as part of a requested scope. Therefore, this profile, requires that if any of the scopes defined in section 3 of [<a href="#attr-spec">OIDC.Sweden.Attr</a>] are requested the corresponding claims MUST be delivered in the ID token<sup>3</sup>.</p>
-<p>&quot;Authentication Information Claims&quot; as defined in section 2.3 of [<a href="#attr-spec">OIDC.Sweden.Attr</a>] are claims
-describing an authentication event, and are not user identity claims. Therefore, any of these claims
-MUST be delivered in the ID token and MUST NOT be delivered from the UserInfo endpoint.</p>
-<p>Note: In order to be compliant with [<a href="#openid-core">OpenID.Core</a>] it is RECOMMENDED that claims requested by the scope values
-<code>profile</code>, <code>email</code>, <code>address</code>, and <code>phone</code> are delivered from the UserInfo endpoint. However, there are some overlap between the
-<code>profile</code> scope and the  <code>https://id.oidc.se/scope/naturalPersonName</code> and <code>https://id.oidc.se/scope/naturalPersonNumber</code> scopes,
-and a Relying Party SHOULD use the latter scopes instead of the <code>profile</code> scope where applicable. </p>
+<p>This means that, unless explicitly requested via the <code>claims</code> request parameter, identity
+claims<sup>1</sup> are delivered from the UserInfo endpoint. </p>
+<p>OpenID Providers compliant with this profile MUST adhere to the above statements, unless governed
+by an overriding policy that states otherwise.</p>
+<p>&quot;Authentication Information Claims&quot; as defined in section 2.3 of [<a href="#attr-spec">OIDC.Sweden.Attr</a>] are
+claims describing an authentication event, and are not regarded as user identity claims. Therefore, any
+of these claims SHOULD be delivered in the ID token and SHOULD NOT be delivered from the UserInfo
+endpoint.</p>
 <blockquote>
 <p>[1]: Apart from the mandatory <code>sub</code> claim that also can be seen as an identity attribute. </p>
-</blockquote>
-<blockquote>
-<p>[2]: Such a claims release policy is out of scope for this specification.</p>
-</blockquote>
-<blockquote>
-<p>[3]: Unless a <code>claims</code> parameter has been supplied where delivery via the UserInfo endpoint has been ordered.</p>
 </blockquote>
 <p><a name="discovery"></a></p>
 <h2 id="5-discovery">5. Discovery</h2>
@@ -459,7 +453,7 @@ and a Relying Party SHOULD use the latter scopes instead of the <code>profile</c
 </tr>
 <tr>
 <td align="left"><code>code_challenge_methods_supported</code></td>
-<td align="left">JSON array containing a list of PKCE code challenge methods supported by this OP. The array MUST include the <code>S256</code> method and MUST NOT include the <code>plain</code> method.<br />The <code>code_challenge_methods_supported</code> parameter is defined in section 2 of [<a href="#rfc8614">RFC8614</a>].</td>
+<td align="left">JSON array containing a list of PKCE code challenge methods supported by this OP. The array MUST include the <code>S256</code> method and MUST NOT include the <code>plain</code> method.<br />The <code>code_challenge_methods_supported</code> parameter is defined in section 2 of [<a href="#rfc8414">RFC8414</a>].</td>
 <td align="left">REQUIRED</td>
 </tr>
 </tbody></table>
@@ -495,7 +489,7 @@ following table.</p>
 </tr>
 <tr>
 <td align="left"><code>jwks</code></td>
-<td align="left">The Relying Party&#39;s JSON Web Key Set [JWK] document, passed by value.</td>
+<td align="left">The Relying Party&#39;s JSON Web Key Set [JWK] document, passed by value. See [<a href="#rfc7517">RFC7517</a>].</td>
 <td align="left">REQUIRED<br />Except for those clients that authenticate according to the exceptions described in section <a href="#client-authentication">3.1.1</a>.</td>
 </tr>
 <tr>
@@ -602,18 +596,28 @@ considered broken and MUST NOT be used or accepted.</p>
 <blockquote>
 <p><a href="https://openid.net/specs/openid-igov-openid-connect-1_0.html">M. Varley, P. Grassi, &quot;International Government Assurance Profile (iGov) for OpenID Connect 1.0&quot;, October 05, 2018</a>.</p>
 </blockquote>
-<p><a name="rfc7519"></a>
-<strong>[RFC7519]</strong></p>
-<blockquote>
-<p><a href="https://datatracker.ietf.org/doc/html/rfc7519">Jones, M., Bradley, J. and N. Sakimura, &quot;JSON Web Token (JWT)&quot;, May 2015</a>.</p>
-</blockquote>
 <p><a name="rfc7515"></a>
 <strong>[RFC7515]</strong></p>
 <blockquote>
 <p><a href="https://tools.ietf.org/html/rfc7515">Jones, M., Bradley, J., and N. Sakimura, “JSON Web Signature (JWS)”, May 2015</a>.</p>
 </blockquote>
-<p><a name="rfc8614"></a>
-<strong>[RFC8614]</strong></p>
+<p><a name="rfc7517"></a>
+<strong>[RFC7517]</strong></p>
+<blockquote>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc7517">Jones, M., &quot;JSON Web Key (JWK)&quot;, May 2015</a>.</p>
+</blockquote>
+<p><a name="rfc7518"></a>
+<strong>[RFC7518]</strong></p>
+<blockquote>
+<p><a href="https://www.rfc-editor.org/rfc/rfc7518.txt">Jones, M., &quot;JSON Web Algorithms (JWA)&quot;, May 2015</a>.</p>
+</blockquote>
+<p><a name="rfc7519"></a>
+<strong>[RFC7519]</strong></p>
+<blockquote>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc7519">Jones, M., Bradley, J. and N. Sakimura, &quot;JSON Web Token (JWT)&quot;, May 2015</a>.</p>
+</blockquote>
+<p><a name="rfc8414"></a>
+<strong>[RFC8414]</strong></p>
 <blockquote>
 <p><a href="https://www.rfc-editor.org/rfc/rfc8414.html">Jones, M., Bradley, J., and N. Sakimura, &quot;OAuth 2.0 Authorization Server Metadata&quot;, June 2018</a>.</p>
 </blockquote>
@@ -636,11 +640,6 @@ considered broken and MUST NOT be used or accepted.</p>
 <strong>[RFC5480]</strong></p>
 <blockquote>
 <p><a href="https://www.ietf.org/rfc/rfc5480.txt">IETF RFC 5480, Elliptic Curve Cryptography Subject Public Key Information, March 2009</a>.</p>
-</blockquote>
-<p><a name="rfc7518"></a>
-<strong>[RFC7518]</strong></p>
-<blockquote>
-<p><a href="https://www.rfc-editor.org/rfc/rfc7518.txt">Jones, M., &quot;JSON Web Algorithms (JWA)&quot;, May 2015</a>.</p>
 </blockquote>
 <p><a name="attr-spec"></a>
 <strong>[OIDC.Sweden.Attr]</strong></p>
