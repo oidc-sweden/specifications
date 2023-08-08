@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-06-16
+### Version: 1.0 - draft 03 - 2023-08-08
 
 ## Abstract
 
@@ -374,30 +374,25 @@ The OpenID Provider MUST NOT release any user identity claims other than the man
 
 OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. 
 
-An OpenID Provider compliant with this profile MUST NOT release any identity claims<sup>1</sup> in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via the `scope` and/or `claims` request parameters, or by a policy<sup>2</sup> known, and accepted, by the involved parties. 
+An OpenID Provider compliant with this profile MUST NOT release any identity claims<sup>1</sup> in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via the `scope` and/or `claims` request parameters, or by a policy known, and accepted, by the involved parties. Furthermore, an OpenID Provider MUST NOT release any claims to a Relying Party that has not been authorized to receive
+them. 
 
 Section 5.4 of \[[OpenID.Core](#openid-core)\] states:
 
 > The Claims requested by the `profile`, `email`, `address`, and `phone` scope values are returned from the UserInfo Endpoint, as described in Section 5.3.2, when a `response_type` value is used that results in an Access Token being issued. However, when no Access Token is issued (which is the case for the `response_type` value `id_token`), the resulting Claims are returned in the ID Token. 
 
-\[[OpenID.Core](#openid-core)\] basically assumes that the user identity is delivered in the `sub` claim that is part of the ID token, and all other attributes are complementary attributes that may be fetched in a later call to the UserInfo endpoint. 
+This means that, unless explicitly requested via the `claims` request parameter, identity
+claims<sup>1</sup> are delivered from the UserInfo endpoint. 
 
-The Swedish OpenID Connect profile takes another approach regarding the primary user identity, and the primary user identity is most often represented by a claim delivered as part of a requested scope. Therefore, this profile, requires that if any of the scopes defined in section 3 of \[[OIDC.Sweden.Attr](#attr-spec)\] are requested the corresponding claims MUST be delivered in the ID token<sup>3</sup>.
-
-"Authentication Information Claims" as defined in section 2.3 of \[[OIDC.Sweden.Attr](#attr-spec)\] are claims
-describing an authentication event, and are not user identity claims. Therefore, any of these claims
-MUST be delivered in the ID token and MUST NOT be delivered from the UserInfo endpoint.
-
-Note: In order to be compliant with \[[OpenID.Core](#openid-core)\] it is RECOMMENDED that claims requested by the scope values
-`profile`, `email`, `address`, and `phone` are delivered from the UserInfo endpoint. However, there are some overlap between the
-`profile` scope and the  `https://id.oidc.se/scope/naturalPersonName` and `https://id.oidc.se/scope/naturalPersonNumber` scopes,
-and a Relying Party SHOULD use the latter scopes instead of the `profile` scope where applicable. 
+OpenID Providers compliant with this profile MUST adhere to the above statements, unless governed
+by an overriding policy that states otherwise.
+  
+"Authentication Information Claims" as defined in section 2.3 of \[[OIDC.Sweden.Attr](#attr-spec)\] are
+claims describing an authentication event, and are not regarded as user identity claims. Therefore, any
+of these claims SHOULD be delivered in the ID token and SHOULD NOT be delivered from the UserInfo
+endpoint.
 
 > \[1\]: Apart from the mandatory `sub` claim that also can be seen as an identity attribute. 
-
-> \[2\]: Such a claims release policy is out of scope for this specification.
-
-> \[3\]: Unless a `claims` parameter has been supplied where delivery via the UserInfo endpoint has been ordered.
 
 <a name="discovery"></a>
 ## 5. Discovery
