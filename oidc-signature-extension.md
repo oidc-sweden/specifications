@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-04-27
+### Version: 1.0 - draft 02 - 2023-10-18
 
 ## Abstract
 
@@ -138,10 +138,7 @@ part of the signature process<sup>2</sup>. The `sign_message` field is a JSON ob
 "https://id.oidc.se/param/signRequest" : {
   "tbs_data" : "<Base64-encoded data>",
   "sign_message" : {
-    "message" : { 
-      "sv" : "<Base64-encoded sign message in Swedish>",
-      "en" : "<Base64-encoded sign message in English>"
-    },
+    "message" : "<Base64-encoded sign message>",
     "mime_type" : "text/plain"
   }
 },
@@ -218,10 +215,8 @@ The following is a non-normative example of the claims in a Request Object befor
   "https://id.oidc.se/param/signRequest": {
     "tbs_data" : "VGhpcyBpcyB0aGUgZGF0YSB0aGF0IEkgd2FudCB0byBzaWdu",
     "sign_message" : {
-      "message" : { 
-        "sv" : "RGVubmEgdGV4dCB2aXNhcyBmw7ZyIGFudsOkbmRhcmVu",
-        "en" : "VGhpcyBpcyB0ZXh0IGRpc3BsYXllZCBmb3IgdGhlIHVzZXI="
-      },
+      "message#sv" : "RGVubmEgdGV4dCB2aXNhcyBmw7ZyIGFudsOkbmRhcmVu",
+      "message#en" : "VGhpcyBpcyB0ZXh0IGRpc3BsYXllZCBmb3IgdGhlIHVzZXI=",
       "mime_type" : "text/plain"
     }
   }

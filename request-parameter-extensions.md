@@ -2,7 +2,7 @@
 
 # Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 01 - 2023-04-27
+### Version: 1.0 - draft 02 - 2023-10-18
 
 ## Abstract
 
@@ -80,14 +80,19 @@ the user authentication.
 **Value type:** The value for the user message request parameter claim is a JSON object<sup>1</sup>
  with the following fields:
 
-* `message` - A JSON-map where the keys are language tags (\[[RFC5646](#rfc5646)\]) and the map
-values are base64-encodings of the UTF-8 string holding the message to display to the user. The map
-MUST contain at least one language-message pair.
+* `message` - The base64-encoding of the UTF-8 string holding the message to display to the user.
 
 * `mime_type` - The MIME type of the supplied message. This profile defines two possible values that
 are `text/plain` (where `;charset=UTF-8` is an implicit condition) and `text/markdown`<sup>2</sup>.
 If no value is given for this field, `text/plain` MUST be assumed. Other profiles MAY add support for
 additional MIME types. 
+
+A requesting entity MAY include several `message` fields for different languages. This is done
+according to section 5.2 of \[[OpenID.Core](#openid-core)\], where a `#` sign is used to delimit
+the member name (`message`) from the language tag (see \[[RFC5646](#rfc5646)\]). See the example below.
+
+If the OpenID Provider has declared `ui_locales_supported` in its metadata (see section 3 of \[[OpenID.Discovery](#openid-discovery)\]) the client SHOULD restrict messages to the languages
+declared by the OP.
 
 **Requirements:** An OpenID Provider MUST NOT display a "user message" unless the user is being
 authenticated. Thus, if the request contains the `prompt` parameter with the value `none` (see
@@ -100,13 +105,37 @@ and supported by the OP, the provider SHOULD display the user message according 
 `display` parameter.
 
 The OpenID Provider MUST display the message matching the user interface locale that is in use. If no
-message matches that current locale, the OP MAY choose not to display any message, or select a message
-from the client provided map.
+message matches that current locale the OP MUST choose the message without a given language tag
+if such a parameter is available. If no message parameter without a language tag is received, the OP MAY 
+choose not to display any message, or select a message from the provided message parameters.
 
 An OpenID Provider MUST refuse to display a message if it does not support a given MIME type.
 
 Should a message contain illegal characters, or any other constructs not accepted by the provider,
 the OP MAY choose not to display the message, or filter the message before displaying it.
+
+**Example 1:** No language is specified.
+
+```
+...
+"https://id.oidc.se/param/userMessage" : {  
+  "message" : "<Base64-encoded message>",  (language is undefined)
+  "mime_type" : "text/plain"
+},
+...
+```
+
+**Example 2:** Messages for different languages are specified.
+
+```
+...
+"https://id.oidc.se/param/userMessage" : {  
+  "message#sv" : "<Base64-encoded message in Swedish>",
+  "message#en" : "<Base64-encoded message in English>",
+  "mime_type" : "text/plain"
+},
+...
+```
 
 **\[1\]:** The `https://id.oidc.se/param/userMessage` parameter value is represented in an
 authentication request as UTF-8 encoded JSON (which ends up being form-urlencoded when passed as a
@@ -114,20 +143,6 @@ parameter). When used in a Request Object value, per section 6.1 of \[[OpenID.Co
 the JSON is used as the value of the `https://id.oidc.se/param/userMessage` member.
 
 **\[2\]:** The Markdown dialect, and potential restrictions for tags, is not regulated in this specification.
-
-**Example:**
-
-```
-...
-"https://id.oidc.se/param/userMessage" : {  
-  "message" : { 
-    "sv" : "<Base64-encoded message in Swedish>",
-    "en" : "<Base64-encoded message in English>"
-  },
-  "mime_type" : "text/plain"
-},
-...
-```
 
 <a name="requested-authentication-provider"></a>
 #### 2.2. Requested Authentication Provider
@@ -220,6 +235,10 @@ If this parameter is not set by the OP, a default of `[ "text/plain" ]` MUST be 
 <a name="openid-core"></a>
 **\[OpenID.Core\]**
 > [Sakimura, N., Bradley, J., Jones, M., de Medeiros, B. and C. Mortimore, "OpenID Connect Core 1.0", August 2015](https://openid.net/specs/openid-connect-core-1_0.html).
+
+<a name="openid-discovery"></a>
+**\[OpenID.Discovery\]**
+> [Sakimura, N., Bradley, J., Jones, M. and E. Jay, "OpenID Connect Discovery 1.0", August 2015](https://openid.net/specs/openid-connect-discovery-1_0.html).
 
 <a name="rfc5646"></a>
 **\[RFC5646\]**
