@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 03 - 2023-08-08
+### Version: 1.0 - draft 04 - 2023-10-19
 
 ## Abstract
 
@@ -85,10 +85,7 @@ This specification defines a profile for OpenID Connect for use within the Swedi
 
 This specification defines a profile for OpenID Connect for use within the Swedish public and private sector. It profiles the OpenID Connect protocol to get a baseline security and to facilitate interoperability between relying parties and OpenID providers.
 
-The profile is loosely based on the International Government Assurance Profile for OpenID Connect draft, \[[OpenID.iGov](#openid-igov)\], but since work and progress within the OpenID foundation iGov working group seems to have stopped, the Swedish OpenID Connect working group has decided to produce a stand-alone profile for OpenID Connect.
-
-> Should the work within the OpenID foundation iGov working group be resumed, the Swedish profile will adapt to this work. 
-
+> The profile is loosely based on the International Government Assurance Profile for OpenID Connect draft, \[[OpenID.iGov](#openid-igov)\].
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -142,7 +139,8 @@ Relying Party to include in a request, and required or optional for an OP to sup
 
 The `scope` parameter value MUST contain `openid` and MAY contain additional scopes controlling required claims.
 
-See \[[OIDC.Sweden.Attr](#attr-spec)\] for all the defined scopes for this profile, and section [4, Claims and Scopes](#claims-and-scopes), for the scopes that are mandatory to support.
+See section [4, Claims and Scopes](#claims-and-scopes), for further requirements concerning `scope`
+processing.
 
 <a name="the-state-parameter"></a>
 #### 2.1.2. The state Parameter
@@ -349,50 +347,56 @@ Relying Parties MUST follow the requirements in section [3.1.3.7] of \[[OpenID.C
 <a name="claims-and-scopes"></a>
 ## 4. Claims and Scopes
 
-The "Attribute Specification for the Swedish OpenID Connect Profile" document, \[[OIDC.Sweden.Attr](#attr-spec)\], defines
-claims and scopes to be used by entities compliant with the Swedish OpenID Connect profile. 
-
-Additional claims and scopes may be defined in profiles extending this profile, but to stay compliant and thus ensure
-interoperability, a claim that represents an identity value that already has a definition in \[[OIDC.Sweden.Attr](#attr-spec)\]
-MUST NOT be re-defined with a new claim name in profiles extending the Swedish OpenID Connect profile.
-
-> As an example: An OpenID Provider compliant with this profile MUST not invent its own claim definition of a Swedish
-personal identity number. It MUST use the `https://id.oidc.se/claim/personalIdentityNumber` defined in 
-\[[OIDC.Sweden.Attr](#attr-spec)\].
-
 <a name="userinfo-endpoint"></a>
 ### 4.1. UserInfo Endpoint
 
-An OpenID Provider compliant with this profile SHOULD support releasing claims from the UserInfo endpoint. If supported the OpenID Provider MUST follow the requirements from section 5.3 of \[[OpenID.Core](#openid-core)\].
+An OpenID Provider compliant with this profile MUST support releasing claims from the UserInfo endpoint
+and MUST follow the requirements from section 5.3 of \[[OpenID.Core](#openid-core)\].
+
+Access to the UserInfo endpoint MUST be denied if a valid access token is not presented.
 
 Responses from the UserInfo endpoint MUST be signed.
 
-The OpenID Provider MUST NOT release any user identity claims other than the mandatory `sub` claim if they are not explicitly requested in the original authentication request via the `claims` parameter, see [2.1.6](#the-claims-parameter), or by a standard scope (see below).
+See section [4.2](#claims-release-requirements) below for claims release requirements via the UserInfo
+endpoint.
+
+Relying Parties MUST follow section 5.3.4 of \[[OpenID.Core](#openid-core)\] when validating a
+UserInfo response message.
 
 <a name="claims-release-requirements"></a>
 ### 4.2. Claims Release Requirements
 
 OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. 
 
-An OpenID Provider compliant with this profile MUST NOT release any identity claims<sup>1</sup> in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via the `scope` and/or `claims` request parameters, or by a policy known, and accepted, by the involved parties. Furthermore, an OpenID Provider MUST NOT release any claims to a Relying Party that has not been authorized to receive
-them. 
+An OpenID Provider compliant with this profile MUST NOT release any identity claims in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via `scope` and/or `claims` request parameters, or by a policy known, and accepted, by the involved parties. 
 
-Section 5.4 of \[[OpenID.Core](#openid-core)\] states:
+The above requirement does not include the mandatory `sub` claim, and claims that do not reveal identity
+information about the user, for example, transaction identifiers or claims holding information about
+the authentication process.
 
-> The Claims requested by the `profile`, `email`, `address`, and `phone` scope values are returned from the UserInfo Endpoint, as described in Section 5.3.2, when a `response_type` value is used that results in an Access Token being issued. However, when no Access Token is issued (which is the case for the `response_type` value `id_token`), the resulting Claims are returned in the ID Token. 
+Furthermore, an OpenID Provider MUST NOT release any claims to a Relying Party that has not been authorized to receive them. How this authorization is handled and managed is out of scope for this
+profile. 
 
-This means that, unless explicitly requested via the `claims` request parameter, identity
-claims<sup>1</sup> are delivered from the UserInfo endpoint. 
+An OpenID Provider compliant with this profile MUST adhere to the following claim release requirements:
 
-OpenID Providers compliant with this profile MUST adhere to the above statements, unless governed
-by an overriding policy that states otherwise.
-  
-"Authentication Information Claims" as defined in section 2.3 of \[[OIDC.Sweden.Attr](#attr-spec)\] are
-claims describing an authentication event, and are not regarded as user identity claims. Therefore, any
-of these claims SHOULD be delivered in the ID token and SHOULD NOT be delivered from the UserInfo
-endpoint.
+- If a `claims` request parameter is included in the authentication request for a specific claim,
+the claim is delivered according to the `claims` parameter contents.
 
-> \[1\]: Apart from the mandatory `sub` claim that also can be seen as an identity attribute. 
+- If a `scope` request parameter value is included in the authentication request, and this scope
+definition has specific claims delivery requirements (i.e., whether the claims belonging to the
+scope should be delivered in ID Token or via the UserInfo endpoint), the claims are delivered
+according to these scope requirements.
+
+- If an overriding policy (to this profile) is effective and this policy has particular requirements
+concerning claims delivery, this policy is applied. 
+
+- If none of the above rules apply, the OpenID Provider MUST default to deliver claims via the 
+UserInfo endpoint, as specified by \[[OpenID.Core](#openid-core)\].
+
+In cases where a specific claim is delivered in the ID Token due to a specific `claims` parameter
+request, and this claim is part of a standard or custom scope that states delivery via the UserInfo
+endpoint (which is the default), the claim should also be delivered via the UserInfo endpoint (if the
+scope in question is requested).
 
 <a name="discovery"></a>
 ## 5. Discovery
@@ -535,7 +539,7 @@ considered broken and MUST NOT be used or accepted.
 
 <a name="openid-igov"></a>
 **\[OpenID.iGov\]**
-> [M. Varley, P. Grassi, "International Government Assurance Profile (iGov) for OpenID Connect 1.0", October 05, 2018](https://openid.net/specs/openid-igov-openid-connect-1_0.html).
+> [M. Varley, P. Grassi, "International Government Assurance Profile (iGov) for OpenID Connect 1.0", August 03, 2013](https://openid.net/specs/openid-igov-openid-connect-1_0.html).
 
 <a name="rfc7515"></a>
 **\[RFC7515\]**
@@ -572,10 +576,6 @@ considered broken and MUST NOT be used or accepted.
 <a name="rfc5480"></a>
 **\[RFC5480\]**
 > [IETF RFC 5480, Elliptic Curve Cryptography Subject Public Key Information, March 2009](https://www.ietf.org/rfc/rfc5480.txt).
-
-<a name="attr-spec"></a>
-**\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://oidc.se/specifications/swedish-oidc-attribute-specification.html).
 
 <a name="nist800-52"></a>
 **\[NIST.800-52.Rev2\]**
