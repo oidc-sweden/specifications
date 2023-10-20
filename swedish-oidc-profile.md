@@ -202,9 +202,9 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.
 ```
 {
   "id_token" : {
-    "https://id.oidc.se/claim/personalIdentityNumber" : { 
+    "email" : { 
       "essential" : true, 
-      "value" : "191212121212" 
+      "value" : "user@example.com" 
     }
   }
 }
@@ -323,7 +323,7 @@ Except for the claims listed above the OpenID Provider also includes claims in t
 
 Section 8 of \[[OpenID.Core](#openid-core)\] defines two Subject Identifier Types, `public` and `pairwise`. An OpenID Provider compliant with this profile MUST support the `public` type and SHOULD support the `pairwise` type.
 
-In order to avoid privacy violations an OpenID Provider MUST NOT use an end-user attribute that reveals personal information about the end-user as the value for `sub`, for example a Swedish personal identity number. Even though this information may be available in other token claims, its release should be dependent on requested scopes (or claims) and not be revealed unless requested (and in some cases consented).
+In order to avoid privacy violations an OpenID Provider MUST NOT use an end-user attribute that reveals personal information about the end-user as the value for `sub`, for example a personal identity number. Even though this information may be available in other token claims, its release should be dependent on requested scopes (or claims) and not be revealed unless requested (and in some cases consented).
 
 <a name="the-exp-token-claim"></a>
 #### 3.2.1.2. The exp Token Claim
@@ -377,25 +377,23 @@ the authentication process.
 Furthermore, an OpenID Provider MUST NOT release any claims to a Relying Party that has not been authorized to receive them. How this authorization is handled and managed is out of scope for this
 profile. 
 
-An OpenID Provider compliant with this profile MUST adhere to the following claim release requirements:
+An OpenID Provider compliant with this profile MUST adhere to the following rules for release
+of identity claims belonging to the subject:
 
-- If a `claims` request parameter is included in the authentication request for a specific claim,
-the claim is delivered according to the `claims` parameter contents.
+- If a `claims` request parameter is included in the authentication request, the claims contained
+in this parameter are delivered according to their indicated destination (`id_token` or `userinfo`).
 
 - If a `scope` request parameter value is included in the authentication request, and this scope
 definition has specific claims delivery requirements (i.e., whether the claims belonging to the
 scope should be delivered in ID Token or via the UserInfo endpoint), the claims are delivered
 according to these scope requirements.
 
-- If an overriding policy (to this profile) is effective and this policy has particular requirements
-concerning claims delivery, this policy is applied. 
-
-- If none of the above rules apply, the OpenID Provider MUST default to deliver claims via the 
-UserInfo endpoint, as specified by \[[OpenID.Core](#openid-core)\].
+- If none of the above rules apply, claims are delivered via the UserInfo endpoint, as specified by 
+\[[OpenID.Core](#openid-core)\].
 
 In cases where a specific claim is delivered in the ID Token due to a specific `claims` parameter
 request, and this claim is part of a standard or custom scope that states delivery via the UserInfo
-endpoint (which is the default), the claim should also be delivered via the UserInfo endpoint (if the
+endpoint (which is the default), the claim MUST also be delivered via the UserInfo endpoint (if the
 scope in question is requested).
 
 <a name="discovery"></a>
