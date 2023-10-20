@@ -1,8 +1,8 @@
 ![Logo](img/oidc-logo.png)
 
-# Attribute Specification for the Swedish OpenID Connect Profile
+# Claims and Scopes Specification for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-04-26
+### Version: 1.0 - draft 03 - 2023-10-20
 
 ## Abstract
 
@@ -87,7 +87,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 These keywords are capitalized when used to unambiguously specify requirements over protocol features and behavior that affect the interoperability and security of implementations. When these words are not capitalized, they are meant in their natural-language sense.
 
 <a name="claims"></a>
-## 2. Attributes and Claims
+## 2. Claims
 
 This specification defines a set of claims that extend the set of standard claims defined in \[[RFC7515](#rfc7515)\] and 
 section 5.1 of \[[OpenID.Core](#openid-core)\]. A full listing of standard claims can be found in the [IANA JSON Web Token Claims

@@ -2,7 +2,7 @@
 
 # Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-10-18
+### Version: 1.0 - draft 02 - 2023-10-20
 
 ## Abstract
 
@@ -162,7 +162,7 @@ When the `authnProvider` request parameter is used, this interaction may be skip
 How possible values for this request parameter is announced by the OpenID Provider is
 out of scope for this specification. 
 
-Section 2.3.5 of \[[OIDC.Sweden.Attr](#attr-spec)\] defines the claim 
+Section 2.3.5 of \[[OIDC.Sweden.Claims](#claims-spec)\] defines the claim 
 `https://id.oidc.se/claim/authnProvider` that MAY be included in an ID token by an OpenID Provider.
 The value of this claim can be used by the Relying Party to request re-authentication of an end-user.
 By assigning the value to the `authnProvider` request parameter, the RP requests that the user is
@@ -244,9 +244,9 @@ If this parameter is not set by the OP, a default of `[ "text/plain" ]` MUST be 
 **\[RFC5646\]**
 > [Phillips, A. and M. Davis, “Tags for Identifying Languages,” BCP 47, RFC 5646, September 2009](https://www.rfc-editor.org/rfc/rfc5646).
 
-<a name="attr-spec"></a>
-**\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html).
+<a name="claims-spec"></a>
+**\[OIDC.Sweden.Claims\]**
+> [Claims and Scopes Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-claims-specification.html).
 
 <a name="oidc-profile"></a>
 **\[OIDC.Sweden.Profile\]**

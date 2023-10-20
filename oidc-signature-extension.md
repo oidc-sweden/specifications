@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-10-18
+### Version: 1.0 - draft 02 - 2023-10-20
 
 ## Abstract
 
@@ -108,7 +108,7 @@ that actually supports eID:s that support creating signatures can be used.
 <a name="identifiers"></a>
 ## 3. Identifiers
 
-This section extends \[[OIDC.Sweden.Attr](#attr-spec)\] with definitions of parameter claims and scopes used for the signing
+This section extends \[[OIDC.Sweden.Claims](#claims-spec)\] with definitions of parameter claims and scopes used for the signing
 use case defined in this specification.
 
 <a name="the-signature-request-parameter"></a>
@@ -181,7 +181,7 @@ Location: https://server.example.com/authorize?
 The scopes requested are `openid` (always) and `https://id.oidc.se/scope/sign` (see [section 3.2](#signature-scope), 
 [Signature Scope](#signature-scope))  that instructs the OpenID Provider that this is a signature request. 
 In a real-life scenario, the Relying Party would probably request additional claims using additional scopes, for example,
- `https://id.oidc.se/scope/naturalPersonNumber` and `https://id.oidc.se/scope/authnInfo` (see \[[OIDC.Sweden.Attr](#attr-spec)\]).
+ `https://id.oidc.se/scope/naturalPersonNumber` and `https://id.oidc.se/scope/authnInfo` (see \[[OIDC.Sweden.Claims](#claims-spec)\]).
 
 The parameter `https://id.oidc.se/param/signRequest` is among the parameters and its value is a JWT
 (abbreviated for readability). This parameter value holds the input to the signature operation.
@@ -268,7 +268,7 @@ included is a "signature request", and it requests the claims declared in the ta
 
 | Claim | Description/comment | Reference | Requirement |
 | :--- | :--- | :--- | :--- |
-| `https://id.oidc.se/`<br />`claim/userSignature` | The signature that is the result of the user signing process at the OP. | \[[OIDC.Sweden.Attr](#attr-spec)\] | REQUIRED |
+| `https://id.oidc.se/`<br />`claim/userSignature` | The signature that is the result of the user signing process at the OP. | \[[OIDC.Sweden.Claims](#claims-spec)\] | REQUIRED |
 | `auth_time` | The time when the signature was created. | \[[OpenID.Core](#openid-core)\] | REQUIRED |
 
 **Note:** The `https://id.oidc.se/scope/sign` alone does not say anything about the identity of the signing end-user.
@@ -386,7 +386,7 @@ OpenID Providers that are compliant with this specification<sup>1</sup>, MUST me
 The `scopes_supported` MUST be present in the provider's discovery document and it MUST contain the scope 
 `https://id.oidc.se/scope/sign`.
 
-Also, it is RECOMMENDED that the `https://id.oidc.se/scope/authnInfo` scope is supported and declared. See \[[OIDC.Sweden.Attr](#attr-spec)\].
+Also, it is RECOMMENDED that the `https://id.oidc.se/scope/authnInfo` scope is supported and declared. See \[[OIDC.Sweden.Claims](#claims-spec)\].
 
 The `claims_supported` field MUST be present and include at least the claims that are included in the scope definitions for all
 declared scopes (in the `scopes_supported`).
@@ -442,9 +442,9 @@ If not declared, `[ "text/plain" ]` MUST be assumed.
 **\[OIDC.Sweden.Profile\]**
 > [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.html).
 
-<a name="attr-spec"></a>
-**\[OIDC.Sweden.Attr\]**
-> [Attribute Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html).
+<a name="claims-spec"></a>
+**\[OIDC.Sweden.Claims\]**
+> [Claims and Scopes Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-claims-specification.html).
 
 <a name="request-ext"></a>
 **\[OIDC.Sweden.Params\]**

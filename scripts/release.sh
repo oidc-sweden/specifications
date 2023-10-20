@@ -27,7 +27,7 @@ INPUT_DIR=${1%/}
 OUTPUT_DIR=${2%/}
 
 declare -a SPECIFICATIONS=("swedish-oidc-profile.md"
-    "swedish-oidc-attribute-specification.md"
+    "swedish-oidc-claims-specification.md"
     "request-parameter-extensions.md"
     "oidc-signature-extension.md"
     "claim-mappings-to-other-specs.md")
@@ -39,10 +39,10 @@ for spec in "${SPECIFICATIONS[@]}"
 do
     echo "Processing ${spec} ..."
     ORIENTATION="p"
-    if [ "${spec}" == "xxx" ] || [ "${spec}" == "yyy" ];
-    then
-	ORIENTATION="l"
-    fi
+#    if [ "${spec}" == "xxx" ] || [ "${spec}" == "yyy" ];
+#    then
+#	ORIENTATION="l"
+#    fi
     ${INSTALL_DIR}/tohtml.sh ${INPUT_DIR}/"${spec}" ${OUTPUT_DIR} -o $ORIENTATION
 done
 

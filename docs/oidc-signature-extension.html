@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="signature-extension-for-openid-connect">Signature Extension for OpenID Connect</h1>
-<h3 id="version-10---draft-02---2023-10-18">Version: 1.0 - draft 02 - 2023-10-18</h3>
+<h3 id="version-10---draft-02---2023-10-20">Version: 1.0 - draft 02 - 2023-10-20</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines an extension to OpenID Connect to facilitate use cases where a Relying Party sends a
 &quot;Signature Request&quot; to an OpenID Provider. A signature request is an extension of an OpenID Connect authentication
@@ -91,7 +91,7 @@ is being signed.</p>
 that actually supports eID:s that support creating signatures can be used.</p>
 <p><a name="identifiers"></a></p>
 <h2 id="3-identifiers">3. Identifiers</h2>
-<p>This section extends [<a href="#attr-spec">OIDC.Sweden.Attr</a>] with definitions of parameter claims and scopes used for the signing
+<p>This section extends [<a href="#claims-spec">OIDC.Sweden.Claims</a>] with definitions of parameter claims and scopes used for the signing
 use case defined in this specification.</p>
 <p><a name="the-signature-request-parameter"></a></p>
 <h3 id="31-the-signature-request-parameter">3.1. The Signature Request Parameter</h3>
@@ -149,7 +149,7 @@ Location: https:<span class="hljs-comment">//server.example.com/authorize?</span
   &amp;https%3A%2F%2Fid.oidc.se%2Fclaim%2FsignRequest=eyJhbjIn0.ew0...MbpL<span class="hljs-number">-2</span>QgwUsAlMGzw</code></pre><p>The scopes requested are <code>openid</code> (always) and <code>https://id.oidc.se/scope/sign</code> (see <a href="#signature-scope">section 3.2</a>, 
 <a href="#signature-scope">Signature Scope</a>)  that instructs the OpenID Provider that this is a signature request. 
 In a real-life scenario, the Relying Party would probably request additional claims using additional scopes, for example,
- <code>https://id.oidc.se/scope/naturalPersonNumber</code> and <code>https://id.oidc.se/scope/authnInfo</code> (see [<a href="#attr-spec">OIDC.Sweden.Attr</a>]).</p>
+ <code>https://id.oidc.se/scope/naturalPersonNumber</code> and <code>https://id.oidc.se/scope/authnInfo</code> (see [<a href="#claims-spec">OIDC.Sweden.Claims</a>]).</p>
 <p>The parameter <code>https://id.oidc.se/param/signRequest</code> is among the parameters and its value is a JWT
 (abbreviated for readability). This parameter value holds the input to the signature operation.</p>
 <blockquote>
@@ -227,7 +227,7 @@ included is a &quot;signature request&quot;, and it requests the claims declared
 <tbody><tr>
 <td align="left"><code>https://id.oidc.se/</code><br /><code>claim/userSignature</code></td>
 <td align="left">The signature that is the result of the user signing process at the OP.</td>
-<td align="left">[<a href="#attr-spec">OIDC.Sweden.Attr</a>]</td>
+<td align="left">[<a href="#claims-spec">OIDC.Sweden.Claims</a>]</td>
 <td align="left">REQUIRED</td>
 </tr>
 <tr>
@@ -328,7 +328,7 @@ claim, MUST be delivered in the ID Token and never from the UserInfo endpoint.</
 <p>OpenID Providers that are compliant with this specification<sup>1</sup>, MUST meet the following requirements discovery requirements:</p>
 <p>The <code>scopes_supported</code> MUST be present in the provider&#39;s discovery document and it MUST contain the scope 
 <code>https://id.oidc.se/scope/sign</code>.</p>
-<p>Also, it is RECOMMENDED that the <code>https://id.oidc.se/scope/authnInfo</code> scope is supported and declared. See [<a href="#attr-spec">OIDC.Sweden.Attr</a>].</p>
+<p>Also, it is RECOMMENDED that the <code>https://id.oidc.se/scope/authnInfo</code> scope is supported and declared. See [<a href="#claims-spec">OIDC.Sweden.Claims</a>].</p>
 <p>The <code>claims_supported</code> field MUST be present and include at least the claims that are included in the scope definitions for all
 declared scopes (in the <code>scopes_supported</code>).</p>
 <p>The <code>request_parameter_supported</code> MUST be present, and SHOULD be set to <code>true</code> (i.e., the OpenID Provider has support for 
@@ -383,10 +383,10 @@ If not declared, <code>[ &quot;text/plain&quot; ]</code> MUST be assumed.</p>
 <blockquote>
 <p><a href="https://www.oidc.se/specifications/swedish-oidc-profile.html">The Swedish OpenID Connect Profile</a>.</p>
 </blockquote>
-<p><a name="attr-spec"></a>
-<strong>[OIDC.Sweden.Attr]</strong></p>
+<p><a name="claims-spec"></a>
+<strong>[OIDC.Sweden.Claims]</strong></p>
 <blockquote>
-<p><a href="https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html">Attribute Specification for the Swedish OpenID Connect Profile</a>.</p>
+<p><a href="https://www.oidc.se/specifications/swedish-oidc-claims-specification.html">Claims and Scopes Specification for the Swedish OpenID Connect Profile</a>.</p>
 </blockquote>
 <p><a name="request-ext"></a>
 <strong>[OIDC.Sweden.Params]</strong></p>

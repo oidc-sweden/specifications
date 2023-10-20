@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="authentication-request-parameter-extensions-for-the-swedish-openid-connect-profile">Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile</h1>
-<h3 id="version-10---draft-02---2023-10-18">Version: 1.0 - draft 02 - 2023-10-18</h3>
+<h3 id="version-10---draft-02---2023-10-20">Version: 1.0 - draft 02 - 2023-10-20</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines authentication request parameter extensions for the Swedish OpenID
 Connect Profile.</p>
@@ -125,7 +125,7 @@ authentication normally displays a dialogue from where the user selects how to a
 When the <code>authnProvider</code> request parameter is used, this interaction may be skipped.</p>
 <p>How possible values for this request parameter is announced by the OpenID Provider is
 out of scope for this specification. </p>
-<p>Section 2.3.5 of [<a href="#attr-spec">OIDC.Sweden.Attr</a>] defines the claim 
+<p>Section 2.3.5 of [<a href="#claims-spec">OIDC.Sweden.Claims</a>] defines the claim 
 <code>https://id.oidc.se/claim/authnProvider</code> that MAY be included in an ID token by an OpenID Provider.
 The value of this claim can be used by the Relying Party to request re-authentication of an end-user.
 By assigning the value to the <code>authnProvider</code> request parameter, the RP requests that the user is
@@ -190,10 +190,10 @@ Its value is only relevant if <code>https://id.oidc.se/disco/userMessageSupporte
 <blockquote>
 <p><a href="https://www.rfc-editor.org/rfc/rfc5646">Phillips, A. and M. Davis, “Tags for Identifying Languages,” BCP 47, RFC 5646, September 2009</a>.</p>
 </blockquote>
-<p><a name="attr-spec"></a>
-<strong>[OIDC.Sweden.Attr]</strong></p>
+<p><a name="claims-spec"></a>
+<strong>[OIDC.Sweden.Claims]</strong></p>
 <blockquote>
-<p><a href="https://www.oidc.se/specifications/swedish-oidc-attribute-specification.html">Attribute Specification for the Swedish OpenID Connect Profile</a>.</p>
+<p><a href="https://www.oidc.se/specifications/swedish-oidc-claims-specification.html">Claims and Scopes Specification for the Swedish OpenID Connect Profile</a>.</p>
 </blockquote>
 <p><a name="oidc-profile"></a>
 <strong>[OIDC.Sweden.Profile]</strong></p>
