@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="signature-extension-for-openid-connect">Signature Extension for OpenID Connect</h1>
-<h3 id="version-10---draft-02---2023-04-27">Version: 1.0 - draft 02 - 2023-04-27</h3>
+<h3 id="version-10---draft-02---2023-10-18">Version: 1.0 - draft 02 - 2023-10-18</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines an extension to OpenID Connect to facilitate use cases where a Relying Party sends a
 &quot;Signature Request&quot; to an OpenID Provider. A signature request is an extension of an OpenID Connect authentication
@@ -116,10 +116,7 @@ part of the signature process<sup>2</sup>. The <code>sign_message</code> field i
 <span class="hljs-string">&quot;https://id.oidc.se/param/signRequest&quot;</span> : {
   <span class="hljs-string">&quot;tbs_data&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded data&gt;&quot;</span>,
   <span class="hljs-string">&quot;sign_message&quot;</span> : {
-    <span class="hljs-string">&quot;message&quot;</span> : { 
-      <span class="hljs-string">&quot;sv&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded sign message in Swedish&gt;&quot;</span>,
-      <span class="hljs-string">&quot;en&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded sign message in English&gt;&quot;</span>
-    },
+    <span class="hljs-string">&quot;message&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded sign message&gt;&quot;</span>,
     <span class="hljs-string">&quot;mime_type&quot;</span> : <span class="hljs-string">&quot;text/plain&quot;</span>
   }
 },
@@ -178,10 +175,8 @@ and some are included in the Request Object. However, since the Request Object M
   <span class="hljs-string">&quot;https://id.oidc.se/param/signRequest&quot;</span>: {
     <span class="hljs-attr">&quot;tbs_data&quot;</span> : <span class="hljs-string">&quot;VGhpcyBpcyB0aGUgZGF0YSB0aGF0IEkgd2FudCB0byBzaWdu&quot;</span>,
     <span class="hljs-attr">&quot;sign_message&quot;</span> : {
-      <span class="hljs-attr">&quot;message&quot;</span> : { 
-        <span class="hljs-attr">&quot;sv&quot;</span> : <span class="hljs-string">&quot;RGVubmEgdGV4dCB2aXNhcyBmw7ZyIGFudsOkbmRhcmVu&quot;</span>,
-        <span class="hljs-attr">&quot;en&quot;</span> : <span class="hljs-string">&quot;VGhpcyBpcyB0ZXh0IGRpc3BsYXllZCBmb3IgdGhlIHVzZXI=&quot;</span>
-      },
+      <span class="hljs-attr">&quot;message#sv&quot;</span> : <span class="hljs-string">&quot;RGVubmEgdGV4dCB2aXNhcyBmw7ZyIGFudsOkbmRhcmVu&quot;</span>,
+      <span class="hljs-attr">&quot;message#en&quot;</span> : <span class="hljs-string">&quot;VGhpcyBpcyB0ZXh0IGRpc3BsYXllZCBmb3IgdGhlIHVzZXI=&quot;</span>,
       <span class="hljs-attr">&quot;mime_type&quot;</span> : <span class="hljs-string">&quot;text/plain&quot;</span>
     }
   }

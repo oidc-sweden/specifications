@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="authentication-request-parameter-extensions-for-the-swedish-openid-connect-profile">Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile</h1>
-<h3 id="version-10---draft-01---2023-04-27">Version: 1.0 - draft 01 - 2023-04-27</h3>
+<h3 id="version-10---draft-02---2023-10-18">Version: 1.0 - draft 02 - 2023-10-18</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines authentication request parameter extensions for the Swedish OpenID
 Connect Profile.</p>
@@ -66,9 +66,7 @@ the user authentication. </p>
 <p><strong>Value type:</strong> The value for the user message request parameter claim is a JSON object<sup>1</sup>
  with the following fields:</p>
 <ul class="list">
-<li><p><code>message</code> - A JSON-map where the keys are language tags ([<a href="#rfc5646">RFC5646</a>]) and the map
-values are base64-encodings of the UTF-8 string holding the message to display to the user. The map
-MUST contain at least one language-message pair.</p>
+<li><p><code>message</code> - The base64-encoding of the UTF-8 string holding the message to display to the user.</p>
 </li>
 <li><p><code>mime_type</code> - The MIME type of the supplied message. This profile defines two possible values that
 are <code>text/plain</code> (where <code>;charset=UTF-8</code> is an implicit condition) and <code>text/markdown</code><sup>2</sup>.
@@ -76,6 +74,11 @@ If no value is given for this field, <code>text/plain</code> MUST be assumed. Ot
 additional MIME types. </p>
 </li>
 </ul>
+<p>A requesting entity MAY include several <code>message</code> fields for different languages. This is done
+according to section 5.2 of [<a href="#openid-core">OpenID.Core</a>], where a <code>#</code> sign is used to delimit
+the member name (<code>message</code>) from the language tag (see [<a href="#rfc5646">RFC5646</a>]). See the example below.</p>
+<p>If the OpenID Provider has declared <code>ui_locales_supported</code> in its metadata (see section 3 of [<a href="#openid-discovery">OpenID.Discovery</a>]) the client SHOULD restrict messages to the languages
+declared by the OP.</p>
 <p><strong>Requirements:</strong> An OpenID Provider MUST NOT display a &quot;user message&quot; unless the user is being
 authenticated. Thus, if the request contains the <code>prompt</code> parameter with the value <code>none</code> (see
 section 2.1.4 of [<a href="#oidc-profile">OIDC.Sweden.Profile</a>]), the OpenID Provider MUST NOT display
@@ -85,26 +88,31 @@ the user message.</p>
 and supported by the OP, the provider SHOULD display the user message according to the value of the
 <code>display</code> parameter.</p>
 <p>The OpenID Provider MUST display the message matching the user interface locale that is in use. If no
-message matches that current locale, the OP MAY choose not to display any message, or select a message
-from the client provided map.</p>
+message matches that current locale the OP MUST choose the message without a given language tag
+if such a parameter is available. If no message parameter without a language tag is received, the OP MAY 
+choose not to display any message, or select a message from the provided message parameters.</p>
 <p>An OpenID Provider MUST refuse to display a message if it does not support a given MIME type.</p>
 <p>Should a message contain illegal characters, or any other constructs not accepted by the provider,
 the OP MAY choose not to display the message, or filter the message before displaying it.</p>
-<p><strong>[1]:</strong> The <code>https://id.oidc.se/param/userMessage</code> parameter value is represented in an
+<p><strong>Example 1:</strong> No language is specified.</p>
+<pre class="hljs"><code>...
+<span class="hljs-string">&quot;https://id.oidc.se/param/userMessage&quot;</span> : {  
+  <span class="hljs-string">&quot;message&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded message&gt;&quot;</span>,
+  <span class="hljs-string">&quot;mime_type&quot;</span> : <span class="hljs-string">&quot;text/plain&quot;</span>
+},
+...</code></pre><p><strong>Example 2:</strong> Messages for different languages are specified.</p>
+<pre class="hljs"><code>...
+<span class="hljs-string">&quot;https://id.oidc.se/param/userMessage&quot;</span> : {  
+  <span class="hljs-string">&quot;message#sv&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded message in Swedish&gt;&quot;</span>,
+  <span class="hljs-string">&quot;message#en&quot;</span> : <span class="hljs-string">&quot;&lt;Base64-encoded message in English&gt;&quot;</span>,
+  <span class="hljs-string">&quot;mime_type&quot;</span> : <span class="hljs-string">&quot;text/plain&quot;</span>
+},
+...</code></pre><p><strong>[1]:</strong> The <code>https://id.oidc.se/param/userMessage</code> parameter value is represented in an
 authentication request as UTF-8 encoded JSON (which ends up being form-urlencoded when passed as a
 parameter). When used in a Request Object value, per section 6.1 of [<a href="#openid-core">OpenID.Core</a>],
 the JSON is used as the value of the <code>https://id.oidc.se/param/userMessage</code> member.</p>
-<p><strong>[2]:</strong> The Markdown dialect, and potential restrictions for tags, is not regulated in this specification.</p>
-<p><strong>Example:</strong></p>
-<pre class="hljs"><code>...
-<span class="hljs-string">&quot;https://id.oidc.se/param/userMessage&quot;</span> : {  
-  <span class="hljs-string">&quot;message&quot;</span> : { 
-    <span class="hljs-string">&quot;sv&quot;</span> : &quot;&lt;<span class="hljs-type">Base64</span>-encoded message <span class="hljs-keyword">in</span> Swedish&gt;<span class="hljs-string">&quot;,
-    &quot;</span>en<span class="hljs-string">&quot; : &quot;</span>&lt;Base64-encoded message <span class="hljs-keyword">in</span> English&gt;<span class="hljs-string">&quot;
-  },
-  &quot;</span>mime_type<span class="hljs-string">&quot; : &quot;</span>text/plain<span class="hljs-string">&quot;
-},
-...</span></code></pre><p><a name="requested-authentication-provider"></a></p>
+<p><strong>[2]:</strong> The Markdown dialect, and potential restrictions for tags, is not regulated in this specification. However, the Markdown SHOULD NOT contain HTML-tags for security reasons.</p>
+<p><a name="requested-authentication-provider"></a></p>
 <h4 id="22-requested-authentication-provider">2.2. Requested Authentication Provider</h4>
 <p><strong>Parameter:</strong> <code>https://id.oidc.se/param/authnProvider</code></p>
 <p><strong>Description:</strong> In cases where the OpenID Provider can delegate, or proxy, the user 
@@ -171,6 +179,11 @@ Its value is only relevant if <code>https://id.oidc.se/disco/userMessageSupporte
 <strong>[OpenID.Core]</strong></p>
 <blockquote>
 <p><a href="https://openid.net/specs/openid-connect-core-1_0.html">Sakimura, N., Bradley, J., Jones, M., de Medeiros, B. and C. Mortimore, &quot;OpenID Connect Core 1.0&quot;, August 2015</a>.</p>
+</blockquote>
+<p><a name="openid-discovery"></a>
+<strong>[OpenID.Discovery]</strong></p>
+<blockquote>
+<p><a href="https://openid.net/specs/openid-connect-discovery-1_0.html">Sakimura, N., Bradley, J., Jones, M. and E. Jay, &quot;OpenID Connect Discovery 1.0&quot;, August 2015</a>.</p>
 </blockquote>
 <p><a name="rfc5646"></a>
 <strong>[RFC5646]</strong></p>
