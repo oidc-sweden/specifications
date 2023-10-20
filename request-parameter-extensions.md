@@ -119,7 +119,7 @@ the OP MAY choose not to display the message, or filter the message before displ
 ```
 ...
 "https://id.oidc.se/param/userMessage" : {  
-  "message" : "<Base64-encoded message>",  (language is undefined)
+  "message" : "<Base64-encoded message>",
   "mime_type" : "text/plain"
 },
 ...
