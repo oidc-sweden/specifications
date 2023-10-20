@@ -142,7 +142,7 @@ authentication request as UTF-8 encoded JSON (which ends up being form-urlencode
 parameter). When used in a Request Object value, per section 6.1 of \[[OpenID.Core](#openid-core)\],
 the JSON is used as the value of the `https://id.oidc.se/param/userMessage` member.
 
-**\[2\]:** The Markdown dialect, and potential restrictions for tags, is not regulated in this specification.
+**\[2\]:** The Markdown dialect, and potential restrictions for tags, is not regulated in this specification. However, the Markdown SHOULD NOT contain HTML-tags for security reasons.
 
 <a name="requested-authentication-provider"></a>
 #### 2.2. Requested Authentication Provider
