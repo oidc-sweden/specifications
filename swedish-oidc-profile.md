@@ -368,14 +368,14 @@ UserInfo response message.
 
 OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. 
 
+An OpenID Provider MUST NOT release any claim to a Relying Party that is has not been authorized
+to receive. How this authorization is handled and managed is out of scope for this profile. 
+
 An OpenID Provider compliant with this profile MUST NOT release any identity claims in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via `scope` and/or `claims` request parameters, or by a policy known, and accepted, by the involved parties. 
 
 The above requirement does not include the mandatory `sub` claim, and claims that do not reveal identity
 information about the user, for example, transaction identifiers or claims holding information about
 the authentication process.
-
-Furthermore, an OpenID Provider MUST NOT release any claims to a Relying Party that has not been authorized to receive them. How this authorization is handled and managed is out of scope for this
-profile. 
 
 An OpenID Provider compliant with this profile MUST adhere to the following rules for release
 of identity claims belonging to the subject:
