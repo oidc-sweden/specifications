@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-10-19
+### Version: 1.0 - draft 04 - 2023-10-24
 
 ## Abstract
 
@@ -251,23 +251,22 @@ OpenID Providers SHOULD limit the use of error codes to the sets defined in:
 
 - \[[OpenID.Unmet-AuthnReq](#openid-unmet-authnreq)\].
 
-The OpenID Connect and OAuth2 specifications do not specify any detailed error codes describing
-different types of authentication failures. Therefore, it is the OpenID Provider's responsibility
-to inform the user in detail about why a particular authentication failed. The Relying Party normally
-only receives an `access_denied` error code.
+All error codes defined in the OpenID Connect and OAuth2 specifications except for `access_denied`
+represent error conditions that are caused by either an invalid request or conditions/requirements 
+that can not be met, where `access_denied` represents that the authentication process was not
+completed. 
 
-One special case that is not handled by OpenID Connect (or SAML) is when an end user cancels an operation
-at the OP. This is a shortcoming, since from the Relying Party's UX point of view this should often not be
-seen as an error. Normally, the user should just be passed back to the application's login page. 
-A typical reason for cancelling a login attempt would be that the user selected the wrong login method
-(OP), and needs to get back to the application login page.
+A non completed authentication process may be caused by:
 
-Therefore, OpenID Providers compliant with this specification SHOULD handle cancelled authentications
-according to the following:
+- the user denies, or cancels, the authentication process, or, 
 
-No error view is displayed for the user at the OP. Instead an authentication error response is sent 
-back to the Relying Party where the `error` parameter is set to `access_denied` and the `error_description`
-parameter begins with the text `"user-cancel"`.
+- the user agrees to authenticate, but the authentication operation fails. 
+
+In the latter case the OpenID Provider MUST inform the user about the error that occurred
+before responding with an error response.
+
+In both above scenarios the `error_description`-field of the error response SHOULD be set and
+contain a description suitable for the Relying Party application logs.
 
 <a name="token-endpoint-requests-and-id-token-issuance"></a>
 ## 3. Token Endpoint Requests and ID Token Issuance
