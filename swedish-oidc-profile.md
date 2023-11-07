@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-10-24
+### Version: 1.0 - draft 04 - 2023-11-07
 
 ## Abstract
 
@@ -215,7 +215,21 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.
 
 An OpenID Provider compliant with this profile MUST support Request Object JWT:s sent by value (using the `request` parameter) and MAY support Request Object JWT:s sent by reference (using the `request_uri` parameter).
 
-Request objects MUST be signed by the Relying Party's registered key, and they MAY be encrypted to the OpenID Provider's public key.
+An OpenID Provider MUST be prepared to accept and process signed and/or encrypted Request Objects.
+
+A Relying Party that signs a Request Object MUST do so using is registered key, and a Relying Party
+that encrypts a Request Object MUST do so using the OpenID Provider's public key.
+
+If a Request Object is signed it MUST contain the `iss` (issuer) and `aud` (audience) claims.
+
+The `iss` value MUST be the client ID of the Relying Party (unless it was signed by a different party
+than the RP). 
+
+The `aud` value SHOULD be set to the OpenID Provider's Issuer Identifier URL. \[[OpenID.Core](#openid-core)\]
+ also allows for this value to be an URL including the OP Issuer Identifier URL. In practice this means
+that the OP Authorization Endpoint URL may be used. Therefore, an OpenID Provider compliant with this
+profile MUST accept `aud` values that are either the OP Issuer Identifier URL or the
+Authorization Endpoint on which an authentication request was received.  
 
 See chapter 6 of \[[OpenID.Core](#openid-core)\] for further details.
 
