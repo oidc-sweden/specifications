@@ -306,6 +306,11 @@ A Relying Party SHOULD default to use the `private_key_jwt` method, and in these
 - `client_assertion_type` - Set to `urn:ietf:params:oauth:client-assertion-type:jwt-bearer`
 - `client_assertion` - The value of the signed client authentication JWT generated. The Relying Party must generate a new assertion JWT for each call to the token endpoint.
 
+Section 9 of \[[OpenID.Core](#openid-core)\] lists the required contents of the signed JWT. These
+requirements states that the `aud` claim value SHOULD be set to the URL of the OpenID Provider's Token
+Endpoint. In order to facilitate interoperability it is RECOMMENDED that an OpenID Provider compliant 
+with this profile also accepts its Issuer Identifier URL as a valid value for the `aud` claim.
+
 <a name="token-responses-and-validation"></a>
 ### 3.2. Token Responses and Validation
 
