@@ -231,6 +231,10 @@ that the OP Authorization Endpoint URL may be used. Therefore, an OpenID Provide
 profile MUST accept `aud` values that are either the OP Issuer Identifier URL or the
 Authorization Endpoint on which an authentication request was received.  
 
+A Relying Party sending an authentication request containing a Request Object SHOULD use the `POST` method
+to do so. Since the contents of the `request` parameter is signed the payload may become too large for using
+`GET`.
+
 See chapter 6 of \[[OpenID.Core](#openid-core)\] for further details.
 
 <a name="pkce-parameters"></a>
