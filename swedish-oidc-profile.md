@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-10-24
+### Version: 1.0 - draft 04 - 2023-11-06
 
 ## Abstract
 
@@ -216,6 +216,10 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.
 An OpenID Provider compliant with this profile MUST support Request Object JWT:s sent by value (using the `request` parameter) and MAY support Request Object JWT:s sent by reference (using the `request_uri` parameter).
 
 Request objects MUST be signed by the Relying Party's registered key, and they MAY be encrypted to the OpenID Provider's public key.
+
+A Relying Party sending an authentication request containing a Request Object SHOULD use the `POST` method
+to do so. Since the contents of the `request` parameter is signed the payload may become too large for using
+`GET`.
 
 See chapter 6 of \[[OpenID.Core](#openid-core)\] for further details.
 

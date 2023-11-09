@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-10-20
+### Version: 1.0 - draft 02 - 2023-11-06
 
 ## Abstract
 
@@ -102,9 +102,6 @@ is being signed.
 
 6. Finally, the completed signature operation is acknowledged to the user.
 
-The advantage with this use case is that it is simple and straightforward. The disadvantage is that only OpenID Providers
-that actually supports eID:s that support creating signatures can be used.
-
 <a name="identifiers"></a>
 ## 3. Identifiers
 
@@ -154,8 +151,13 @@ parameter-in-an-authentication-request) below.
 #### 3.1.1. Placement of the Parameter in an Authentication Request
 
 The `https://id.oidc.se/param/signRequest` request parameter, can be provided in an authentication
-request in two ways; as a custom request parameter where its value is represented as a JWT, or as part of a Request Object 
-that is the value to the `request` (or `request_uri`) parameter.
+request in two ways; as a custom request parameter where its value is represented as a JWT, or as part of a
+Request Object that is the value to the `request` (or `request_uri`) parameter.
+
+**Note:** Since section [3.1.2](#security-requirements) states that a "signature request" must be signed
+the Relying Party SHOULD use the `POST` method to send authentication requests containing a
+`https://id.oidc.se/param/signRequest` request parameter. The reason for this is that the payload may
+become too large for using the `GET` method.   
 
 <a name="as-a-custom-request-parameter"></a>
 ##### 3.1.1.1. As a Custom Request Parameter
