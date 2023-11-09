@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="the-swedish-openid-connect-profile">The Swedish OpenID Connect Profile</h1>
-<h3 id="version-10---draft-04---2023-10-24">Version: 1.0 - draft 04 - 2023-10-24</h3>
+<h3 id="version-10---draft-04---2023-11-07">Version: 1.0 - draft 04 - 2023-11-07</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines a profile for OpenID Connect for use within the Swedish public and private sectors. It profiles the OpenID Connect protocol to get a baseline security and to facilitate interoperability between relying parties and OpenID providers.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
@@ -212,7 +212,20 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.<
 }</code></pre><p><a name="request-objects-request-and-request-uri-parameters"></a></p>
 <h4 id="217-request-objects-request-and-request_uri-parameters">2.1.7. Request Objects (request and request_uri parameters)</h4>
 <p>An OpenID Provider compliant with this profile MUST support Request Object JWT:s sent by value (using the <code>request</code> parameter) and MAY support Request Object JWT:s sent by reference (using the <code>request_uri</code> parameter).</p>
-<p>Request objects MUST be signed by the Relying Party&#39;s registered key, and they MAY be encrypted to the OpenID Provider&#39;s public key.</p>
+<p>An OpenID Provider MUST be prepared to accept and process signed and/or encrypted Request Objects.</p>
+<p>A Relying Party that signs a Request Object MUST do so using is registered key, and a Relying Party
+that encrypts a Request Object MUST do so using the OpenID Provider&#39;s public key.</p>
+<p>If a Request Object is signed it MUST contain the <code>iss</code> (issuer) and <code>aud</code> (audience) claims.</p>
+<p>The <code>iss</code> value MUST be the client ID of the Relying Party (unless it was signed by a different party
+than the RP). </p>
+<p>The <code>aud</code> value SHOULD be set to the OpenID Provider&#39;s Issuer Identifier URL. [<a href="#openid-core">OpenID.Core</a>]
+ also allows for this value to be an URL including the OP Issuer Identifier URL. In practice this means
+that the OP Authorization Endpoint URL may be used. Therefore, an OpenID Provider compliant with this
+profile MUST accept <code>aud</code> values that are either the OP Issuer Identifier URL or the
+Authorization Endpoint on which an authentication request was received.  </p>
+<p>A Relying Party sending an authentication request containing a Request Object SHOULD use the <code>POST</code> method
+to do so. Since the contents of the <code>request</code> parameter is signed the payload may become too large for using
+<code>GET</code>.</p>
 <p>See chapter 6 of [<a href="#openid-core">OpenID.Core</a>] for further details.</p>
 <p><a name="pkce-parameters"></a></p>
 <h4 id="218-pkce-parameters">2.1.8. PKCE Parameters</h4>
@@ -268,6 +281,10 @@ contain a description suitable for the Relying Party application logs.</p>
 <li><code>client_assertion_type</code> - Set to <code>urn:ietf:params:oauth:client-assertion-type:jwt-bearer</code></li>
 <li><code>client_assertion</code> - The value of the signed client authentication JWT generated. The Relying Party must generate a new assertion JWT for each call to the token endpoint.</li>
 </ul>
+<p>Section 9 of [<a href="#openid-core">OpenID.Core</a>] lists the required contents of the signed JWT. These
+requirements states that the <code>aud</code> claim value SHOULD be set to the URL of the OpenID Provider&#39;s Token
+Endpoint. In order to facilitate interoperability it is RECOMMENDED that an OpenID Provider compliant 
+with this profile also accepts its Issuer Identifier URL as a valid value for the <code>aud</code> claim.</p>
 <p><a name="token-responses-and-validation"></a></p>
 <h3 id="32-token-responses-and-validation">3.2. Token Responses and Validation</h3>
 <p>The token response MUST include an access token (to be used to make UserInfo requests) and an ID token as described below.</p>

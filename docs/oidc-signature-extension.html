@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="signature-extension-for-openid-connect">Signature Extension for OpenID Connect</h1>
-<h3 id="version-10---draft-02---2023-10-20">Version: 1.0 - draft 02 - 2023-10-20</h3>
+<h3 id="version-10---draft-02---2023-11-06">Version: 1.0 - draft 02 - 2023-11-06</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines an extension to OpenID Connect to facilitate use cases where a Relying Party sends a
 &quot;Signature Request&quot; to an OpenID Provider. A signature request is an extension of an OpenID Connect authentication
@@ -87,8 +87,6 @@ is being signed.</p>
 <li><p>Finally, the completed signature operation is acknowledged to the user.</p>
 </li>
 </ol>
-<p>The advantage with this use case is that it is simple and straightforward. The disadvantage is that only OpenID Providers
-that actually supports eID:s that support creating signatures can be used.</p>
 <p><a name="identifiers"></a></p>
 <h2 id="3-identifiers">3. Identifiers</h2>
 <p>This section extends [<a href="#claims-spec">OIDC.Sweden.Claims</a>] with definitions of parameter claims and scopes used for the signing
@@ -130,8 +128,12 @@ parameter-in-an-authentication-request) below. </p>
 <p><a name="placement-of-the-parameter-in-an-authentication-request"></a></p>
 <h4 id="311-placement-of-the-parameter-in-an-authentication-request">3.1.1. Placement of the Parameter in an Authentication Request</h4>
 <p>The <code>https://id.oidc.se/param/signRequest</code> request parameter, can be provided in an authentication
-request in two ways; as a custom request parameter where its value is represented as a JWT, or as part of a Request Object 
-that is the value to the <code>request</code> (or <code>request_uri</code>) parameter.</p>
+request in two ways; as a custom request parameter where its value is represented as a JWT, or as part of a
+Request Object that is the value to the <code>request</code> (or <code>request_uri</code>) parameter.</p>
+<p><strong>Note:</strong> Since section <a href="#security-requirements">3.1.2</a> states that a &quot;signature request&quot; must be signed
+the Relying Party SHOULD use the <code>POST</code> method to send authentication requests containing a
+<code>https://id.oidc.se/param/signRequest</code> request parameter. The reason for this is that the payload may
+become too large for using the <code>GET</code> method.   </p>
 <p><a name="as-a-custom-request-parameter"></a></p>
 <h5 id="3111-as-a-custom-request-parameter">3.1.1.1. As a Custom Request Parameter</h5>
 <p>If the sign request parameter is included as a custom request parameter its value MUST be represented as a JWT following 
