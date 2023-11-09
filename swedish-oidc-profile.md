@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-11-06
+### Version: 1.0 - draft 04 - 2023-11-07
 
 ## Abstract
 
@@ -215,7 +215,21 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.
 
 An OpenID Provider compliant with this profile MUST support Request Object JWT:s sent by value (using the `request` parameter) and MAY support Request Object JWT:s sent by reference (using the `request_uri` parameter).
 
-Request objects MUST be signed by the Relying Party's registered key, and they MAY be encrypted to the OpenID Provider's public key.
+An OpenID Provider MUST be prepared to accept and process signed and/or encrypted Request Objects.
+
+A Relying Party that signs a Request Object MUST do so using is registered key, and a Relying Party
+that encrypts a Request Object MUST do so using the OpenID Provider's public key.
+
+If a Request Object is signed it MUST contain the `iss` (issuer) and `aud` (audience) claims.
+
+The `iss` value MUST be the client ID of the Relying Party (unless it was signed by a different party
+than the RP). 
+
+The `aud` value SHOULD be set to the OpenID Provider's Issuer Identifier URL. \[[OpenID.Core](#openid-core)\]
+ also allows for this value to be an URL including the OP Issuer Identifier URL. In practice this means
+that the OP Authorization Endpoint URL may be used. Therefore, an OpenID Provider compliant with this
+profile MUST accept `aud` values that are either the OP Issuer Identifier URL or the
+Authorization Endpoint on which an authentication request was received.  
 
 A Relying Party sending an authentication request containing a Request Object SHOULD use the `POST` method
 to do so. Since the contents of the `request` parameter is signed the payload may become too large for using
@@ -295,6 +309,11 @@ A Relying Party SHOULD default to use the `private_key_jwt` method, and in these
 
 - `client_assertion_type` - Set to `urn:ietf:params:oauth:client-assertion-type:jwt-bearer`
 - `client_assertion` - The value of the signed client authentication JWT generated. The Relying Party must generate a new assertion JWT for each call to the token endpoint.
+
+Section 9 of \[[OpenID.Core](#openid-core)\] lists the required contents of the signed JWT. These
+requirements states that the `aud` claim value SHOULD be set to the URL of the OpenID Provider's Token
+Endpoint. In order to facilitate interoperability it is RECOMMENDED that an OpenID Provider compliant 
+with this profile also accepts its Issuer Identifier URL as a valid value for the `aud` claim.
 
 <a name="token-responses-and-validation"></a>
 ### 3.2. Token Responses and Validation
