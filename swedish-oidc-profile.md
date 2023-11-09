@@ -413,7 +413,7 @@ according to these scope requirements.
 - If none of the above rules apply, claims are delivered via the UserInfo endpoint, as specified by 
 \[[OpenID.Core](#openid-core)\].
 
-In cases where a specific claim is delivered in the ID Token due to a specific `claims` parameter
+In cases where a claim is delivered in the ID Token due to a specific `claims` parameter
 request, and this claim is part of a standard or custom scope that states delivery via the UserInfo
 endpoint (which is the default), the claim MUST also be delivered via the UserInfo endpoint (if the
 scope in question is requested).

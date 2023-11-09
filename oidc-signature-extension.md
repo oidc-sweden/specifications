@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-11-06
+### Version: 1.0 - draft 02 - 2023-11-09
 
 ## Abstract
 
@@ -268,15 +268,29 @@ registered public key.
 **Description:** The scope has two purposes; it indicates for the OpenID Provider that the request in which the scope is
 included is a "signature request", and it requests the claims declared in the table below.
 
-| Claim | Description/comment | Reference | Requirement |
-| :--- | :--- | :--- | :--- |
-| `https://id.oidc.se/`<br />`claim/userSignature` | The signature that is the result of the user signing process at the OP. | \[[OIDC.Sweden.Claims](#claims-spec)\] | REQUIRED |
-| `auth_time` | The time when the signature was created. | \[[OpenID.Core](#openid-core)\] | REQUIRED |
+Note: The `https://id.oidc.se/scope/sign` alone does not say anything about the identity of the
+signing end-user. A Relying Party wishing to get this information, which it most likely does,
+should include additional scopes in the request that declares which identity claims that are wanted. 
 
-**Note:** The `https://id.oidc.se/scope/sign` alone does not say anything about the identity of the signing end-user.
-A Relying Party wishing to get this information, which it most likely does, should include additional scopes in the 
-request that declares which identity claims that are wanted. 
+| Claim | Description/comment | Reference |
+| :--- | :--- | :--- |
+| `https://id.oidc.se/`<br />`claim/userSignature` | The signature that is the result of the user signing process at the OP. | \[[OIDC.Sweden.Claims](#claims-spec)\] |
+| `auth_time` | The time when the signature was created. | \[[OpenID.Core](#openid-core)\] |
 
+**Claims Parameter Equivalent:**
+
+```
+{
+  "id_token" : {
+    "https://id.oidc.se/claim/userSignature" : { "essential" : true },
+    "auth_time" : { "essential" : true }
+  }
+}
+```
+
+The `https://id.oidc.se/claim/userSignature` and `auth_time` claims MUST be delivered in the ID 
+token and MUST NOT be delivered via the UserInfo endpoint. The reason for this is that none of 
+the claims represent user identity information, but is the result of the signature operation.
 
 <a name="relying-party-requirements"></a>
 ## 4. Relying Party Requirements
@@ -359,7 +373,7 @@ or initiate the signature operation before the user's identity has been proven t
 identity does not match the supplied value(s) in the `claims` parameter, an error response MUST be sent.
 
 The processing of the supplied signature message (`sign_message` field of the `https://id.oidc.se/param/signRequest` parameter)
-MUST follow the requirements stated in section 2.2.1 of \[[OIDC.Sweden.Profile](#oidc-profile)\]. If the message for
+MUST follow the requirements stated in section 2.1 of \[[OIDC.Sweden.Params](#request-ext)\]. If the message for
 some reason can not be displayed<sup>2</sup>, the the signature operation MUST be rejected (and an error message sent).
 
 The OpenID Provider SHOULD NOT save the user's signature operation in its session at the OP for later re-use in SSO-scenarios.
@@ -377,8 +391,12 @@ support the `claims` request parameter.
 <a name="response-requirements"></a>
 ### 5.2. Response Requirements
 
-Claims that are representing the result of a signature operation, such as the `https://id.oidc.se/claim/userSignature`
-claim, MUST be delivered in the ID Token and never from the UserInfo endpoint.
+Claims that are representing the result of a signature operation, such as the 
+`https://id.oidc.se/claim/userSignature` claim, MUST be delivered in the ID Token and never from
+the UserInfo endpoint.
+
+If the signature operation does not succeed and a `https://id.oidc.se/claim/userSignature` claim
+can not be delivered the OpenID Provider MUST respond with an error.
 
 <a name="discovery"></a>
 ### 5.3. Discovery
@@ -387,8 +405,6 @@ OpenID Providers that are compliant with this specification<sup>1</sup>, MUST me
 
 The `scopes_supported` MUST be present in the provider's discovery document and it MUST contain the scope 
 `https://id.oidc.se/scope/sign`.
-
-Also, it is RECOMMENDED that the `https://id.oidc.se/scope/authnInfo` scope is supported and declared. See \[[OIDC.Sweden.Claims](#claims-spec)\].
 
 The `claims_supported` field MUST be present and include at least the claims that are included in the scope definitions for all
 declared scopes (in the `scopes_supported`).
