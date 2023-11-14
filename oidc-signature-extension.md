@@ -289,8 +289,8 @@ should include additional scopes in the request that declares which identity cla
 ```
 
 The `https://id.oidc.se/claim/userSignature` and `auth_time` claims MUST be delivered in the ID 
-token and MUST NOT be delivered via the UserInfo endpoint. The reason for this is that none of 
-the claims represent user identity information, but is the result of the signature operation.
+token. The reason for this is that none of the claims represent user identity information, but is
+the result of the signature operation.
 
 <a name="relying-party-requirements"></a>
 ## 4. Relying Party Requirements
@@ -392,8 +392,7 @@ support the `claims` request parameter.
 ### 5.2. Response Requirements
 
 Claims that are representing the result of a signature operation, such as the 
-`https://id.oidc.se/claim/userSignature` claim, MUST be delivered in the ID Token and never from
-the UserInfo endpoint.
+`https://id.oidc.se/claim/userSignature` claim, MUST be delivered in the ID Token.
 
 If the signature operation does not succeed and a `https://id.oidc.se/claim/userSignature` claim
 can not be delivered the OpenID Provider MUST respond with an error.

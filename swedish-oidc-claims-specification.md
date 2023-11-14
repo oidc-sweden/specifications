@@ -60,7 +60,7 @@ This specification defines claims and scopes for the Swedish OpenID Connect prof
     
     3.2. [Natural Person Identity - Personal Number](#natural-person-identity-personal-number)
         
-    3.3. [Natural Person Organizational Identity](#natural-person-organizational-identitys
+    3.3. [Natural Person Organizational Identity](#natural-person-organizational-identity)
 
 4. [**Normative References**](#normative-references)
 
@@ -240,8 +240,9 @@ may be the, but is not required to be, the "personal-id" part of the claim.
 ### 2.3. Authentication Information Claims
 
 An "authentication information" claim delivers information about a specific authentication event.
-An identity provider SHOULD deliver these kinds of claims in an ID token and not from the UserInfo
-endpoint since the values the claims represent refers to an event, and not user properties as such. 
+An OpenID Provider SHOULD deliver "authentication information" claims in an ID token and not from
+the UserInfo endpoint since the values the claims represent refers to an event, and not user
+properties as such. 
 
 <a name="user-certificate"></a>
 #### 2.3.1. User Certificate
@@ -402,7 +403,7 @@ potentially, unnecessary call to the UserInfo endpoint.
 
 For each scope defined below, a listing of the claims that the scope value requests (access to) is
 declared. Each scope definition also presents a "claims parameter equivalent", i.e., how the
-claims would be requested using the `claims` request parameter. This tells where claims should be
+claims would be requested using the `claims` request parameter. This tells where claims are
 delivered (ID token and/or UserInfo endpoint), and whether the claims should be regarded as essential
 or voluntary to deliver by the OP.
 
@@ -411,7 +412,7 @@ that its delivery is marked as essential for the Relying Party's ability to cont
 specific task requested by the end-user (for example, logging the user in to the RP application,
 or ensuring a smooth authorization for a specific task).
 
-> If a scope definition states that a certain claim should be delivered in the ID token, its definition
+> If a scope definition states that a certain claim is delivered in the ID token, its definition
 will in many cases also include the same claim for delivery via the UserInfo endpoint. The reason for 
 this is that the UserInfo endpoint should offer a complete set of user identity claims (based on 
 the authorization of the RP).
@@ -452,7 +453,7 @@ normally associated with a Swedish eID.
 **Note:**: The `https://id.oidc.se/scope/naturalPersonInfo` scope is a subset of the `profile` standard
 scope as defined in section 5.4 of \[[OpenID.Core](#openid-core)\].
 
-The `profile` scope is pretty much intended as a scope for an Internet user wishing to create an 
+The `profile` scope is more or less intended as a scope for an Internet user wishing to create an 
 account on a website. Claims  such as `preferred_username`, `picture` and `website` indicates that.
 Of course, not all claims within the scope need to be delivered, but for the sake of privacy a Relying Party should not ask for more claims than it actually requires. Therefore, this specification 
 defines the `https://id.oidc.se/scope/naturalPersonInfo` scope to limit the amount of user identity
@@ -475,8 +476,7 @@ claim (see section [2.1.2.2](#previous-coordination-number)). This claim has to 
 requested using the `claims` request parameter and is not part of the `naturalPersonNumber` scope.
 
 Section [2.1.2.1](#coordination-number-level) declares a claim for coordination number levels.
-This claim is seen as an informational claim, and needs to be explicitly requested using the
-`claims` request parameter. 
+This claim can be explicitly requested using the `claims` request parameter. 
 
 | Claim | Description/comment | Reference |
 | :--- | :--- | :--- |
@@ -509,8 +509,8 @@ The claims should also be delivered via the UserInfo endpoint.
 **Scope:** `https://id.oidc.se/scope/naturalPersonOrgId`
 
 **Description:** The “Natural Person Organizational Identity” scope requests basic organizational
-identity information claims about a person. The organizational identity does not necessarily imply
-that the subject has any particular relationship with or standing within the organization, but 
+identity information claims about a person. The organizational identity does not imply that the 
+subject has any particular relationship with or standing within the organization, but 
 rather that this identity has been issued/provided by that organization for any particular reason
 (employee, customer, consultant, etc.).
 
