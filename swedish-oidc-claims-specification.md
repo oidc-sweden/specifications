@@ -2,7 +2,7 @@
 
 # Claims and Scopes Specification for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 03 - 2023-10-20
+### Version: 1.0 - draft 04 - 2023-11-15
 
 ## Abstract
 
@@ -56,13 +56,11 @@ This specification defines claims and scopes for the Swedish OpenID Connect prof
     2.4.4. [Age](#age) 
 3. [**Scopes**](#scopes)
 
-    3.1. [Natural Person Name Information](#natural-person-name-information)
+    3.1. [Natural Person Information](#natural-person-information)
     
     3.2. [Natural Person Identity - Personal Number](#natural-person-identity-personal-number)
         
     3.3. [Natural Person Organizational Identity](#natural-person-organizational-identity)
-
-    3.4. [Authentication Information](#authentication-information)
 
 4. [**Normative References**](#normative-references)
 
@@ -241,9 +239,10 @@ may be the, but is not required to be, the "personal-id" part of the claim.
 <a name="authentication-information-claims"></a>
 ### 2.3. Authentication Information Claims
 
-An "authentication information" claim delivers information about a specific authentication event. An identity provider SHOULD
-deliver these kinds of claims in an ID token and not from the UserInfo endpoint since the values the claims represent refers
-to an event, and not user properties as such. 
+An "authentication information" claim delivers information about a specific authentication event.
+An OpenID Provider SHOULD deliver "authentication information" claims in an ID token and not from
+the UserInfo endpoint since the values the claims represent refers to an event, and not user
+properties as such. 
 
 <a name="user-certificate"></a>
 #### 2.3.1. User Certificate
@@ -390,104 +389,155 @@ There are basically two ways for a Relying Party to indicate which claims it wis
 
 - By explicitly requesting claims using the `claims` request parameter.
 
-The way of requesting claims by providing scope values is dependent on that there is a defined meaning to each scope.
-This section defines a set of scopes where each named scope maps to a set of claims.
+This specification defines a number of scopes that are useful within the context of Swedish
+eID usage. 
 
-Section 5.4 of \[[OpenID.Core](#openid-core)\] defines a set of standard scope values including the `profile` scope that
-maps to the end-user "profile". This information comprises of the claims: `name`, `family_name`, `given_name`, `middle_name`, `nickname`, `preferred_username`, `profile`, `picture`, `website`, `gender`, `birthdate`, `zoneinfo`, `locale`, and `updated_at`.
+Many Relying Parties that uses OpenID Connect to authenticate users can not solely depend
+on the user's session at the OpenID Provider and the `sub` claim to log in the user to the
+RP application. In the context of Swedish eID there are some obvious claims that are regarded
+to be "primary" identity claims by Relying Parties, for example a Swedish personal identity
+number. Such claims are needed by the Relying Party in order to log in a user to its application.
+Therefore, this specification's scope definitions will define that some claims are to be delivered
+in the ID token so that a Relying Party can fully log in a user without having to make a,
+potentially, unnecessary call to the UserInfo endpoint.
 
-The `profile` scope is pretty much intended as a scope for an Internet user wishing to create an account on a website. Claims 
-such as `preferred_username`, `picture` and `website` indicates that. Of course, not all claims within the scope need to be
-delivered, but it is more useful to define more fine grained scopes. Also, for the sake of privacy a relying party should not
-ask for more claims than it actually requires. Therefore, this specification defines a set of scopes that combines standard 
-claims with the claims defined in this specification.
+For each scope defined below, a listing of the claims that the scope value requests (access to) is
+declared. Each scope definition also presents a "claims parameter equivalent", i.e., how the
+claims would be requested using the `claims` request parameter. This tells where claims are
+delivered (ID token and/or UserInfo endpoint), and whether the claims should be regarded as essential
+or voluntary to deliver by the OP.
 
-This specification specifically takes into consideration the Swedish eID solutions, and the attributes that are tied to a 
-Swedish eID.
+> Note that the use of "essential" does not imply that the OP must deliver the claim, only
+that its delivery is marked as essential for the Relying Party's ability to continue the
+specific task requested by the end-user (for example, logging the user in to the RP application,
+or ensuring a smooth authorization for a specific task).
 
-For each scope defined below a set of claims is declared. Each declared claim has an indicator telling whether it is 
-Mandatory or Optional within the given scope. A profile specification extending this attribute specification MAY change 
-a declared claim's requirement from Optional to Mandatory, but MUST NOT lower the requirements from Mandatory to Optional.
-In those cases the extending specification need to define a new scope. Also, a profile specification extending this
-attribute MAY declare new claims, but MUST NOT remove any claims from the scope definition.
+> If a scope definition states that a certain claim is delivered in the ID token, its definition
+will in many cases also include the same claim for delivery via the UserInfo endpoint. The reason for 
+this is that the UserInfo endpoint should offer a complete set of user identity claims (based on 
+the authorization of the RP).
 
-<a name="natural-person-name-information"></a>
-### 3.1. Natural Person Name Information
+**Note:** The scope definitions regarding the delivery location of claims assumes that authentication
+requests are made using `response_type=code`. 
 
-**Scope:** `https://id.oidc.se/scope/naturalPersonName`
+<a name="natural-person-information"></a>
+### 3.1. Natural Person Information
 
-**Description:** A scope that defines a claim set that provides basic natural person information without revealing the
-civic registration number of the subject.
+**Scope:** `https://id.oidc.se/scope/naturalPersonInfo`
 
-| Claim | Description/comment | Reference | Requirement |
-| :--- | :--- | :--- | :--- |
-| `family_name` | Surname/family name | \[[OpenID.Core](#openid-core)\] | Mandatory |
-| `given_name` | Given name | \[[OpenID.Core](#openid-core)\] | Mandatory |
-| `name` | Display name | \[[OpenID.Core](#openid-core)\] | Mandatory |
+**Description:** A scope that defines a claim set that provides basic natural person information
+normally associated with a Swedish eID.
+
+| Requested Claims | Description/comment | Reference |
+| :--- | :--- | :--- |
+| `family_name` | Surname/family name | \[[OpenID.Core](#openid-core)\] |
+| `given_name` | Given name | \[[OpenID.Core](#openid-core)\] |
+| `middle_name` | Middle name | \[[OpenID.Core](#openid-core)\] |
+| `name` | Display name | \[[OpenID.Core](#openid-core)\] |
+| `birthdate` | Date of birth | \[[OpenID.Core](#openid-core)\] |
+
+**Claims Parameter Equivalent:**
+
+```
+{
+  "userinfo" : {
+    "family_name" : null,
+    "given_name" : null,
+    "middle_name" : null,
+    "name": null,
+    "birthdate" : null
+  }
+}
+```
+
+**Note:**: The `https://id.oidc.se/scope/naturalPersonInfo` scope is a subset of the `profile` standard
+scope as defined in section 5.4 of \[[OpenID.Core](#openid-core)\].
+
+The `profile` scope is more or less intended as a scope for an Internet user wishing to create an 
+account on a website. Claims  such as `preferred_username`, `picture` and `website` indicates that.
+Of course, not all claims within the scope need to be delivered, but for the sake of privacy a Relying Party should not ask for more claims than it actually requires. Therefore, this specification 
+defines the `https://id.oidc.se/scope/naturalPersonInfo` scope to limit the amount of user identity
+claims to what is offered using a Swedish eID.
 
 <a name="natural-person-identity-personal-number"></a>
 ### 3.2. Natural Person Identity - Personal Number
 
 **Scope:** `https://id.oidc.se/scope/naturalPersonNumber`
 
-**Description:** The scope extends the `https://id.oidc.se/scope/naturalPersonName` scope with a Swedish civic
-registration number (personnummer) or a Swedish coordination number (samordningsnummer).
+**Description:** A scope that requests a Swedish civic registration number (personnummer) or 
+a Swedish coordination number (samordningsnummer). These identity numbers are often used as 
+primary identities at public Swedish organizations.
 
-| Claim | Description/comment | Reference | Requirement |
-| :--- | :--- | :--- | :--- |
-| `https://id.oidc.se/claim/`<br />`personalIdentityNumber` | Swedish civic registration number. | This profile | Mandatory<sup>1</sup> |
-| `https://id.oidc.se/claim/`<br />`coordinationNumber` | Swedish coordination number. If delivered according to this scope, the coordination number SHOULD have a status of Active<sup>2</sup>. | This profile | Mandatory<sup>1</sup> |
-| `family_name` | Surname/family name | \[[OpenID.Core](#openid-core)\] | Mandatory |
-| `given_name` | Given name | \[[OpenID.Core](#openid-core)\] | Mandatory |
-| `name` | Display name | \[[OpenID.Core](#openid-core)\] | Mandatory | 
-| `birthdate` | Date of birth | \[[OpenID.Core](#openid-core)\] | Optional | 
+Note that an OpenID Provider delivering claims according to this scope MUST NOT deliver both a
+`personalIdentityNumber` and a `coordinationNumber` claim. These are mutually exclusive. However, 
+a person that holds a civic registration number (personnummer) may previously have had a 
+coordination number. This number may then be delivered using the `previousCoordinationNumber` 
+claim (see section [2.1.2.2](#previous-coordination-number)). This claim can be explicitly
+requested using the `claims` request parameter and is not part of the `naturalPersonNumber` scope.
 
-> **\[1\]**: A `personalIdentityNumber` OR `coordinationNumber` claim MUST be delivered, but not both.
+Section [2.1.2.1](#coordination-number-level) declares a claim for coordination number levels.
+This claim can be explicitly requested using the `claims` request parameter. 
 
-> **\[2\]**: A Swedish coordination number has a status associated, where the different statuses are "active" (aktivt),
-> "on hold" (vilandeförklarat), "on hold - closed" (vilandeförklarat - stängt) and "deregistered" (avregistrerat). The reason that
-> this profile does not apply a "MUST"-requirement for an active status is that it is a too strict requirement to put on claims
-> issuers. In theory they would have to make controls against the Swedish population register every time an assertion or token would
-> be released. Therefore, a consumer of the `coordinationNumber` scope MUST always ensure that the number's status is acceptable.
+| Claim | Description/comment | Reference |
+| :--- | :--- | :--- |
+| `https://id.oidc.se/claim/`<br />`personalIdentityNumber` | Swedish civic registration number. | This profile |
+| `https://id.oidc.se/claim/`<br />`coordinationNumber` | Swedish coordination number. | This profile |
+
+
+**Claims Parameter Equivalent:**
+
+```
+{
+  "userinfo" : {
+    "https://id.oidc.se/claim/personalIdentityNumber" : { "essential" : true },
+    "https://id.oidc.se/claim/coordinationNumber" : { "essential" : true }
+  },
+  "id_token" : {
+    "https://id.oidc.se/claim/personalIdentityNumber" : { "essential" : true },
+    "https://id.oidc.se/claim/coordinationNumber" : { "essential" : true }
+  }
+}
+```
+
+Since a Swedish personal identity number often is required to authenticate at a public
+Swedish organization these claims are delivered in the ID token and are marked as essential.
+The claims should also be delivered via the UserInfo endpoint.
 
 <a name="natural-person-organizational-identity"></a>
 ### 3.3. Natural Person Organizational Identity
 
 **Scope:** `https://id.oidc.se/scope/naturalPersonOrgId`
 
-**Description:** The “Natural Person Organizational Identity” scope provides basic organizational identity information about a
-person. The organizational identity does not necessarily imply that the subject has any particular relationship with or standing
-within the organization, but rather that this identity has been issued/provided by that organization for any particular reason
+**Description:** The “Natural Person Organizational Identity” scope requests basic organizational
+identity information claims about a person. The organizational identity does not imply that the 
+subject has any particular relationship with or standing within the organization, but 
+rather that this identity has been issued/provided by that organization for any particular reason
 (employee, customer, consultant, etc.).
 
-| Claim | Description/comment | Reference | Requirement |
-| :--- | :--- | :--- | :--- |
-| `name` | Display name. The claim MAY contain personal information such as the given name or surname, but it MAY also be used as an anonymized display name, for example, "Administrator 123". This is decided by the issuing organization. | \[[OpenID.Core](#openid-core)\] | Mandatory |
-| `https://id.oidc.se/claim/`<br />`orgAffiliation` | Personal identifier and organizational number. | This profile | Mandatory |
-| `https://id.oidc.se/claim/`<br />`orgName` | Organization name. | This profile | Mandatory |
-| `https://id.oidc.se/claim/`<br />`orgNumber` | Swedish organization number. This number can always be derived from the mandatory orgAffiliation claim, but for simplicity it is recommended that an attribute provider includes this claim. | This profile | Optional, but recommended | 
+| Claim | Description/comment | Reference |
+| :--- | :--- | :--- |
+| `name` | Display name. The claim MAY contain personal information such as the given name or surname, but it MAY also be used as an anonymized display name, for example, "Administrator 123". This is decided by the issuing organization. | \[[OpenID.Core](#openid-core)\] |
+| `https://id.oidc.se/claim/`<br />`orgAffiliation` | Personal identifier and organizational number. | This profile |
+| `https://id.oidc.se/claim/`<br />`orgName` | Organization name. | This profile | 
+| `https://id.oidc.se/claim/`<br />`orgNumber` | Swedish organization number. This number can always be derived from the orgAffiliation claim, but for simplicity it is recommended that an attribute provider includes this claim. | This profile | 
 
-<a name="authentication-information"></a>
-### 3.4. Authentication Information
+**Claims Parameter Equivalent:**
 
-**Scope:** `https://id.oidc.se/scope/authnInfo`
+```
+  "userinfo" : {
+    "name" : null,
+    "https://id.oidc.se/claim/orgName" : null,
+    "https://id.oidc.se/claim/orgNumber" : null,
+    "https://id.oidc.se/claim/orgAffiliation" : { "essential" : true }
+  },
+  "id_token" : {
+    "https://id.oidc.se/claim/orgAffiliation" : { "essential" : true }
+  }
+```
 
-**Description:** A scope that is used to request claims that represents information from the authentication process and
-information about the subject's credentials used to authenticate. 
-
-This specification declares all claims as optional except for the `auth_time` claim. A profile specification extending
-this attribute specification MAY change requirements to Mandatory and declare additional claims.
-
-| Claim | Description/comment | Reference | Requirement |
-| :--- | :--- | :--- | :--- |
-| `auth_time` | Time when the end-user authentication occurred. | \[[OpenID.Core](#openid-core)\] | Mandatory |
-| `txn` | Transaction identifier for the operation. | \[[RFC8417](#rfc8417)\] | Optional |
-| `https://id.oidc.se/claim/`<br />`userCertificate` | The certificate presented by the user during the authentication process. | This profile | Optional |
-| `https://id.oidc.se/claim/`<br />`credentialValidFrom` | The start time of the user credential's validity. | This profile | Optional |
-| `https://id.oidc.se/claim/`<br />`credentialValidTo` | The end time of the user credential's validity. | This profile | Optional |
-| `https://id.oidc.se/claim/`<br />`deviceIp` | IP address of user's device holding the credentials. | This profile | Optional | 
-
-Note: The `https://id.oidc.se/claim/authnEvidence` (authentication evidence) claim is not declared in the scope and need to be requested explicitly if required. The reason for this is that few relying parties are likely to be interested in that kind of detailed authentication information.
+A Relying Party including the `https://id.oidc.se/scope/naturalPersonOrgId` scope most likely 
+uses the `https://id.oidc.se/claim/orgAffiliation` claim as a primary ID attribute for its users.
+Therefore this claim is delivered in the ID token and is marked as essential. 
 
 <a name="normative-references"></a>
 ## 4. Normative References
