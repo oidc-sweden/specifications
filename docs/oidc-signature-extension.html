@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="signature-extension-for-openid-connect">Signature Extension for OpenID Connect</h1>
-<h3 id="version-10---draft-02---2023-11-06">Version: 1.0 - draft 02 - 2023-11-06</h3>
+<h3 id="version-10---draft-02---2023-11-15">Version: 1.0 - draft 02 - 2023-11-15</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines an extension to OpenID Connect to facilitate use cases where a Relying Party sends a
 &quot;Signature Request&quot; to an OpenID Provider. A signature request is an extension of an OpenID Connect authentication
@@ -217,31 +217,37 @@ registered public key. </p>
 <p><strong>Scope:</strong> <code>https://id.oidc.se/scope/sign</code></p>
 <p><strong>Description:</strong> The scope has two purposes; it indicates for the OpenID Provider that the request in which the scope is
 included is a &quot;signature request&quot;, and it requests the claims declared in the table below.</p>
+<p>Note: The <code>https://id.oidc.se/scope/sign</code> alone does not say anything about the identity of the
+signing end-user. A Relying Party wishing to get this information, which it most likely does,
+should include additional scopes in the request that declares which identity claims that are wanted. </p>
 <table>
 <thead>
 <tr>
 <th align="left">Claim</th>
 <th align="left">Description/comment</th>
 <th align="left">Reference</th>
-<th align="left">Requirement</th>
 </tr>
 </thead>
 <tbody><tr>
 <td align="left"><code>https://id.oidc.se/</code><br /><code>claim/userSignature</code></td>
 <td align="left">The signature that is the result of the user signing process at the OP.</td>
 <td align="left">[<a href="#claims-spec">OIDC.Sweden.Claims</a>]</td>
-<td align="left">REQUIRED</td>
 </tr>
 <tr>
 <td align="left"><code>auth_time</code></td>
 <td align="left">The time when the signature was created.</td>
 <td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
-<td align="left">REQUIRED</td>
 </tr>
 </tbody></table>
-<p><strong>Note:</strong> The <code>https://id.oidc.se/scope/sign</code> alone does not say anything about the identity of the signing end-user.
-A Relying Party wishing to get this information, which it most likely does, should include additional scopes in the 
-request that declares which identity claims that are wanted. </p>
+<p><strong>Claims Parameter Equivalent:</strong></p>
+<pre class="hljs"><code>{
+  <span class="hljs-attr">&quot;id_token&quot;</span> : {
+    <span class="hljs-attr">&quot;https://id.oidc.se/claim/userSignature&quot;</span> : { <span class="hljs-attr">&quot;essential&quot;</span> : <span class="hljs-literal">true</span> },
+    <span class="hljs-attr">&quot;auth_time&quot;</span> : { <span class="hljs-attr">&quot;essential&quot;</span> : <span class="hljs-literal">true</span> }
+  }
+}</code></pre><p>The <code>https://id.oidc.se/claim/userSignature</code> and <code>auth_time</code> claims MUST be delivered in the ID 
+token. The reason for this is that none of the claims represent user identity information, but is
+the result of the signature operation.</p>
 <p><a name="relying-party-requirements"></a></p>
 <h2 id="4-relying-party-requirements">4. Relying Party Requirements</h2>
 <p><a name="requests"></a></p>
@@ -305,7 +311,7 @@ the <code>https://id.oidc.se/param/signRequest</code> request parameter, or resp
 or initiate the signature operation before the user&#39;s identity has been proven to match these value(s). If the user
 identity does not match the supplied value(s) in the <code>claims</code> parameter, an error response MUST be sent.</p>
 <p>The processing of the supplied signature message (<code>sign_message</code> field of the <code>https://id.oidc.se/param/signRequest</code> parameter)
-MUST follow the requirements stated in section 2.2.1 of [<a href="#oidc-profile">OIDC.Sweden.Profile</a>]. If the message for
+MUST follow the requirements stated in section 2.1 of [<a href="#request-ext">OIDC.Sweden.Params</a>]. If the message for
 some reason can not be displayed<sup>2</sup>, the the signature operation MUST be rejected (and an error message sent).</p>
 <p>The OpenID Provider SHOULD NOT save the user&#39;s signature operation in its session at the OP for later re-use in SSO-scenarios.
 The reason for this is that a signature operation is inheritely non-SSO, and authentication and signature operations should
@@ -323,14 +329,15 @@ support the <code>claims</code> request parameter.</p>
 </blockquote>
 <p><a name="response-requirements"></a></p>
 <h3 id="52-response-requirements">5.2. Response Requirements</h3>
-<p>Claims that are representing the result of a signature operation, such as the <code>https://id.oidc.se/claim/userSignature</code>
-claim, MUST be delivered in the ID Token and never from the UserInfo endpoint.</p>
+<p>Claims that are representing the result of a signature operation, such as the 
+<code>https://id.oidc.se/claim/userSignature</code> claim, MUST be delivered in the ID Token.</p>
+<p>If the signature operation does not succeed and a <code>https://id.oidc.se/claim/userSignature</code> claim
+can not be delivered the OpenID Provider MUST respond with an error.</p>
 <p><a name="discovery"></a></p>
 <h3 id="53-discovery">5.3. Discovery</h3>
 <p>OpenID Providers that are compliant with this specification<sup>1</sup>, MUST meet the following requirements discovery requirements:</p>
 <p>The <code>scopes_supported</code> MUST be present in the provider&#39;s discovery document and it MUST contain the scope 
 <code>https://id.oidc.se/scope/sign</code>.</p>
-<p>Also, it is RECOMMENDED that the <code>https://id.oidc.se/scope/authnInfo</code> scope is supported and declared. See [<a href="#claims-spec">OIDC.Sweden.Claims</a>].</p>
 <p>The <code>claims_supported</code> field MUST be present and include at least the claims that are included in the scope definitions for all
 declared scopes (in the <code>scopes_supported</code>).</p>
 <p>The <code>request_parameter_supported</code> MUST be present, and SHOULD be set to <code>true</code> (i.e., the OpenID Provider has support for 
