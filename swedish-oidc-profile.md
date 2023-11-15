@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-11-07
+### Version: 1.0 - draft 04 - 2023-11-15
 
 ## Abstract
 
@@ -132,7 +132,7 @@ Relying Party to include in a request, and required or optional for an OP to sup
 | `acr_values` | Requested Authentication Context Class Reference values. | Optional for RP<br />Mandatory for OP |
 | `request` | Request Object JWT. See [2.1.7](#request-objects-request-and-request-uri-parameters). | OPTIONAL for RP<br />REQUIRED for OP |
 | `request_uri` | Request Object JWT passed by reference. See [2.1.7](#request-objects-request-and-request-uri-parameters). | OPTIONAL |
-| `code_challenge`, `code_challenge_method` | Proof Key for Code Exchange (PKCE). See [2.1.8](#pkce-parameters) below. | OPTIONAL for RP<br />REQUIRED for OP |
+| `code_challenge`, `code_challenge_method` | Proof Key for Code Exchange (PKCE). See [2.1.8](#pkce-parameters) below. | See [2.1.8](#pkce-parameters) for RP<br />REQUIRED for OP |
 
 <a name="the-scope-parameter"></a>
 #### 2.1.1. The scope Parameter
@@ -240,9 +240,13 @@ See chapter 6 of \[[OpenID.Core](#openid-core)\] for further details.
 <a name="pkce-parameters"></a>
 #### 2.1.8. PKCE Parameters
 
-A Relying Party MAY choose to use the Proof Key for Code Exchange (PKCE) extension, \[[RFC7636](#rfc7636)\] and include the `code_challenge` and `code_challenge_method` parameters.
+Regular Relying Parties (i.e., not *Public Clients*) SHOULD use the Proof Key for Code Exchange (PKCE) extension, \[[RFC7636](#rfc7636)\] and include the `code_challenge` and `code_challenge_method` parameters.
 
-If PKCE is used, the code challenge method `S256` SHOULD be used.
+A "Public Client", i.e., a browser-based web application or a native mobile app with no backend logic, 
+MUST use PKCE and include the `code_challenge` and `code_challenge_method` parameters in the authentication
+request.
+
+When PKCE is used, the code challenge method `S256` SHOULD be used.
 
 An OpenID Provider compliant with this profile MUST support the PKCE extension including support for the `S256` code challenge method.
 
@@ -295,6 +299,10 @@ This chapter declares requirements that extend, or clarify, the requirements for
 ### 3.1. Token Requests
 
 A Token Request MUST be sent in accordance with section 3.1.3.1 of \[[OpenID.Core](#openid-core)\] meaning that the `grant_type` is set to `authorization_code` and `code` carries the value of the code parameter returned in the authentication (authorization) response.
+
+If PKCE parameters were sent in the authentication request, see section [2.1.8](#pkce-parameters) above,
+the Token Request MUST include the PKCE `code_verifier` parameter, and the OpenID Provider MUST process
+this parameter according to section 4.6 of \[[RFC7636](#rfc7636)\].
 
 For client authentication requirements, see [3.1.1](#client-authentication) below.
 
