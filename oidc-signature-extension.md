@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-11-09
+### Version: 1.0 - draft 02 - 2023-11-15
 
 ## Abstract
 

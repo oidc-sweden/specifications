@@ -2,7 +2,7 @@
 
 # Claims and Scopes Specification for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-11-09
+### Version: 1.0 - draft 04 - 2023-11-15
 
 ## Abstract
 
@@ -472,7 +472,7 @@ Note that an OpenID Provider delivering claims according to this scope MUST NOT 
 `personalIdentityNumber` and a `coordinationNumber` claim. These are mutually exclusive. However, 
 a person that holds a civic registration number (personnummer) may previously have had a 
 coordination number. This number may then be delivered using the `previousCoordinationNumber` 
-claim (see section [2.1.2.2](#previous-coordination-number)). This claim has to be explicitly
+claim (see section [2.1.2.2](#previous-coordination-number)). This claim can be explicitly
 requested using the `claims` request parameter and is not part of the `naturalPersonNumber` scope.
 
 Section [2.1.2.1](#coordination-number-level) declares a claim for coordination number levels.
