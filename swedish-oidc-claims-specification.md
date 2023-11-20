@@ -2,7 +2,7 @@
 
 # Claims and Scopes Specification for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-11-15
+### Version: 1.0 - draft 04 - 2023-11-20
 
 ## Abstract
 
@@ -130,7 +130,7 @@ the `coordinationNumber` claim.
 
 **Claim:** `https://id.oidc.se/claim/coordinationNumberLevel`
 
-**Description:** According to \[[2021/22:276](#2021-22-276)\] a Swedish coordination number is classified with a "level"
+**Description:** According to \[[2022:1697](#2022-1697)\] a Swedish coordination number is classified with a "level"
 that tells how well the holder has proven his or her identity in conjunction with the issuance of the number. Possible levels are:
 
 - `confirmed` - The identity of the holder is fully confirmed.
@@ -141,10 +141,7 @@ The `coordinationNumberLevel` claim may be used to represent this level when a c
 
 **Type:** String holding any of the three values listed above.
 
-> **Note (i):** \[[2021/22:276](#2021-22-276)\] is a government proposition that has been approved by the Swedish parliament
-and it will lead to a law update concerning the handling of coordination numbers.
-
-> **Note (ii):** The level of an assigned coordination number may changed over the lifetime of the number. For example, the
+> **Note:** The level of an assigned coordination number may changed over the lifetime of the number. For example, the
 level (trustworthiness) may be increased after a supplementary identification, or the level may be lowered after an audit
 where the original identification process was proved to be inadequate. This profile does not put any specific requirements
 on the issuer of this claim, for example that the current coordination number status must be checked before each time it is
@@ -575,9 +572,9 @@ Therefore this claim is delivered in the ID token and is marked as essential.
 > [Skatteverket, SKV 707, Utgåva 2,
 > Samordningsnummer](https://docs.swedenconnect.se/technical-framework/mirror/skv/skv707-2.pdf).
 
-<a name="2021-22-276"></a>
-**\[2021/22:276\]**
-> [Stärkt system för samordningsnummer - Proposition 2021/22:276](https://www.riksdagen.se/sv/dokument-lagar/dokument/proposition/starkt-system-for-samordningsnummer_H903276).
+<a name="2022-1697"></a>
+**\[2022:1697\]**
+> [Lag (2022:1697) om samordningsnummer](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/lag-20221697-om-samordningsnummer_sfs-2022-1697/).
 
 <a name="skv709"></a>
 **\[SKV709\]**
