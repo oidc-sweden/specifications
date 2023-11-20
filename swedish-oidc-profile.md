@@ -75,6 +75,8 @@ This specification defines a profile for OpenID Connect for use within the Swedi
 7. [**Security Requirements**](#security-requirements)
 
     7.1. [Cryptographic Algorithms](#cryptographic-algorithms)
+    
+    7.2. [Signing Requirements](#signing-requirements)
 
 8. [**Normative References**](#normative-references)
 
@@ -442,7 +444,8 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | Field | Description | Requirement |
 | :--- | :--- | :--- |
 | `token_endpoint` | Fully qualified URL of the OpenID Provider's OAuth 2.0 Token Endpoint. | REQUIRED |
-| `userinfo_endpoint` | Fully qualified URL of the OpenID Provider's UserInfo Endpoint. | OPTIONAL |
+| `userinfo_endpoint` | Fully qualified URL of the OpenID Provider's UserInfo Endpoint. | REQUIRED |
+| `jwks_uri` | URL of the OP's JSON Web Key Set \[[JWK](#rfc7517)\] document.<br />To facilitate a smooth key rollover, each JWK of the referenced document SHOULD include a `kid` parameter. See section 4.5 of \[[RFC7517](#rfc7517)\]. | REQUIRED |
 | `scopes_supported` | JSON array containing a list of the scope values that this provider supports. MUST contain the `openid` value. | REQUIRED |
 | `response_types_supported` | JSON array containing a list of the OAuth 2.0 `response_type` values that the OpenID Provider supports. MUST contain the `code` type. | REQUIRED |
 | `acr_values_supported` | JSON array containing a list of the Authentication Context Class References that the OpenID Provider supports. | REQUIRED |
@@ -470,7 +473,7 @@ following table.
 | `redirect_uris` | Array of redirection URI values used by the Relying Party. | REQUIRED |
 | `response_types` | The response types that the Relying Party uses. Must be set to `code`. | REQUIRED |
 | `grant_types` | The OAuth2 grant types the Relying Party uses. Must be set to `authorization_code`. | REQUIRED |
-| `jwks` | The Relying Party's JSON Web Key Set [JWK] document, passed by value. See \[[RFC7517](#rfc7517)\]. | REQUIRED<br />Except for those clients that authenticate according to the exceptions described in section [3.1.1](#client-authentication). |
+| `jwks`<br />`jwks_uri` | The Relying Party's JSON Web Key Set \[[JWK](#rfc7517)\] document, passed by value or reference (URI).<br />To facilitate a smooth key rollover, each JWK of the referenced document SHOULD include a `kid` parameter. See section 4.5 of \[[RFC7517](#rfc7517)\]. | At least one of `jwks` or `jwks_uri` is REQUIRED.<br />Except for those clients that authenticate according to the exceptions described in section [3.1.1](#client-authentication). |
 | `subject_type` | Subject type requested for responses to this Client. The `subject_types_supported` discovery parameter contains a list of the supported `subject_type` values for this server. Valid types include `pairwise` and `public`. The default SHOULD be `public`. See section [3.2.1.1](#the-sub-token-claim). | OPTIONAL |
 | `token_endpoint_auth_method` | Authentication method for accessing the Token endpoint. See section [3.1.1](#client-authentication). | REQUIRED |
 | `default_acr_values` | Default requested Authentication Context Class Reference values. | OPTIONAL |
@@ -529,6 +532,18 @@ or Client Registration metadata).
 > \[1\]: \[[NIST.800-131A.Rev2](#nist800-131)\] contains a listing of algorithms that must not be used.
 However, there is a need to explicitly point out that the commonly used algorithm SHA-1 for digests is 
 considered broken and MUST NOT be used or accepted.
+
+<a name="signing-requirements"></a>
+### 7.2. Signing Requirements
+
+Entities compliant with this profile MUST follow the requirements from section section 10.1 
+of \[[OpenID.Core](#openid-core)\]. This section states the following:
+
+> If there are multiple keys in the referenced JWK Set document, a `kid` value MUST be provided in the JOSE Header.
+
+In order to facilitate for rotation/update of asymmetric keys and to enable for the receiving entity to
+dynamically update the sender's JWK Set document entities compliant with this profile SHOULD include the 
+`kid` value also in the cases where its `jwks` only contains one (signing) key. 
 
 <a name="normative-references"></a>
 ## 8. Normative References
