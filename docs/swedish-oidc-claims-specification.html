@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="claims-and-scopes-specification-for-the-swedish-openid-connect-profile">Claims and Scopes Specification for the Swedish OpenID Connect Profile</h1>
-<h3 id="version-10---draft-04---2023-11-15">Version: 1.0 - draft 04 - 2023-11-15</h3>
+<h3 id="version-10---draft-04---2023-11-20">Version: 1.0 - draft 04 - 2023-11-20</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines claims and scopes for the Swedish OpenID Connect profile.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
@@ -97,7 +97,7 @@ see section <a href="#natural-person-identity-personal-number">3.2</a>, <a href=
 <p><a name="coordination-number-level"></a></p>
 <h5 id="2121-coordination-number-level">2.1.2.1. Coordination Number Level</h5>
 <p><strong>Claim:</strong> <code>https://id.oidc.se/claim/coordinationNumberLevel</code></p>
-<p><strong>Description:</strong> According to [<a href="#2021-22-276">2021/22:276</a>] a Swedish coordination number is classified with a &quot;level&quot;
+<p><strong>Description:</strong> According to [<a href="#2022-1697">2022:1697</a>] a Swedish coordination number is classified with a &quot;level&quot;
 that tells how well the holder has proven his or her identity in conjunction with the issuance of the number. Possible levels are:</p>
 <ul class="list">
 <li><code>confirmed</code> - The identity of the holder is fully confirmed.</li>
@@ -107,11 +107,7 @@ that tells how well the holder has proven his or her identity in conjunction wit
 <p>The <code>coordinationNumberLevel</code> claim may be used to represent this level when a coordination number is released.</p>
 <p><strong>Type:</strong> String holding any of the three values listed above.</p>
 <blockquote>
-<p><strong>Note (i):</strong> [<a href="#2021-22-276">2021/22:276</a>] is a government proposition that has been approved by the Swedish parliament
-and it will lead to a law update concerning the handling of coordination numbers.</p>
-</blockquote>
-<blockquote>
-<p><strong>Note (ii):</strong> The level of an assigned coordination number may changed over the lifetime of the number. For example, the
+<p><strong>Note:</strong> The level of an assigned coordination number may changed over the lifetime of the number. For example, the
 level (trustworthiness) may be increased after a supplementary identification, or the level may be lowered after an audit
 where the original identification process was proved to be inadequate. This profile does not put any specific requirements
 on the issuer of this claim, for example that the current coordination number status must be checked before each time it is
@@ -510,10 +506,10 @@ Therefore this claim is delivered in the ID token and is marked as essential. </
 <p><a href="https://docs.swedenconnect.se/technical-framework/mirror/skv/skv707-2.pdf">Skatteverket, SKV 707, Utgåva 2,
 Samordningsnummer</a>.</p>
 </blockquote>
-<p><a name="2021-22-276"></a>
-<strong>[2021/22:276]</strong></p>
+<p><a name="2022-1697"></a>
+<strong>[2022:1697]</strong></p>
 <blockquote>
-<p><a href="https://www.riksdagen.se/sv/dokument-lagar/dokument/proposition/starkt-system-for-samordningsnummer_H903276">Stärkt system för samordningsnummer - Proposition 2021/22:276</a>.</p>
+<p><a href="https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/lag-20221697-om-samordningsnummer_sfs-2022-1697/">Lag (2022:1697) om samordningsnummer</a>.</p>
 </blockquote>
 <p><a name="skv709"></a>
 <strong>[SKV709]</strong></p>
