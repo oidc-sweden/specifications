@@ -44,16 +44,7 @@ This specification defines claims and scopes for the Swedish OpenID Connect prof
     2.3.4. [Authentication Evidence](#authentication-evidence)
 
     2.3.5. [Authentication Provider](#authentication-provider)
-    
-    2.4. [General Purpose Claims](#general-purpose-claims)
-
-    2.4.1. [Country](#country)
-    
-    2.4.2. [Birth Name](#birth-name)
-    
-    2.4.3. [Place of Birth](#place-of-birth)
-
-    2.4.4. [Age](#age) 
+     
 3. [**Scopes**](#scopes)
 
     3.1. [Natural Person Information](#natural-person-information)
@@ -331,51 +322,6 @@ we describe above.
 
 > **\[2\]:** These services, or authorities, do not necessarily have to be OpenID Providers, but 
 can be SAML Identity Providers, or any other authentication service.
-
-<a name="general-purpose-claims"></a>
-### 2.4. General Purpose Claims
-
-This section contains definitions of general purpose claims that do not fit into any of the above categories. 
-
-<a name="country"></a>
-#### 2.4.1. Country
-
-**Claim:** `https://id.oidc.se/claim/country`
-
-**Description:** \[[OpenID.Core](#openid-core)\] defines the `address` claim containing a `country` field, but
-there are many other areas where a country needs to be represented other than in the context of an individual's
-address. The `https://id.oidc.se/claim/country` claim is a general purpose claim that can be used to represent a country.
-
-**Type:** String. ISO 3166-1 alpha-2 \[[ISO3166](#iso3166)\] two letter country code.
-
-<a name="birth-name"></a>
-#### 2.4.2. Birth Name
-
-**Claim:** `https://id.oidc.se/claim/birthName`
-
-**Description:** Claims that corresponds to the `name` claim defined in \[[OpenID.Core](#openid-core)\] but is the
-full name at the time of birth for the subject.
-
-**Type:** String
-
-<a name="place-of-birth"></a>
-#### 2.4.3. Place of Birth
-
-**Claim:** `https://id.oidc.se/claim/placeOfbirth`
-
-**Description:** Claim representing the place of birth for the subject. This specification does not define "place".
-Depending on the context it may be "City" or "City, Country" or any other representation.
-
-**Type:** String 
-
-<a name="age"></a>
-#### 2.4.4. Age
-
-**Claim:** `https://id.oidc.se/claim/age`
-
-**Description:** Claim representing the age (in years) of the subject person.
-
-**Type:** Integer
 
 <a name="scopes"></a>
 ## 3. Scopes
