@@ -17,17 +17,17 @@ The following table defines a mapping from the SAML attribute names defined in "
 | Swedish Personal Number | urn:oid:1.2.752.29.4.13 (personalIdentityNumber) | `https://id.oidc.se/claim/`<br/>`personalIdentityNumber` | \[[OIDC.Sweden](#oidc-sweden)\] | \[[SC.AttrSpec](#sc-attrspec)\] also uses the same attribute for a Swedish coordination number. \[[OIDC.Sweden](#oidc-sweden)\] defines this claim to be `https://id.oidc.se/claim/coordinationNumber`. |
 | previousPersonal-<br/>IdentityNumber | urn:oid:1.2.752.201.3.15<br />(previousPersonalIdentityNumber) | `https://id.oidc.se/claim/`<br />`previousCoordinationNumber` | [[OIDC.Sweden](#oidc-sweden)\] | The OIDC-profile only handles coordination numbers. |
 | Date of birth | urn:oid:1.3.6.1.5.5.7.9.1 (dateOfBirth) | `birthdate` | \[[OpenID.Core](#openid-core)\] | The format (YYYY-MM-DD) is the same for both the dateOfBirth SAML-attribute and the `birthdate` claim. |
-| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | `https://id.oidc.se/claim/`<br />`birthName` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Name at the time of birth | urn:oid:1.2.752.201.3.8 (birthName) | `birth_family_name`<br />`birth_given_name`<br />`birth_middle_name` | \[[OIDC.IA](#oidc-ia)\] | |
 | Street address | urn:oid:2.5.4.9 (street) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
 | Post office box | urn:oid:2.5.4.18 (postOfficeBox) | `address.street_address` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. The `street_address` MAY include house number, street name, Post Office Box, and multi-line extended street address information.   |
 | Postal code | urn:oid:2.5.4.17 (postalCode) | `address.postal_code` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
 | Locality | urn:oid:2.5.4.7 (l) | `address.locality` | \[[OpenID.Core](#openid-core)\] | Field of the `address` claim. |
-| Country | urn:oid:2.5.4.6 (c) | `address.country` or<br />`https://id.oidc.se/claim/`<br />`country` | \[[OpenID.Core](#openid-core)\]<br />\[[OIDC.Sweden](#oidc-sweden)\] | Depends on in which context country is to be represented. |
-| Place of birth | urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth) | `https://id.oidc.se/claim/`<br />`placeOfbirth` | \[[OIDC.Sweden](#oidc-sweden)\] | |
+| Country | urn:oid:2.5.4.6 (c) | `address.country` | \[[OpenID.Core](#openid-core)\] | Depends on in which context country is to be represented. |
+| Place of birth | urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth) | `place_of_birth` | \[[OIDC.IA](#oidc-ia)\] |  |
 | Country of citizenship | urn:oid:1.3.6.1.5.5.7.9.4 (countryOfCitizenship) | - | - | No mapping exists at this moment. |
 | Country of Residence | urn:oid:1.3.6.1.5.5.7.9.5 (countryOfResidence) | - | - | No mapping exists at this moment. |
 | Telephone number | urn:oid:2.5.4.20 (telephoneNumber) | `phone_number` | \[[OpenID.Core](#openid-core)\] | See also `phone_number_verified`. |
-| Mobile number | urn:oid:0.9.2342.19200300.100.1.41 (mobile) | `phone_number` | \[[OpenID.Core](#openid-core)\] | No specific claim exists that make a difference between a landline phone and a mobile phone in \[[IANA-Reg](#iana-reg)\]. Is this necessary? |
+| Mobile number | urn:oid:0.9.2342.19200300.100.1.41 (mobile) | `phone_number`<br />`msisdn` | \[[OpenID.Core](#openid-core)\]<br />\[[OIDC.IA](#oidc-ia)\] | |
 | E-mail address | urn:oid:0.9.2342.19200300.100.1.3 (mail) | `email` | \[[OpenID.Core](#openid-core)\] | See also `email_verified`. |
 | Organization name | urn:oid:2.5.4.10 (o) | `https://id.oidc.se/claim/`<br />`orgName` | \[[OIDC.Sweden](#oidc-sweden)\] |  |
 | Organizational unit name | urn:oid:2.5.4.11 (ou) | `https://id.oidc.se/claim/`<br />`orgUnit` | \[[OIDC.Sweden](#oidc-sweden)\] | |
@@ -95,6 +95,10 @@ The following table defines a mapping from the attribute names defined in "Freja
 <a name="openid-core"></a>
 **\[OpenID.Core\]**
 > [Sakimura, N., Bradley, J., Jones, M., de Medeiros, B. and C. Mortimore, "OpenID Connect Core 1.0", August 2015](https://openid.net/specs/openid-connect-core-1_0.html).
+
+<a name="oidc-ia"></a>
+**\[OIDC.IA\]**
+> [T. Lodderstedt, D. Fett, M. Haine, A. Pulido, K. Lehmann, K. Koiwai, "OpenID Connect for Identity Assurance 1.0", August 2022](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html).
 
 <a name="iana-reg"></a>
 **\[IANA-Reg\]**
