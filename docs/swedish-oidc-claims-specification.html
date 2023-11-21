@@ -35,11 +35,6 @@
 <p> 2.3.3. <a href="#user-credentials-validity">User Credentials Validity</a></p>
 <p> 2.3.4. <a href="#authentication-evidence">Authentication Evidence</a></p>
 <p> 2.3.5. <a href="#authentication-provider">Authentication Provider</a></p>
-<p> 2.4. <a href="#general-purpose-claims">General Purpose Claims</a></p>
-<p> 2.4.1. <a href="#country">Country</a></p>
-<p> 2.4.2. <a href="#birth-name">Birth Name</a></p>
-<p> 2.4.3. <a href="#place-of-birth">Place of Birth</a></p>
-<p> 2.4.4. <a href="#age">Age</a></p>
 </li>
 <li><p><a href="#scopes"><strong>Scopes</strong></a></p>
 <p> 3.1. <a href="#natural-person-information">Natural Person Information</a></p>
@@ -248,33 +243,6 @@ we describe above. </p>
 <p><strong>[2]:</strong> These services, or authorities, do not necessarily have to be OpenID Providers, but 
 can be SAML Identity Providers, or any other authentication service.</p>
 </blockquote>
-<p><a name="general-purpose-claims"></a></p>
-<h3 id="24-general-purpose-claims">2.4. General Purpose Claims</h3>
-<p>This section contains definitions of general purpose claims that do not fit into any of the above categories. </p>
-<p><a name="country"></a></p>
-<h4 id="241-country">2.4.1. Country</h4>
-<p><strong>Claim:</strong> <code>https://id.oidc.se/claim/country</code></p>
-<p><strong>Description:</strong> [<a href="#openid-core">OpenID.Core</a>] defines the <code>address</code> claim containing a <code>country</code> field, but
-there are many other areas where a country needs to be represented other than in the context of an individual&#39;s
-address. The <code>https://id.oidc.se/claim/country</code> claim is a general purpose claim that can be used to represent a country.</p>
-<p><strong>Type:</strong> String. ISO 3166-1 alpha-2 [<a href="#iso3166">ISO3166</a>] two letter country code.</p>
-<p><a name="birth-name"></a></p>
-<h4 id="242-birth-name">2.4.2. Birth Name</h4>
-<p><strong>Claim:</strong> <code>https://id.oidc.se/claim/birthName</code></p>
-<p><strong>Description:</strong> Claims that corresponds to the <code>name</code> claim defined in [<a href="#openid-core">OpenID.Core</a>] but is the
-full name at the time of birth for the subject.</p>
-<p><strong>Type:</strong> String</p>
-<p><a name="place-of-birth"></a></p>
-<h4 id="243-place-of-birth">2.4.3. Place of Birth</h4>
-<p><strong>Claim:</strong> <code>https://id.oidc.se/claim/placeOfbirth</code></p>
-<p><strong>Description:</strong> Claim representing the place of birth for the subject. This specification does not define &quot;place&quot;.
-Depending on the context it may be &quot;City&quot; or &quot;City, Country&quot; or any other representation.</p>
-<p><strong>Type:</strong> String </p>
-<p><a name="age"></a></p>
-<h4 id="244-age">2.4.4. Age</h4>
-<p><strong>Claim:</strong> <code>https://id.oidc.se/claim/age</code></p>
-<p><strong>Description:</strong> Claim representing the age (in years) of the subject person.</p>
-<p><strong>Type:</strong> Integer</p>
 <p><a name="scopes"></a></p>
 <h2 id="3-scopes">3. Scopes</h2>
 <p>There are basically two ways for a Relying Party to indicate which claims it wishes to receive:</p>

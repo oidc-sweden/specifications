@@ -77,8 +77,8 @@
 <tr>
 <td align="left">Name at the time of birth</td>
 <td align="left">urn:oid:1.2.752.201.3.8 (birthName)</td>
-<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>birthName</code></td>
-<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"><code>birth_family_name</code><br /><code>birth_given_name</code><br /><code>birth_middle_name</code></td>
+<td align="left">[<a href="#oidc-ia">OIDC.IA</a>]</td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -112,15 +112,15 @@
 <tr>
 <td align="left">Country</td>
 <td align="left">urn:oid:2.5.4.6 (c)</td>
-<td align="left"><code>address.country</code> or<br /><code>https://id.oidc.se/claim/</code><br /><code>country</code></td>
-<td align="left">[<a href="#openid-core">OpenID.Core</a>]<br />[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"><code>address.country</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
 <td align="left">Depends on in which context country is to be represented.</td>
 </tr>
 <tr>
 <td align="left">Place of birth</td>
 <td align="left">urn:oid:1.3.6.1.5.5.7.9.2 (placeOfBirth)</td>
-<td align="left"><code>https://id.oidc.se/claim/</code><br /><code>placeOfbirth</code></td>
-<td align="left">[<a href="#oidc-sweden">OIDC.Sweden</a>]</td>
+<td align="left"><code>place_of_birth</code></td>
+<td align="left">[<a href="#oidc-ia">OIDC.IA</a>]</td>
 <td align="left"></td>
 </tr>
 <tr>
@@ -147,9 +147,9 @@
 <tr>
 <td align="left">Mobile number</td>
 <td align="left">urn:oid:0.9.2342.19200300.100.1.41 (mobile)</td>
-<td align="left"><code>phone_number</code></td>
-<td align="left">[<a href="#openid-core">OpenID.Core</a>]</td>
-<td align="left">No specific claim exists that make a difference between a landline phone and a mobile phone in [<a href="#iana-reg">IANA-Reg</a>]. Is this necessary?</td>
+<td align="left"><code>phone_number</code><br /><code>msisdn</code></td>
+<td align="left">[<a href="#openid-core">OpenID.Core</a>]<br />[<a href="#oidc-ia">OIDC.IA</a>]</td>
+<td align="left"></td>
 </tr>
 <tr>
 <td align="left">E-mail address</td>
@@ -471,6 +471,11 @@
 <strong>[OpenID.Core]</strong></p>
 <blockquote>
 <p><a href="https://openid.net/specs/openid-connect-core-1_0.html">Sakimura, N., Bradley, J., Jones, M., de Medeiros, B. and C. Mortimore, &quot;OpenID Connect Core 1.0&quot;, August 2015</a>.</p>
+</blockquote>
+<p><a name="oidc-ia"></a>
+<strong>[OIDC.IA]</strong></p>
+<blockquote>
+<p><a href="https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html">T. Lodderstedt, D. Fett, M. Haine, A. Pulido, K. Lehmann, K. Koiwai, &quot;OpenID Connect for Identity Assurance 1.0&quot;, August 2022</a>.</p>
 </blockquote>
 <p><a name="iana-reg"></a>
 <strong>[IANA-Reg]</strong></p>
