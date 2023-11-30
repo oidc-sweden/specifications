@@ -281,8 +281,10 @@ this parameter according to section 4.6 of [<a href="#rfc7636">RFC7636</a>].</p>
 <p>For client authentication requirements, see <a href="#client-authentication">3.1.1</a> below.</p>
 <p><a name="client-authentication"></a></p>
 <h4 id="311-client-authentication">3.1.1. Client Authentication</h4>
-<p>OpenID Providers compliant with this profile MUST support the <code>private_key_jwt</code> method for client authentication at the Token endpoint, and MAY support other methods as specified in section 9 of [<a href="#openid-core">OpenID.Core</a>].</p>
-<p>The <code>none</code> authentication method MAY be used in the cases where client authentication is performed by other means, for example by mutual TLS. In these cases the authentication process MUST resolve a registered <code>client_id</code>. Otherwise the <code>none</code> method MUST NOT be accepted or used.</p>
+<p>OpenID Providers compliant with this profile MUST support the <code>private_key_jwt</code> method for client authentication at the Token endpoint, and MAY support other methods if permitted by the context
+or policy under which the OP is functioning.</p>
+<p>If Mutual TLS authentication is supported and used, the requirements stated in section 2 of 
+[<a href="#rfc8705">RFC8705</a>] MUST be followed.</p>
 <p>A Relying Party SHOULD default to use the <code>private_key_jwt</code> method, and in these cases the following claims MUST be included in the token request:</p>
 <ul class="list">
 <li><code>client_assertion_type</code> - Set to <code>urn:ietf:params:oauth:client-assertion-type:jwt-bearer</code></li>
@@ -461,7 +463,7 @@ scope in question is requested).</p>
 </tr>
 <tr>
 <td align="left"><code>token_endpoint_auth_</code><br /><code>methods_supported</code></td>
-<td align="left">JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain <code>private_key_jwt</code> and MAY contain other authentication methods as specified in section 9 of [<a href="#openid-core">OpenID.Core</a>].</td>
+<td align="left">JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain <code>private_key_jwt</code> and MAY contain other authentication methods as specified in section 9 of [<a href="#openid-core">OpenID.Core</a>] or [<a href="#rfc8705">RFC8705</a>] for Mutual TLS.</td>
 <td align="left">REQUIRED</td>
 </tr>
 <tr>
@@ -658,6 +660,11 @@ dynamically update the sender&#39;s JWK Set document entities compliant with thi
 <strong>[RFC7519]</strong></p>
 <blockquote>
 <p><a href="https://datatracker.ietf.org/doc/html/rfc7519">Jones, M., Bradley, J. and N. Sakimura, &quot;JSON Web Token (JWT)&quot;, May 2015</a>.</p>
+</blockquote>
+<p><a name="rfc8705"></a>
+<strong>[RFC8705]</strong></p>
+<blockquote>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc8705">B. Campbell, J. Bradley, N. Sakimura, T. Lodderstedt, &quot;OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens&quot;, February 2020</a>.</p>
 </blockquote>
 <p><a name="rfc8414"></a>
 <strong>[RFC8414]</strong></p>
