@@ -311,9 +311,11 @@ For client authentication requirements, see [3.1.1](#client-authentication) belo
 <a name="client-authentication"></a>
 #### 3.1.1. Client Authentication
 
-OpenID Providers compliant with this profile MUST support the `private_key_jwt` method for client authentication at the Token endpoint, and MAY support other methods as specified in section 9 of \[[OpenID.Core](#openid-core)\].
+OpenID Providers compliant with this profile MUST support the `private_key_jwt` method for client authentication at the Token endpoint, and MAY support other methods if permitted by the context
+or policy under which the OP is functioning.
 
-The `none` authentication method MAY be used in the cases where client authentication is performed by other means, for example by mutual TLS. In these cases the authentication process MUST resolve a registered `client_id`. Otherwise the `none` method MUST NOT be accepted or used.
+If Mutual TLS authentication is supported and used, the requirements stated in section 2 of 
+\[[RFC8705](#rfc8705)\] MUST be followed.
 
 A Relying Party SHOULD default to use the `private_key_jwt` method, and in these cases the following claims MUST be included in the token request:
 
@@ -458,7 +460,7 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | `response_types_supported` | JSON array containing a list of the OAuth 2.0 `response_type` values that the OpenID Provider supports. MUST contain the `code` type. | REQUIRED |
 | `acr_values_supported` | JSON array containing a list of the Authentication Context Class References that the OpenID Provider supports. | REQUIRED |
 | `subject_types_supported` | JSON array containing a list of the Subject Identifier types that the OpenID Provider supports. MUST contain `public` and SHOULD contain `pairwise` | REQUIRED |
-| `token_endpoint_auth_`<br />`methods_supported` | JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain `private_key_jwt` and MAY contain other authentication methods as specified in section 9 of \[[OpenID.Core](#openid-core)\]. | REQUIRED |
+| `token_endpoint_auth_`<br />`methods_supported` | JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain `private_key_jwt` and MAY contain other authentication methods as specified in section 9 of \[[OpenID.Core](#openid-core)\] or \[[RFC8705](#rfc8705)\] for Mutual TLS. | REQUIRED |
 | `token_endpoint_auth_`<br />`signing_alg_values_supported` | JSON array containing a list of JWS signing algorithms supported by the Token Endpoint for the signature on the JWT used to authenticate the client at the Token Endpoint for the `private_key_jwt`. `RS256` MUST appear, and `none` MUST NOT appear. | REQUIRED |
 | `claims_supported` | JSON array containing a list of the claim names of the claims that the OpenID Provider MAY be able to supply values for. | REQUIRED |
 | `claims_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `claims` request parameter. Since this profile requires support the value MUST be set to `true`. | REQUIRED |
@@ -599,6 +601,10 @@ dynamically update the sender's JWK Set document entities compliant with this pr
 <a name="rfc7519"></a>
 **\[RFC7519\]**
 > [Jones, M., Bradley, J. and N. Sakimura, "JSON Web Token (JWT)", May 2015](https://datatracker.ietf.org/doc/html/rfc7519).
+
+<a name="rfc8705"></a>
+**\[RFC8705\]**
+> [B. Campbell, J. Bradley, N. Sakimura, T. Lodderstedt, "OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens", February 2020](https://datatracker.ietf.org/doc/html/rfc8705).
 
 <a name="rfc8414"></a>
 **\[RFC8414\]**
