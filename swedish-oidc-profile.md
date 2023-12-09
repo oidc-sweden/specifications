@@ -278,7 +278,7 @@ An OpenID Provider MUST NOT allow a Relying Party to use the `plain` code challe
 
 An OpenID Provider compliant with this profile MUST follow the requirements stated in section 3.1.2.2 of \[[OpenID.Core](#openid-core)\] and the requirements put in [section 2.1](#authentication-request-parameters) of this profile.
 
-Furthermore, the OpenID Provider MUST not proceed with the authentication if the request contains 
+Furthermore, the OpenID Provider MUST NOT proceed with the authentication if the request contains 
 a `claims` parameter including essential `acr` values and none of the specified Requested Authentication
 Context Class Reference values can be used to authenticate the end-user. In these cases the provider
 SHOULD respond with an `unmet_authentication_requirements` error as defined in
