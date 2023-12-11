@@ -6,7 +6,7 @@
 
 ## Abstract
 
-This specification defines claims and scopes for the Swedish OpenID Connect profile.
+This specification defines claims and scopes for the Swedish OpenID Connect Profile.
 
 
 ## Table of Contents
@@ -107,73 +107,82 @@ The claims and scopes defined in this specification are named in a collision-res
 
 **Type:** String where the format is 12 digits without hyphen.
 
-> **Note (i):** See section [2.1.2.1](#coordination-number-level), [Coordination Number Level](#coordination-number-level),
-below for a claim definition that represents a coordination number level. This claim MAY be used in conjunction with
-the `coordinationNumber` claim.
+> **Note (i):** See section [2.1.2.1](#coordination-number-level), 
+[Coordination Number Level](#coordination-number-level), below for a claim definition that represents
+a coordination number level. This claim MAY be used in conjunction with the `coordinationNumber` claim.
 
-> **Note (ii):** A Swedish coordination number also has a "status" associated. This status can be active, on hold or
-> deregistered. This profile's definition of the `https://id.oidc.se/claim/coordinationNumber` claim does not
-> put any requirements regarding the number's status. However, this can be made when the claim is part of a scope,
-> see section [3.2](#natural-person-identity-personal-number), [Natural Person Identity - Personal Number](#natural-person-identity-personal-number) below.
+> **Note (ii):** A Swedish coordination number also has a "status" associated. This status can be active,
+on hold or deregistered. This profile's definition of the `https://id.oidc.se/claim/coordinationNumber`
+claim does not put any requirements regarding the number's status. 
 
 <a name="coordination-number-level"></a>
 ##### 2.1.2.1. Coordination Number Level
 
 **Claim:** `https://id.oidc.se/claim/coordinationNumberLevel`
 
-**Description:** According to \[[2022:1697](#2022-1697)\] a Swedish coordination number is classified with a "level"
-that tells how well the holder has proven his or her identity in conjunction with the issuance of the number. Possible levels are:
+**Description:** According to \[[2022:1697](#2022-1697)\] a Swedish coordination number is classified
+with a "level" that tells how well the holder has proven his or her identity in conjunction with the
+issuance of the number. Possible levels are:
 
 - `confirmed` - The identity of the holder is fully confirmed.
 - `probable` - The identity of the holder is probable, but not fully confirmed.
 - `uncertain` - The identity of the holder is uncertain.
 
-The `coordinationNumberLevel` claim may be used to represent this level when a coordination number is released.
+The `coordinationNumberLevel` claim may be used to represent this level when a coordination number
+claim is released.
 
 **Type:** String holding any of the three values listed above.
 
-> **Note:** The level of an assigned coordination number may changed over the lifetime of the number. For example, the
-level (trustworthiness) may be increased after a supplementary identification, or the level may be lowered after an audit
-where the original identification process was proved to be inadequate. This profile does not put any specific requirements
-on the issuer of this claim, for example that the current coordination number status must be checked before each time it is
-issued. This may be done by other profiles building upon this profile, but using the claim in the context of this profile
-alone implies that the consuming entity MUST ensure that status of the coordination number before it is used.
+> **Note:** The level of an assigned coordination number may changed over the lifetime of the number.
+For example, the level (trustworthiness) may be increased after a supplementary identification, or the
+level may be lowered after an audit where the original identification process was proved to be
+inadequate. This profile does not put any specific requirements on the issuer of this claim, for example
+that the current coordination number status must be checked before each time it is issued. This may be
+done by other profiles building upon this profile, but using the claim in the context of this profile
+alone implies that the consuming entity MUST ensure that status of the coordination number before it is
+used.
 
 <a name="previous-coordination-number"></a>
 ##### 2.1.2.2. Previous Coordination Number
 
 **Claim:** `https://id.oidc.se/claim/previousCoordinationNumber`
 
-**Description:**  All individuals born in Sweden or moving to Sweden with the intention of staying one year or longer will be
-assigned a personal identity number ("personnummer") and registered in the population register. Prior to being assigned a 
-Swedish personal identity number ("personnummer"), a coordination number (see [2.1.2](#swedish-coordination-number)) may be
-issued in order to enable communication with various government authorities, healthcare institutions, higher education and banks.
+**Description:**  All individuals born in Sweden or moving to Sweden with the intention of staying
+one year or longer will be assigned a personal identity number ("personnummer") and registered in the
+population register. Prior to being assigned a Swedish personal identity number ("personnummer"), a
+coordination number (see [2.1.2](#swedish-coordination-number)) may be issued in order to enable
+communication with various government authorities, healthcare institutions, higher education and banks.
 
-In most cases regarding people that move to Sweden, a person first holds a coordination number during a period before he or she
-is assigned a personal identity number. A typical use case is a person that seeks asylum and later is given a residence permit.
-In this case the person may first hold a coordination number and if a residence permit is given a personal identity number will
-be assigned.
+In most cases regarding people that move to Sweden, a person first holds a coordination number during
+a period before he or she is assigned a personal identity number. A typical use case is a person that
+seeks asylum and later is given a residence permit. In this case the person may first hold a coordination
+number and if a residence permit is given a personal identity number will be assigned.
 
-For a service provider this may lead to problems since the primary identifier for an individual has changed. A login with the newly
-assigned identifier will not match the user account previously used by this individual.
+For a service provider this may lead to problems since the primary identifier for an individual has
+changed. A login with the newly assigned identifier will not match the user account previously used by
+this individual.
 
-Therefore, this profile defines the `previousCoordinationNumber` claim to enable matching a previously held identity number to a
-newly assigned identity number. The `previousCoordinationNumber` claim is typically released together with the "new" 
-`personalIdentityNumber` claim in order to facilitate account matching at a service provider.
+Therefore, this profile defines the `previousCoordinationNumber` claim to enable matching a previously
+held identity number to a newly assigned identity number. The `previousCoordinationNumber` claim is 
+typically released together with the "new" `personalIdentityNumber` claim in order to facilitate account
+matching at a service provider.
 
 **Type:** See [2.1.1](#swedish-personal-identity-number) and [2.1.2](#swedish-coordination-number) above.
 
-> **Note (i):** This claim is a special-purpose claim that most likely only will be used in very specific use cases. 
-Therefore it is not included in any scope definitions below. A service provider wishing to potentially receive this claim
-SHOULD request is explicitly using the `claims` request parameter.
+> **Note (i):** This claim is a special-purpose claim that most likely only will be used in very 
+specific use cases. Therefore it is not included in any scope definitions below. A service provider
+wishing to potentially receive this claim SHOULD request is explicitly using the `claims` request
+parameter.
 
-> **Note (ii):** This profile does not put any requirements regarding the "status" associated with the coordination number
-represented. Since it has been superseded by a Swedish personal identity number ("personnummer") its status may be non-active.
+> **Note (ii):** This profile does not put any requirements regarding the "status" associated with the
+coordination number represented. Since it has been superseded by a Swedish personal identity number
+("personnummer") its status may be non-active.
 
 <a name="organizational-identity-claims"></a>
 ### 2.2. Organizational Identity Claims
 
-This section defines a number of claims in the area of organizational identities. More specific claims concerning organizational belonging can be defined as an extension to this specification. 
+This section defines a number of claims in the area of organizational identities. More specific claims
+concerning organizational belonging can be defined as an extension to this specification. 
 
 <a name="swedish-organization-number"></a>
 #### 2.2.1. Swedish Organization Number
@@ -189,22 +198,26 @@ This section defines a number of claims in the area of organizational identities
 
 **Claim:** `https://id.oidc.se/claim/orgAffiliation`
 
-**Description:** The personal identity at a Swedish organization (identified as a Swedish organizational number according to 
-\[[SKV709](#skv709)\]). The `orgAffiliation` claim is intended to be used as a primary identity claim for global personal
-organizational identities. It consists of a personal identifier and an organizational identifier code (`orgNumber`).
+**Description:** The personal identity at a Swedish organization (identified as a Swedish organizational
+number according to \[[SKV709](#skv709)\]). The `orgAffiliation` claim is intended to be used as a
+primary identity claim for global personal organizational identities. It consists of a personal
+identifier and an organizational identifier code (`orgNumber`).
 
-This specification does not impose any specific requirements concerning the personal identifier part of the claim other than that
-it MUST be unique for the given organization.
+This specification does not impose any specific requirements concerning the personal identifier part
+of the claim other than that it MUST be unique for the given organization.
 
-**Type:** String on the format \<personal-id\>@\<org-number\> where the personal-id part determined by the organization and the org-number part is according to [2.2.1](#swedish-organization-number) above.
+**Type:** String on the format `<personal-id>@<org-number>` where the `personal-id` part determined
+by the organization and the `org-number` part is according to [2.2.1](#swedish-organization-number) above.
 
-> **Note (i)**: In the general case, a claims consumer MUST NOT assume a particular format or meaning of the personal identifier
-part since different organizations may use different formats. A claims consumer should also be aware that a personal identifier
-separated from its organizational identifier code can not be regarded as unique.
+> **Note (i)**: In the general case, a claims consumer MUST NOT assume a particular format or meaning
+of the personal identifier part since different organizations may use different formats. A claims
+consumer should also be aware that a personal identifier separated from its organizational identifier
+code can not be regarded as unique.
 
-> **Note (ii)**: In the description above we write "global personal organizational identities". With global we refer to
-an identity that is used outside of the issuing organization's scope/domain. The individual's identity within the organization
-may be the, but is not required to be, the "personal-id" part of the claim.  
+> **Note (ii)**: In the description above we write "global personal organizational identities".
+With global we refer to an identity that is used outside of the issuing organization's scope/domain.
+The individual's identity within the organization may be the, but is not required to be,
+"personal-id" part of the claim.
 
 <a name="organization-name"></a>
 #### 2.2.3. Organization Name
@@ -228,7 +241,7 @@ may be the, but is not required to be, the "personal-id" part of the claim.
 ### 2.3. Authentication Information Claims
 
 An "authentication information" claim delivers information about a specific authentication event.
-An OpenID Provider SHOULD deliver "authentication information" claims in an ID token and not from
+An OpenID Provider SHOULD deliver "authentication information" claims in an ID Token and not from
 the UserInfo endpoint since the values the claims represent refers to an event, and not user
 properties as such. 
 
@@ -248,14 +261,15 @@ properties as such.
 
 **Description:** A signature that was produced by the subject (user) during the authentication, or signature, process.
 
-> Note: This specification does not state any requirements on the type of signature object that is stored as a claim value.
+> Note: This specification does not state any requirements on the type of signature object that is
+stored as a claim value.
 
 **Type:** String (Base64 encoded)
 
 <a name="user-credentials-validity"></a>
 #### 2.3.3. User Credentials Validity
 
-A relying party may wish to get information about the user's credentials used during the authentication process to serve as input to its risk based monitoring system, or simply to inform the user about "your eID is about to expire" (even though it is more natural to have the OP doing this). This section defines the corresponding claims to attributes and properties that are in use today in Swedish eID solutions.
+A Relying Party may wish to get information about the user's credentials used during the authentication process to serve as input to its risk based monitoring system, or simply to inform the user about "your eID is about to expire" (even though it is more natural to have the OP doing this). This section defines the corresponding claims to attributes and properties that are in use today in Swedish eID solutions.
 
 <a name="credential-valid-from"></a>
 ##### 2.3.3.1. Credential Valid From
@@ -310,7 +324,7 @@ This claim is intended to be released by OpenID Providers that offers several au
 mechanisms (providers). This includes OpenID Providers that delegate, or proxy, the user authentication
 to other services<sup>2</sup>. 
 
-By including this claim in an ID token the OP informs the Relying Party about the identity of 
+By including this claim in an ID Token the OP informs the Relying Party about the identity of 
 the provider (mechanism or authority) that authenticated the user.
 
 **Type:** String, preferably an URI
@@ -341,13 +355,13 @@ RP application. In the context of Swedish eID there are some obvious claims that
 to be "primary" identity claims by Relying Parties, for example a Swedish personal identity
 number. Such claims are needed by the Relying Party in order to log in a user to its application.
 Therefore, this specification's scope definitions will define that some claims are to be delivered
-in the ID token so that a Relying Party can fully log in a user without having to make a,
+in the ID Token so that a Relying Party can fully log in a user without having to make a,
 potentially, unnecessary call to the UserInfo endpoint.
 
 For each scope defined below, a listing of the claims that the scope value requests (access to) is
 declared. Each scope definition also presents a "claims parameter equivalent", i.e., how the
 claims would be requested using the `claims` request parameter. This tells where claims are
-delivered (ID token and/or UserInfo endpoint), and whether the claims should be regarded as essential
+delivered (ID Token and/or UserInfo endpoint), and whether the claims should be regarded as essential
 or voluntary to deliver by the OP.
 
 > Note that the use of "essential" does not imply that the OP must deliver the claim, only
@@ -355,7 +369,7 @@ that its delivery is marked as essential for the Relying Party's ability to cont
 specific task requested by the end-user (for example, logging the user in to the RP application,
 or ensuring a smooth authorization for a specific task).
 
-> If a scope definition states that a certain claim is delivered in the ID token, its definition
+> If a scope definition states that a certain claim is delivered in the ID Token, its definition
 will in many cases also include the same claim for delivery via the UserInfo endpoint. The reason for 
 this is that the UserInfo endpoint should offer a complete set of user identity claims (based on 
 the authorization of the RP).
@@ -398,7 +412,7 @@ scope as defined in section 5.4 of \[[OpenID.Core](#openid-core)\].
 
 The `profile` scope is more or less intended as a scope for an Internet user wishing to create an 
 account on a website. Claims  such as `preferred_username`, `picture` and `website` indicates that.
-Of course, not all claims within the scope need to be delivered, but for the sake of privacy a Relying Party should not ask for more claims than it actually requires. Therefore, this specification 
+Of course, not all claims within the scope need to be delivered, but for the sake of privacy, a Relying Party should not ask for more claims than it actually requires. Therefore, this specification 
 defines the `https://id.oidc.se/scope/naturalPersonInfo` scope to limit the amount of user identity
 claims to what is offered using a Swedish eID.
 
@@ -443,7 +457,7 @@ This claim can be explicitly requested using the `claims` request parameter.
 ```
 
 Since a Swedish personal identity number often is required to authenticate at a public
-Swedish organization these claims are delivered in the ID token and are marked as essential.
+Swedish organization these claims are delivered in the ID Token and are marked as essential.
 The claims should also be delivered via the UserInfo endpoint.
 
 <a name="natural-person-organizational-identity"></a>
@@ -480,7 +494,7 @@ rather that this identity has been issued/provided by that organization for any 
 
 A Relying Party including the `https://id.oidc.se/scope/naturalPersonOrgId` scope most likely 
 uses the `https://id.oidc.se/claim/orgAffiliation` claim as a primary ID attribute for its users.
-Therefore this claim is delivered in the ID token and is marked as essential. 
+Therefore this claim is delivered in the ID Token and is marked as essential. 
 
 <a name="normative-references"></a>
 ## 4. Normative References

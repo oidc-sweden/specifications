@@ -81,7 +81,7 @@ This specification defines a profile for OpenID Connect for use within the Swedi
 
 This specification defines a profile for OpenID Connect for use within the Swedish public and private sector. It profiles the OpenID Connect protocol to get a baseline security and to facilitate interoperability between relying parties and OpenID providers.
 
-> The profile is loosely based on the International Government Assurance Profile for OpenID Connect draft, \[[OpenID.iGov](#openid-igov)\].
+> The profile is loosely based on the [International Government Assurance Profile for OpenID Connect draft](https://openid.net/specs/openid-igov-openid-connect-1_0.html).
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -93,7 +93,7 @@ These keywords are capitalized when used to unambiguously specify requirements o
 <a name="conformance"></a>
 ### 1.2. Conformance
 
-This profile defines requirements for OpenID Connect Relying Parties (clients) and OpenID Connect Providers (identity providers). Furthermore, it defines the interaction between a Relying Party and an OpenID Provider.
+This profile defines requirements for OpenID Connect Relying Parties (clients) and OpenID Providers (identity providers). Furthermore, it defines the interaction between a Relying Party and an OpenID Provider.
 
 When a component compliant with this profile is interacting with other components compliant with this profile, all components MUST fully conform to the features and requirements of this specification. Any interaction with components that are not compliant with this profile is out of scope for this specification.
 
@@ -109,10 +109,13 @@ This chapter defines requirements for Relying Parties issuing requests and OpenI
 
 Section 3.1.2.1 of \[[OpenID.Core](#openid-core)\] defines a set of request parameters for OpenID Connect.  
 
-Below follows a table with request parameters that are mandatory according to this profile along with selected optional parameters for which this profile extends the requirements or descriptions given in \[[OpenID.Core](#openid-core)\].
+The table below lists request parameters that are mandatory according to this profile,
+ along with selected optional parameters for which this profile extends the requirements or
+ descriptions given in \[[OpenID.Core](#openid-core)\].
 
-> In the table below the "Support Requirement" column indicates whether a parameter is required or optional for a
-Relying Party to include in a request, and required or optional for an OP to support and process. 
+> In the table below the "Support Requirement" column indicates whether a parameter is required or
+optional for a Relying Party to include in a request, and required or optional for an OP to support
+and process. 
 
 | Parameter | Description | Support Requirement |
 | :--- | :--- | :--- |
@@ -159,11 +162,19 @@ In order to prevent open redirection and other injection attacks, the OpenID Pro
 
 A Relying Party MAY use the `prompt` parameter to control, or prevent, Single Sign On.
 
-By setting the `prompt` parameter to `none` it instructs the OpenID Provider that no display of any authentication or consent views is allowed, and that an error should be returned if the user is not already authenticated at the OpenID Provider. This corresponds to the SAML authentication request attribute `IsPassive=true`.
+By setting the `prompt` parameter to `none` the Relying Party instructs the OpenID Provider that no
+display of any authentication or consent views is allowed, and that an error should be returned if the
+user is not already authenticated at the OpenID Provider. This corresponds to the SAML authentication
+request attribute `IsPassive=true`.
 
-By setting the `prompt` parameter to `login` the Relying Party instructs the OpenID Provider that the user MUST authenticate, and that it MUST NOT use a previous authentication session for the end-user. This corresponds to the SAML authentication request attribute `ForceAuthn=true`. 
+By setting the `prompt` parameter to `login` the Relying Party instructs the OpenID Provider that the
+user MUST authenticate, and that it MUST NOT use a previous authentication session for the end-user.
+This corresponds to the SAML authentication request attribute `ForceAuthn=true`. 
 
-An OpenID Provider MUST support the `prompt` parameter according to the requirements in section 3.1.2.1 of \[[OpenID.Core](#openid-core)\], with the following extension: If the value of the `prompt` parameter contains the "login" string value the OpenID Provider MUST prompt the end-user for (re-)authentication.
+An OpenID Provider MUST support the `prompt` parameter according to the requirements in 
+section 3.1.2.1 of \[[OpenID.Core](#openid-core)\], with the following extension: If the value of
+the `prompt` parameter contains the "login" string value the OpenID Provider MUST prompt the end-user
+for (re-)authentication.
 
 <a name="the-login-hint-parameter"></a>
 #### 2.1.5. The login\_hint Parameter
@@ -175,7 +186,7 @@ This profile does not define which type of string that is passed as a value to t
 context- and OpenID Provider specific. 
 
 However, a Relying Party MUST NOT use the `login_hint` to pass a claim value that it requests to be delivered in
-the resulting ID token. In these cases the `claims` request parameter SHOULD be used, see 
+the resulting ID Token. In these cases the `claims` request parameter SHOULD be used, see 
 [2.1.6](#the-claims-parameter) below.
 
 <a name="the-claims-parameter"></a>
@@ -189,7 +200,7 @@ parameter and when included in a Request Object (see [2.1.7](#request-objects-re
 
 Section [2.1.5](#the-login-hint-parameter) states that the `claims` parameter is to be used
 in favour of the `login_hint` parameter when the Relying Party needs to pass a value that it wants to be
-delivered as a claim in the resulting ID token.
+delivered as a claim in the resulting ID Token.
 
 The example below illustrates the contents of the `claims` parameter where the Relying Party specifies 
 a value for a specific claim. By doing this instead of specifying the value as a `login_hint`, the
@@ -206,10 +217,10 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.
 }
 ```
 
-A Relying Party that has a strict requirement for deliverance of the `acr` claim in the ID token
-SHOULD include the `acr` claim in the `claims` parameter and specify it as "essential". 
+A Relying Party that has a strict requirement for deliverance of the `acr` claim in the ID Token
+has the possibility to include the `acr` claim in the `claims` parameter and specify it as "essential".
 Furthermore, if the RP wants to specify which Authentication Context Class Reference values that
-are acceptable, the `values` parameter SHOULD be included and list these values. See section 5.5.1.1
+are acceptable, the `values` parameter could be included and list these values. See section 5.5.1.1
 of \[[OpenID.Core](#openid-core)\].
 
 ```
@@ -222,13 +233,15 @@ of \[[OpenID.Core](#openid-core)\].
 }
 ```
 
-A Relying Party specifying the `acr` claim in the `claims` parameter SHOULD NOT include the `acr_values`
-parameter in the request.
+A Relying Party specifying the `acr` claim in the `claims` parameter SHOULD NOT include the
+`acr_values` parameter in the request.
 
 <a name="request-objects-request-and-request-uri-parameters"></a>
 #### 2.1.7. Request Objects (request and request_uri parameters)
 
-An OpenID Provider compliant with this profile MUST support Request Object JWT:s sent by value (using the `request` parameter) and MAY support Request Object JWT:s sent by reference (using the `request_uri` parameter).
+An OpenID Provider compliant with this profile MUST support Request Object JWT:s sent by value
+(using the `request` parameter) and MAY support Request Object JWT:s sent by reference (using
+the `request_uri` parameter).
 
 An OpenID Provider MUST be prepared to accept and process signed and/or encrypted Request Objects.
 
@@ -237,46 +250,53 @@ that encrypts a Request Object MUST do so using the OpenID Provider's public key
 
 If a Request Object is signed it MUST contain the `iss` (issuer) and `aud` (audience) claims.
 
-The `iss` value MUST be the client ID of the Relying Party (unless it was signed by a different party
-than the RP). 
+The `iss` value MUST be the client ID of the Relying Party (unless it was signed by a different
+party than the RP). 
 
-The `aud` value SHOULD be set to the OpenID Provider's Issuer Identifier URL. \[[OpenID.Core](#openid-core)\]
- also allows for this value to be an URL including the OP Issuer Identifier URL. In practice this means
-that the OP Authorization Endpoint URL may be used. Therefore, an OpenID Provider compliant with this
-profile MUST accept `aud` values that are either the OP Issuer Identifier URL or the
-Authorization Endpoint on which an authentication request was received.  
+The `aud` value SHOULD be set to the OpenID Provider's Issuer Identifier URL. 
+\[[OpenID.Core](#openid-core)\] also allows for this value to be an URL including the OP Issuer
+Identifier URL. In practice this means that the OP Authorization Endpoint URL may be used.
+Therefore, an OpenID Provider compliant with this profile MUST accept `aud` values that are either
+the OP Issuer Identifier URL or the Authorization Endpoint on which an authentication request was
+received.  
 
-A Relying Party sending an authentication request containing a Request Object SHOULD use the `POST` method
-to do so. Since the contents of the `request` parameter is signed the payload may become too large for using
-`GET`.
+A Relying Party sending an authentication request containing a Request Object SHOULD use the
+`POST` method to do so. Since the contents of the `request` parameter is signed the payload may
+become too large for using `GET`.
 
 See chapter 6 of \[[OpenID.Core](#openid-core)\] for further details.
 
 <a name="pkce-parameters"></a>
 #### 2.1.8. PKCE Parameters
 
-Regular Relying Parties (i.e., not *Public Clients*) SHOULD use the Proof Key for Code Exchange (PKCE) extension, \[[RFC7636](#rfc7636)\] and include the `code_challenge` and `code_challenge_method` parameters.
+Regular Relying Parties (i.e., not *Public Clients*) SHOULD use the Proof Key for Code Exchange (PKCE)
+extension, \[[RFC7636](#rfc7636)\] and include the `code_challenge` and `code_challenge_method`
+parameters.
 
-A "Public Client", i.e., a browser-based web application or a native mobile app with no backend logic, 
-MUST use PKCE and include the `code_challenge` and `code_challenge_method` parameters in the authentication
-request.
+A "Public Client", i.e., a browser-based web application or a native mobile app with no backend logic,
+MUST use PKCE and include the `code_challenge` and `code_challenge_method` parameters in the
+authentication request.
 
 When PKCE is used, the code challenge method `S256` SHOULD be used.
 
-An OpenID Provider compliant with this profile MUST support the PKCE extension including support for the `S256` code challenge method.
+An OpenID Provider compliant with this profile MUST support the PKCE extension including support
+for the `S256` code challenge method.
 
 An OpenID Provider MUST NOT allow a Relying Party to use the `plain` code challenge method.
 
 <a name="processing-of-authentication-requests"></a>
 ### 2.2. Processing of Authentication Requests
 
-An OpenID Provider compliant with this profile MUST follow the requirements stated in section 3.1.2.2 of \[[OpenID.Core](#openid-core)\] and the requirements put in [section 2.1](#authentication-request-parameters) of this profile.
+An OpenID Provider compliant with this profile MUST follow the requirements stated in 
+section 3.1.2.2 of \[[OpenID.Core](#openid-core)\] and the requirements put in 
+[section 2.1](#authentication-request-parameters) of this profile.
 
-Furthermore, the OpenID Provider MUST NOT proceed with the authentication if the request contains 
-a `claims` parameter including essential `acr` values and none of the specified Requested Authentication
-Context Class Reference values can be used to authenticate the end-user. In these cases the provider
-SHOULD respond with an `unmet_authentication_requirements` error as defined in
-\[[OpenID.Unmet-AuthnReq](#openid-unmet-authnreq)\]. See section 5.5.1.1 of \[[OpenID.Core](#openid-core)\].
+Furthermore, the OpenID Provider MUST NOT proceed with the authentication if the request contains
+a `claims` parameter including essential `acr` values and none of the specified Requested 
+Authentication Context Class Reference values can be used to authenticate the end-user. In these
+cases the provider SHOULD respond with an `unmet_authentication_requirements` error as defined in
+\[[OpenID.Unmet-AuthnReq](#openid-unmet-authnreq)\]. 
+See section 5.5.1.1 of \[[OpenID.Core](#openid-core)\].
 
 <a name="authentication-responses"></a>
 ### 2.3. Authentication Responses
@@ -297,7 +317,7 @@ represent error conditions that are caused by either an invalid request or condi
 that can not be met, where `access_denied` represents that the authentication process was not
 completed. 
 
-A non completed authentication process may be caused by:
+A non-completed authentication process may be caused by:
 
 - the user denies, or cancels, the authentication process, or, 
 
@@ -312,16 +332,19 @@ contain a description suitable for the Relying Party application logs.
 <a name="token-endpoint-requests-and-id-token-issuance"></a>
 ## 3. Token Endpoint Requests and ID Token Issuance
 
-This chapter declares requirements that extend, or clarify, the requirements for ID tokens in section 3.1.3 of \[[OpenID.Core](#openid-core)\].
+This chapter declares requirements that extend, or clarify, the requirements for ID Tokens in 
+section 3.1.3 of \[[OpenID.Core](#openid-core)\].
 
 <a name="token-requests"></a>
 ### 3.1. Token Requests
 
-A Token Request MUST be sent in accordance with section 3.1.3.1 of \[[OpenID.Core](#openid-core)\] meaning that the `grant_type` is set to `authorization_code` and `code` carries the value of the code parameter returned in the authentication (authorization) response.
+A Token Request MUST be sent in accordance with section 3.1.3.1 of \[[OpenID.Core](#openid-core)\]
+meaning that the `grant_type` is set to `authorization_code` and `code` carries the value of the
+code parameter returned in the authentication (authorization) response.
 
-If PKCE parameters were sent in the authentication request, see section [2.1.8](#pkce-parameters) above,
-the Token Request MUST include the PKCE `code_verifier` parameter, and the OpenID Provider MUST process
-this parameter according to section 4.6 of \[[RFC7636](#rfc7636)\].
+If PKCE parameters were sent in the authentication request, see section [2.1.8](#pkce-parameters) 
+above, the Token Request MUST include the PKCE `code_verifier` parameter, and the OpenID Provider
+MUST process this parameter according to section 4.6 of \[[RFC7636](#rfc7636)\].
 
 For client authentication requirements, see [3.1.1](#client-authentication) below.
 
@@ -334,27 +357,32 @@ or policy under which the OP is functioning.
 If Mutual TLS authentication is supported and used, the requirements stated in section 2 of 
 \[[RFC8705](#rfc8705)\] MUST be followed.
 
-A Relying Party SHOULD default to use the `private_key_jwt` method, and in these cases the following claims MUST be included in the token request:
+A Relying Party SHOULD default to use the `private_key_jwt` method, and in these cases the following
+claims MUST be included in the token request:
 
 - `client_assertion_type` - Set to `urn:ietf:params:oauth:client-assertion-type:jwt-bearer`
 - `client_assertion` - The value of the signed client authentication JWT generated. The Relying Party must generate a new assertion JWT for each call to the token endpoint.
 
 Section 9 of \[[OpenID.Core](#openid-core)\] lists the required contents of the signed JWT. These
 requirements states that the `aud` claim value SHOULD be set to the URL of the OpenID Provider's Token
-Endpoint. In order to facilitate interoperability it is RECOMMENDED that an OpenID Provider compliant 
+endpoint. In order to facilitate interoperability it is RECOMMENDED that an OpenID Provider compliant 
 with this profile also accepts its Issuer Identifier URL as a valid value for the `aud` claim.
 
 <a name="token-responses-and-validation"></a>
 ### 3.2. Token Responses and Validation
 
-The token response MUST include an access token (to be used to make UserInfo requests) and an ID token as described below.
+The token response MUST include an access token (to be used to make UserInfo requests) and an ID Token as described below.
 
 <a name="id-token-contents"></a>
 ### 3.2.1. ID Token Contents
 
-ID Tokens issued by OpenID Providers compliant with this profile MUST be signed and MAY be encrypted using the appropriate key of the requesting Relying Party.
+ID Tokens issued by OpenID Providers compliant with this profile MUST be signed and MAY be
+encrypted using the appropriate key of the requesting Relying Party.
 
-Section 2 of \[[OpenID.Core](#openid-core)\] defines the contents of an ID Token. Below follows a listing of the token claims that are mandatory according to this profile along with selected optional claims for which this profile extends the requirements or descriptions given in \[[OpenID.Core](#openid-core)\].
+Section 2 of \[[OpenID.Core](#openid-core)\] defines the contents of an ID Token. Below follows a
+listing of the token claims that are mandatory according to this profile along with selected optional
+claims for which this profile extends the requirements or descriptions given in 
+\[[OpenID.Core](#openid-core)\].
 
 | Token Claim | Description | Requirement |
 | :--- | :--- | :--- |
@@ -365,16 +393,23 @@ Section 2 of \[[OpenID.Core](#openid-core)\] defines the contents of an ID Token
 | `iat` | Issuance time. | REQUIRED |
 | `auth_time` | Time when the end-user authentication occurred. In the cases where an ID Token is issued based on a previous end-user authentication, this claim MUST hold the time from the original authentication. | REQUIRED |
 | `nonce` | Nonce that must be matched against nonce provided in the authentication request. | OPTIONAL |
-| `acr` | Authentication Context Class Reference. See [3.2.1.3](#the-acr-claim) below. | REQUIRED the `acr` claim was requested as an essential claim (see [2.1](#authentication-request-parameters) above), otherwise OPTIONAL. |
+| `acr` | Authentication Context Class Reference. See [3.2.1.3](#the-acr-claim) below. | REQUIRED if the `acr` claim was requested as an essential claim (see [2.1](#authentication-request-parameters) above), otherwise OPTIONAL. |
 
-Except for the claims listed above the OpenID Provider also includes claims in the ID token that depends on requested scopes and claims.
+Except for the claims listed above the OpenID Provider also includes claims in the ID Token that
+depends on requested scopes and claims.
 
 <a name="the-sub-token-claim"></a>
 #### 3.2.1.1. The sub Token Claim
 
-Section 8 of \[[OpenID.Core](#openid-core)\] defines two Subject Identifier Types, `public` and `pairwise`. An OpenID Provider compliant with this profile MUST support the `public` type and SHOULD support the `pairwise` type.
+Section 8 of \[[OpenID.Core](#openid-core)\] defines two Subject Identifier Types, `public` and
+`pairwise`. An OpenID Provider compliant with this profile MUST support the `public` type and 
+SHOULD support the `pairwise` type.
 
-In order to avoid privacy violations an OpenID Provider MUST NOT use an end-user attribute that reveals personal information about the end-user as the value for `sub`, for example a personal identity number. Even though this information may be available in other token claims, its release should be dependent on requested scopes (or claims) and not be revealed unless requested (and in some cases consented).
+In order to avoid privacy violations an OpenID Provider MUST NOT use an end-user attribute that
+reveals personal information about the end-user as the value for `sub`, for example a personal
+identity number. Even though this information may be available in other token claims, its release
+should be dependent on requested scopes (or claims) and not be revealed unless explicitly
+requested (and in some cases consented).
 
 <a name="the-exp-token-claim"></a>
 #### 3.2.1.2. The exp Token Claim
@@ -384,12 +419,13 @@ The lifetime of an ID Token should be kept as short as possible, and MUST NOT ex
 <a name="the-acr-claim"></a>
 #### 3.2.1.3. The acr Claim
 
-An OpenID Provider compliant with this profile MUST adhere to section 5.5.1.1 of \[[OpenID.Core](#openid-core)\] regarding issuance of the `acr` claim.
+An OpenID Provider compliant with this profile MUST adhere to section 5.5.1.1 of
+\[[OpenID.Core](#openid-core)\] regarding issuance of the `acr` claim.
 
 <a name="id-token-validation"></a>
 ### 3.2.2. ID Token Validation
 
-Relying Parties MUST follow the requirements in section [3.1.3.7] of \[[OpenID.Core](#openid-core)\].
+Relying Parties MUST follow the requirements in section 3.1.3.7 of \[[OpenID.Core](#openid-core)\].
 
 <a name="claims-and-scopes"></a>
 ## 4. Claims and Scopes
@@ -397,15 +433,15 @@ Relying Parties MUST follow the requirements in section [3.1.3.7] of \[[OpenID.C
 <a name="userinfo-endpoint"></a>
 ### 4.1. UserInfo Endpoint
 
-An OpenID Provider compliant with this profile MUST support releasing claims from the UserInfo endpoint
-and MUST follow the requirements from section 5.3 of \[[OpenID.Core](#openid-core)\].
+An OpenID Provider compliant with this profile MUST support releasing claims from the UserInfo
+endpoint and MUST follow the requirements from section 5.3 of \[[OpenID.Core](#openid-core)\].
 
 Access to the UserInfo endpoint MUST be denied if a valid access token is not presented.
 
 Responses from the UserInfo endpoint MUST be signed.
 
-See section [4.2](#claims-release-requirements) below for claims release requirements via the UserInfo
-endpoint.
+See section [4.2](#claims-release-requirements) below for claims release requirements via the
+UserInfo endpoint.
 
 Relying Parties MUST follow section 5.3.4 of \[[OpenID.Core](#openid-core)\] when validating a
 UserInfo response message.
@@ -413,16 +449,20 @@ UserInfo response message.
 <a name="claims-release-requirements"></a>
 ### 4.2. Claims Release Requirements
 
-OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting it can provide a user claim does not imply that this data is available for all its users. Relying Parties MUST be prepared to receive partial data. 
+OpenID Providers MUST return claims on a best effort basis. However, an OpenID Provider asserting
+it can provide a user claim does not imply that this data is available for all its users. Relying
+Parties MUST be prepared to receive partial data. 
 
 An OpenID Provider MUST NOT release any claim to a Relying Party that it has not been authorized
 to receive. How this authorization is handled and managed is out of scope for this profile. 
 
-An OpenID Provider compliant with this profile MUST NOT release any identity claims in the ID token, or via the UserInfo endpoint, if they have not been explicitly requested via `scope` and/or `claims` request parameters, or by a policy known, and accepted, by the involved parties. 
+An OpenID Provider compliant with this profile MUST NOT release any identity claims in the ID Token,
+or via the UserInfo endpoint, if they have not been explicitly requested via `scope` and/or `claims`
+request parameters, or indirectly by a policy known, and accepted, by the involved parties.
 
-The above requirement does not include the mandatory `sub` claim, and claims that do not reveal identity
-information about the user, for example, transaction identifiers or claims holding information about
-the authentication process.
+The above requirement does not include the mandatory `sub` claim, and claims that do not reveal 
+identity information about the user, for example, transaction identifiers or claims holding
+information about the authentication process.
 
 An OpenID Provider compliant with this profile MUST adhere to the following rules for release
 of identity claims belonging to the subject:
@@ -454,15 +494,21 @@ Relying Parties SHOULD cache OpenID Provider metadata after a provider has been 
 <a name="discovery-requirements-for-an-openid-provider"></a>
 ### 5.2. Discovery Requirements for an OpenID Provider
 
-OpenID Providers compliant with this profile MUST support the OpenID Connect Discovery standard, \[[OpenID.Discovery](#openid-discovery)\] and adhere to the requirements defined in this chapter.
+OpenID Providers compliant with this profile MUST support the OpenID Connect Discovery standard,
+\[[OpenID.Discovery](#openid-discovery)\] and adhere to the requirements defined in this chapter.
 
-Access to the Discovery document MAY be protected with existing web authentication methods if required by the OpenID Provider. Further requirements about access management of the Discovery document is outside of the scope for this specification.
+Access to the Discovery document MAY be protected with existing web authentication methods if
+required by the OpenID Provider. Further requirements about access management of the Discovery
+document is outside of the scope for this specification.
 
 The endpoints described in the Discovery document MUST be secured in accordance with this profile.
 
-All OpenID Providers are uniquely identified by a URL known as the issuer. This URL serves as the prefix of a service discovery endpoint as specified in \[[OpenID.Discovery](#openid-discovery)\]. 
+All OpenID Providers are uniquely identified by a URL known as the issuer. This URL serves as the
+prefix of a service discovery endpoint as specified in \[[OpenID.Discovery](#openid-discovery)\]. 
 
-An OpenID Provider compliant with this profile MUST present a discovery document including the required fields specified in section 3 of \[[OpenID.Discovery](#openid-discovery)\] **and** meet the requirements in the table below: 
+An OpenID Provider compliant with this profile MUST present a discovery document including the
+required fields specified in section 3 of \[[OpenID.Discovery](#openid-discovery)\] **and** meet
+the requirements in the table below: 
 
 | Field | Description | Requirement |
 | :--- | :--- | :--- |
@@ -474,7 +520,7 @@ An OpenID Provider compliant with this profile MUST present a discovery document
 | `acr_values_supported` | JSON array containing a list of the Authentication Context Class References that the OpenID Provider supports. | REQUIRED |
 | `subject_types_supported` | JSON array containing a list of the Subject Identifier types that the OpenID Provider supports. MUST contain `public` and SHOULD contain `pairwise` | REQUIRED |
 | `token_endpoint_auth_`<br />`methods_supported` | JSON array containing a list of client authentication methods supported by at the Token endpoint. MUST contain `private_key_jwt` and MAY contain other authentication methods as specified in section 9 of \[[OpenID.Core](#openid-core)\] or \[[RFC8705](#rfc8705)\] for Mutual TLS. | REQUIRED |
-| `token_endpoint_auth_`<br />`signing_alg_values_supported` | JSON array containing a list of JWS signing algorithms supported by the Token Endpoint for the signature on the JWT used to authenticate the client at the Token Endpoint for the `private_key_jwt`. `RS256` MUST appear, and `none` MUST NOT appear. | REQUIRED |
+| `token_endpoint_auth_`<br />`signing_alg_values_supported` | JSON array containing a list of JWS signing algorithms supported by the Token Endpoint for the signature on the JWT used to authenticate the client at the Token Endpoint for the `private_key_jwt`. `RS256` and `ES256` MUST appear, and `none` MUST NOT appear.  See section [7.1](#cryptographic-algorithms) below.| REQUIRED |
 | `claims_supported` | JSON array containing a list of the claim names of the claims that the OpenID Provider MAY be able to supply values for. | REQUIRED |
 | `claims_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `claims` request parameter. Since this profile requires support the value MUST be set to `true`. | REQUIRED |
 | `request_parameter_supported` | Boolean value specifying whether the OpenID Provider supports use of the `request` parameter for Request Objects. Since this profile requires support the value MUST be set to `true`. | REQUIRED |
@@ -511,7 +557,8 @@ All parties MUST conform to applicable recommendations in section 16, "Security 
 <a name="cryptographic-algorithms"></a>
 ### 7.1. Cryptographic Algorithms
 
-This section lists the requirements for crypto algorithm support for being compliant with this profile.
+This section lists the requirements for cryptographic algorithm support for being compliant with
+this profile.
 
 All entities compliant with this profile MUST follow the guidelines in 
 \[[NIST.800-131A.Rev2](#nist800-131)\] regarding use of algorithms and key lengths<sup>1</sup>.
@@ -594,10 +641,6 @@ dynamically update the sender's JWK Set document entities compliant with this pr
 <a name="openid-registration"></a>
 **\[OpenID.Registration\]**
 > [Sakimura, N., Bradley, J., and M. Jones, “OpenID Connect Dynamic Client Registration 1.0,” November 2014](https://openid.net/specs/openid-connect-registration-1_0.html).
-
-<a name="openid-igov"></a>
-**\[OpenID.iGov\]**
-> [M. Varley, P. Grassi, "International Government Assurance Profile (iGov) for OpenID Connect 1.0", August 03, 2013](https://openid.net/specs/openid-igov-openid-connect-1_0.html).
 
 <a name="rfc7515"></a>
 **\[RFC7515\]**
