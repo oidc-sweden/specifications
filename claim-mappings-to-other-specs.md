@@ -118,4 +118,4 @@ The following table defines a mapping from the attribute names defined in "Freja
 
 <a name="freja-api"></a>
 **\[Freja.API\]**
-> [Freja eID Relying Party Developers' Documentation](https://frejaeid.com/rest-api/Freja%20eID%20Relying%20Party%20Developers'%20Documentation.html).
+> [Freja eID Relying Party Developers' Documentation](https://org.frejaeid.com/en/developers-section/).

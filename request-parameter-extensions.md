@@ -2,7 +2,7 @@
 
 # Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-10-20
+### Version: 1.0 - 2023-12-11
 
 ## Abstract
 
@@ -57,7 +57,7 @@ These keywords are capitalized when used to unambiguously specify requirements o
 <a name="conformance"></a>
 ### 1.2. Conformance
 
-This profile defines requirements for OpenID Connect Relying Parties (clients) and OpenID Connect Providers (identity providers). Furthermore, it defines the interaction between a Relying Party and an OpenID Provider.
+This profile defines requirements for OpenID Connect Relying Parties (clients) and OpenID Providers (identity providers). Furthermore, it defines the interaction between a Relying Party and an OpenID Provider.
 
 When a component compliant with this profile is interacting with other components compliant with this profile, all components MUST fully conform to the features and requirements of this specification. Any interaction with components that are not compliant with this profile is out of scope for this specification.
 
@@ -163,7 +163,7 @@ How possible values for this request parameter is announced by the OpenID Provid
 out of scope for this specification. 
 
 Section 2.3.5 of \[[OIDC.Sweden.Claims](#claims-spec)\] defines the claim 
-`https://id.oidc.se/claim/authnProvider` that MAY be included in an ID token by an OpenID Provider.
+`https://id.oidc.se/claim/authnProvider` that MAY be included in an ID Token by an OpenID Provider.
 The value of this claim can be used by the Relying Party to request re-authentication of an end-user.
 By assigning the value to the `authnProvider` request parameter, the RP requests that the user is
 authenticated using the same authentication mechanism that he or she originally was authenticated with.
@@ -244,10 +244,10 @@ If this parameter is not set by the OP, a default of `[ "text/plain" ]` MUST be 
 **\[RFC5646\]**
 > [Phillips, A. and M. Davis, “Tags for Identifying Languages,” BCP 47, RFC 5646, September 2009](https://www.rfc-editor.org/rfc/rfc5646).
 
-<a name="claims-spec"></a>
-**\[OIDC.Sweden.Claims\]**
-> [Claims and Scopes Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-claims-specification.html).
-
 <a name="oidc-profile"></a>
 **\[OIDC.Sweden.Profile\]**
-> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.html).
+> [The Swedish OpenID Connect Profile - Version 1.0](https://www.oidc.se/specifications/swedish-oidc-profile-1_0.html).
+
+<a name="claims-spec"></a>
+**\[OIDC.Sweden.Claims\]**
+> [Claims and Scopes Specification for the Swedish OpenID Connect Profile - Version 1.0](https://www.oidc.se/specifications/swedish-oidc-claims-specification-1_0.html).
