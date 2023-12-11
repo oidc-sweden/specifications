@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="the-swedish-openid-connect-profile">The Swedish OpenID Connect Profile</h1>
-<h3 id="version-10---draft-04---2023-11-15">Version: 1.0 - draft 04 - 2023-11-15</h3>
+<h3 id="version-10---draft-04---2023-12-08">Version: 1.0 - draft 04 - 2023-12-08</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines a profile for OpenID Connect for use within the Swedish public and private sectors. It profiles the OpenID Connect protocol to get a baseline security and to facilitate interoperability between relying parties and OpenID providers.</p>
 <h2 id="table-of-contents">Table of Contents</h2>
@@ -138,12 +138,12 @@ Relying Party to include in a request, and required or optional for an OP to sup
 </tr>
 <tr>
 <td align="left"><code>claims</code></td>
-<td align="left">Parameter for requesting individual claims and specifying parameters that apply to the requested claims. See <a href="the-claims-parameter">2.1.6</a> below.</td>
+<td align="left">Parameter for requesting individual claims and specifying parameters that apply to the requested claims. See <a href="#the-claims-parameter">2.1.6</a> below.</td>
 <td align="left">OPTIONAL for RP<br />REQUIRED for OP</td>
 </tr>
 <tr>
 <td align="left"><code>acr_values</code></td>
-<td align="left">Requested Authentication Context Class Reference values.</td>
+<td align="left">Requested Authentication Context Class Reference (<code>acr</code>) values.<br /><br />According to section 3.1.2.1 of  [<a href="#openid-core">OpenID.Core</a>] the <code>acr</code> claim is requested as a voluntary claim by this parameter. A Relying Party wishing to request the <code>acr</code> claim as an essential claim should request the <code>acr</code> claim using the <code>claims</code> parameter and set it as &quot;essential&quot;. See section <a href="#the-claims-parameter">2.1.6</a> below and section 5.5.1.1 of [<a href="#openid-core">OpenID.Core</a>].</td>
 <td align="left">Optional for RP<br />Mandatory for OP</td>
 </tr>
 <tr>
@@ -210,7 +210,20 @@ RP gives the OpenID Provider a more exact view of the user being authenticated.<
       <span class="hljs-attr">&quot;value&quot;</span> : <span class="hljs-string">&quot;user@example.com&quot;</span> 
     }
   }
-}</code></pre><p><a name="request-objects-request-and-request-uri-parameters"></a></p>
+}</code></pre><p>A Relying Party that has a strict requirement for deliverance of the <code>acr</code> claim in the ID token
+SHOULD include the <code>acr</code> claim in the <code>claims</code> parameter and specify it as &quot;essential&quot;. 
+Furthermore, if the RP wants to specify which Authentication Context Class Reference values that
+are acceptable, the <code>values</code> parameter SHOULD be included and list these values. See section 5.5.1.1
+of [<a href="#openid-core">OpenID.Core</a>].</p>
+<pre class="hljs"><code>{
+  <span class="hljs-attr">&quot;id_token&quot;</span> : {
+    <span class="hljs-attr">&quot;acr&quot;</span>: { <span class="hljs-attr">&quot;essential&quot;</span>: <span class="hljs-literal">true</span>,
+             <span class="hljs-attr">&quot;values&quot;</span>: [ <span class="hljs-string">&quot;https://acr.example.com/1&quot;</span>, <span class="hljs-string">&quot;https://acr.example.com/2&quot;</span> ] }
+  }
+  ...
+}</code></pre><p>A Relying Party specifying the <code>acr</code> claim in the <code>claims</code> parameter SHOULD NOT include the <code>acr_values</code>
+parameter in the request.</p>
+<p><a name="request-objects-request-and-request-uri-parameters"></a></p>
 <h4 id="217-request-objects-request-and-request_uri-parameters">2.1.7. Request Objects (request and request_uri parameters)</h4>
 <p>An OpenID Provider compliant with this profile MUST support Request Object JWT:s sent by value (using the <code>request</code> parameter) and MAY support Request Object JWT:s sent by reference (using the <code>request_uri</code> parameter).</p>
 <p>An OpenID Provider MUST be prepared to accept and process signed and/or encrypted Request Objects.</p>
@@ -240,7 +253,11 @@ request.</p>
 <p><a name="processing-of-authentication-requests"></a></p>
 <h3 id="22-processing-of-authentication-requests">2.2. Processing of Authentication Requests</h3>
 <p>An OpenID Provider compliant with this profile MUST follow the requirements stated in section 3.1.2.2 of [<a href="#openid-core">OpenID.Core</a>] and the requirements put in <a href="#authentication-request-parameters">section 2.1</a> of this profile.</p>
-<p>Furthermore, the OpenID Provider MUST not proceed with the authentication if the request contains the <code>acr_values</code> request parameter and none of the specified Requested Authentication Context Class Reference values can be used to authenticate the end-user. In these cases the provider SHOULD respond with an <code>unmet_authentication_requirements</code> error as defined in [<a href="#openid-unmet-authnreq">OpenID.Unmet-AuthnReq</a>].</p>
+<p>Furthermore, the OpenID Provider MUST NOT proceed with the authentication if the request contains 
+a <code>claims</code> parameter including essential <code>acr</code> values and none of the specified Requested Authentication
+Context Class Reference values can be used to authenticate the end-user. In these cases the provider
+SHOULD respond with an <code>unmet_authentication_requirements</code> error as defined in
+[<a href="#openid-unmet-authnreq">OpenID.Unmet-AuthnReq</a>]. See section 5.5.1.1 of [<a href="#openid-core">OpenID.Core</a>].</p>
 <p><a name="authentication-responses"></a></p>
 <h3 id="23-authentication-responses">2.3. Authentication Responses</h3>
 <p>Entities compliant with this profile MUST follow the requirements regarding authentication error
@@ -347,7 +364,7 @@ with this profile also accepts its Issuer Identifier URL as a valid value for th
 <tr>
 <td align="left"><code>acr</code></td>
 <td align="left">Authentication Context Class Reference. See <a href="#the-acr-claims">3.2.1.3</a> below.</td>
-<td align="left">REQUIRED if <code>acr_values</code> was received in request, otherwise OPTIONAL</td>
+<td align="left">REQUIRED the <code>acr</code> claim was requested as an essential claim (see <a href="#authentication-request-parameters">2.1</a> above), otherwise OPTIONAL.</td>
 </tr>
 </tbody></table>
 <p>Except for the claims listed above the OpenID Provider also includes claims in the ID token that depends on requested scopes and claims.</p>
@@ -360,9 +377,7 @@ with this profile also accepts its Issuer Identifier URL as a valid value for th
 <p>The lifetime of an ID Token should be kept as short as possible, and MUST NOT exceed 5 minutes. Shorter times are RECOMMENDED when possible.</p>
 <p><a name="the-acr-claim"></a></p>
 <h4 id="3213-the-acr-claim">3.2.1.3. The acr Claim</h4>
-<p>If the authentication request corresponding to the ID Token being issued contained a non empty <code>acr_values</code> parameter, the <code>acr</code> claim MUST be included in the ID Token and its value MUST be one of the values supplied in <code>acr_values</code>.</p>
-<p>If the Relying Party has registered default Authentication Context Class Reference values using the <code>default_acr_values</code> Client Metadata parameter (see section <a href="#client-registration">6, Client Registration</a>) and any of those are acceptable for the OpenID provider the <code>acr</code> claim MUST be included in the ID Token and its value MUST be one of the values supplied in <code>default_acr_values</code>. </p>
-<p>If no <code>acr_values</code> parameter was received in the authentication request the OpenID Provider MAY include the <code>acr</code> claim.</p>
+<p>An OpenID Provider compliant with this profile MUST adhere to section 5.5.1.1 of [<a href="#openid-core">OpenID.Core</a>] regarding issuance of the <code>acr</code> claim.</p>
 <p><a name="id-token-validation"></a></p>
 <h3 id="322-id-token-validation">3.2.2. ID Token Validation</h3>
 <p>Relying Parties MUST follow the requirements in section [3.1.3.7] of [<a href="#openid-core">OpenID.Core</a>].</p>
