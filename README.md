@@ -4,6 +4,7 @@
 
 The oidc-sweden/specifications repository is where the Working Group for the Swedish OpenID Connect Profile develops the specifications for the Swedish OpenID Connect Profile.
 
+## Specifications
 
 * [The Swedish OpenID Connect Profile](swedish-oidc-profile.md) - The main specification for the Swedish OpenID Connect profile.
 
@@ -16,6 +17,16 @@ The oidc-sweden/specifications repository is where the Working Group for the Swe
 * [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](request-parameter-extensions.md) - Authentication request parameter extensions for the Swedish
 OpenID Connect Profile.
 
+## Drafts
+
+### OpenID Connect Federation
+
+* [The Swedish OpenID Connect Federation Profile](swedish-oidc-fed-profile.md) - Defines a profile for
+OpenID Connect federations for use within the Swedish public and private sectors.
+
+  * [The Swedish OpenID Connect Federation - Architecture](swedish-oidc-fed-architecture.md) - Non-normative document describing how the OpenID federation draft standard works and how it can be used to provide the architecture of collaborating Swedish OpenID federations.
+  
+  * [The Swedish OpenID Connect Federation - Challenges and Requirements](swedish-oidc-fed-challenges.md) - A work-document where current challenges and requirements are documented.
 
 
 
