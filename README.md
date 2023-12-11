@@ -24,7 +24,7 @@ OpenID Connect Profile.
 * [The Swedish OpenID Connect Federation Profile](swedish-oidc-fed-profile.md) - Defines a profile for
 OpenID Connect federations for use within the Swedish public and private sectors.
 
-  * [The Swedish OpenID Connect Federation - Architecture](swedish-oidc-fed-architecture.md) - Non-normative document describing how the OpenID federation draft standard works and how it can be used to provide the architecture of collaborating Swedish OpenID federations.
+  * [The Swedish OpenID Connect Federation - Introduction](swedish-oidc-fed-introduction.md) - Non-normative document describing how the OpenID federation draft standard works and how it can be used to provide the base of collaborating Swedish OpenID federations.
   
   * [The Swedish OpenID Connect Federation - Challenges and Requirements](swedish-oidc-fed-challenges.md) - A work-document where current challenges and requirements are documented.
 
