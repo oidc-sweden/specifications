@@ -2,7 +2,7 @@
 
 # Claims and Scopes Specification for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 04 - 2023-11-20
+### Version: 1.0 - 2023-12-11
 
 ## Abstract
 
@@ -500,10 +500,6 @@ Therefore this claim is delivered in the ID token and is marked as essential.
 <a name="iana-reg"></a>
 **\[IANA-Reg\]**
 > [IANA JSON Web Token Claims Registry](https://www.iana.org/assignments/jwt/jwt.xhtml#claims).
-
-<a name="rfc8417"></a>
-**\[RFC8417\]**
-> [P. Hunt, M. Jones, W. Denniss, M. Ansari, "Security Event Token (SET)", July 2018](https://tools.ietf.org/html/rfc8417).
 
 <a name="iso3166"></a>
 **\[ISO3166\]**

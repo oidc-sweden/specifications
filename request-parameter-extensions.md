@@ -2,7 +2,7 @@
 
 # Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile
 
-### Version: 1.0 - draft 02 - 2023-10-20
+### Version: 1.0 - 2023-12-11
 
 ## Abstract
 
@@ -244,10 +244,10 @@ If this parameter is not set by the OP, a default of `[ "text/plain" ]` MUST be 
 **\[RFC5646\]**
 > [Phillips, A. and M. Davis, “Tags for Identifying Languages,” BCP 47, RFC 5646, September 2009](https://www.rfc-editor.org/rfc/rfc5646).
 
-<a name="claims-spec"></a>
-**\[OIDC.Sweden.Claims\]**
-> [Claims and Scopes Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-claims-specification.html).
-
 <a name="oidc-profile"></a>
 **\[OIDC.Sweden.Profile\]**
-> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.html).
+> [The Swedish OpenID Connect Profile - Version 1.0](https://www.oidc.se/specifications/swedish-oidc-profile-1_0.html).
+
+<a name="claims-spec"></a>
+**\[OIDC.Sweden.Claims\]**
+> [Claims and Scopes Specification for the Swedish OpenID Connect Profile - Version 1.0](https://www.oidc.se/specifications/swedish-oidc-claims-specification-1_0.html).

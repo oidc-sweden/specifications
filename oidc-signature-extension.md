@@ -2,7 +2,7 @@
 
 # Signature Extension for OpenID Connect
 
-### Version: 1.0 - draft 02 - 2023-11-15
+### Version: 1.0 - 2023-12-11
 
 ## Abstract
 
@@ -142,8 +142,8 @@ part of the signature process<sup>2</sup>. The `sign_message` field is a JSON ob
 ...
 ```
 
-> **\[1\]:** Depending on where in a request the parameter is placed, the value may be a JWT, see [section 3.1.1](#placement-of-the-
-parameter-in-an-authentication-request) below. 
+> **\[1\]:** Depending on where in a request the parameter is placed, the value may be a JWT, see 
+[section 3.1.1](#placement-of-the-parameter-in-an-authentication-request) below. 
 
 > **\[2\]:** Whether the contents of the sign message is part of the signature input data at the OpenID Provider or not is not regulated by this profile.
 
@@ -457,15 +457,15 @@ If not declared, `[ "text/plain" ]` MUST be assumed.
 
 <a name="oidc-profile"></a>
 **\[OIDC.Sweden.Profile\]**
-> [The Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-profile.html).
+> [The Swedish OpenID Connect Profile - Version 1.0](https://www.oidc.se/specifications/swedish-oidc-profile-1_0.html).
 
 <a name="claims-spec"></a>
 **\[OIDC.Sweden.Claims\]**
-> [Claims and Scopes Specification for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/swedish-oidc-claims-specification.html).
+> [Claims and Scopes Specification for the Swedish OpenID Connect Profile - Version 1.0](https://www.oidc.se/specifications/swedish-oidc-claims-specification-1_0.html).
 
 <a name="request-ext"></a>
 **\[OIDC.Sweden.Params\]**
-> [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](https://www.oidc.se/specifications/request-parameter-extensions.html).
+> [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile - Version 1.0](https://www.oidc.se/specifications/request-parameter-extensions-1_0.html).
 
 
 
