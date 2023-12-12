@@ -193,7 +193,7 @@ The value check is successful if, and only if, the regular expression matches al
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
 
 
 <a name="no-merge-policy-operators"></a>
@@ -226,10 +226,10 @@ As defined by the policy operator `one_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
 
 > Merge of `nm_one_of` fails if the path also contains a merged `one_of` policy operator with a different value.
-> This condition MUST be treated as an error
+> This condition MUST be treated as an error.
 
 <a name="no-merge-subset-of"></a>
 #### 4.2.1. No Merge subset_of
@@ -254,10 +254,10 @@ As defined by the policy operator `subset_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
 
 > Merge of `nm_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value.
-> This condition MUST be treated as an error
+> This condition MUST be treated as an error.
 
 
 <a name="no-merge-superset-of"></a>
@@ -279,10 +279,10 @@ As defined by the policy operator `superset_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
 
 > Merge of `nm_superset_of` fails if the path also contains a merged `superset_of` policy operator with a different value.
-> This condition MUST be treated as an error
+> This condition MUST be treated as an error.
 
 
 <a name="policy-operator-constraints"></a>
