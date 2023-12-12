@@ -17,6 +17,8 @@ The oidc-sweden/specifications repository is where the Working Group for the Swe
 * [Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile](request-parameter-extensions.md) - Authentication request parameter extensions for the Swedish
 OpenID Connect Profile.
 
+[https://www.oidc.se/specifications](https://www.oidc.se/specifications) publishes these specifications.
+
 ## Drafts
 
 ### OpenID Connect Federation
