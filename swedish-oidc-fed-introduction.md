@@ -2,12 +2,12 @@
 
 # The Swedish OpenID Federation - Introduction
 
-### Version: 0.1 - 2023-12-11
+### 2023-12-11
 
 ## Abstract
 
 This document describes in layperson terms how the OpenID federation draft standard
-[[https://openid.net/specs/openid-federation-1_0.html](https://openid.net/specs/openid-federation-1_0.html)]
+[https://openid.net/specs/openid-federation-1_0.html](https://openid.net/specs/openid-federation-1_0.html)
 works and how it can be used to provide the architecture of collaborating Swedish OpenID Federations.
 
 The purpose of this document is to provide an introduction to OpenID federation as a baseline for deeper understanding of challenges

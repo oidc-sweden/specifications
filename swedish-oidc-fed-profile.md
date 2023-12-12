@@ -7,7 +7,7 @@
 ## Abstract
 
 This specification defines a profile for OpenID Connect federations for use within the Swedish public and private sectors.
-It profiles the OpenID Federation standard [[OpenID.Federation\]](#openid-federation)
+It profiles the OpenID Federation standard \[[OpenID.Federation](#openid-federation)\]
 to provide a baseline for security and interoperability for metadata exchange between OAuth and OpenID entities.
 
 ## Table of Contents
@@ -60,10 +60,10 @@ to provide a baseline for security and interoperability for metadata exchange be
 ## 1. Introduction
 
 This specification defines a profile for OpenID Federation for use within the Swedish public and private sector. It profiles the OpenID
-Federation specification [[OpenID.Federation\]](#openid-federation) to:
+Federation specification \[[OpenID.Federation](#openid-federation)\] to:
 
-1) Define how resolvers provide data about federation entities using the resolve endpoint.
-2) Define how Intermediate entities and Trust Anchor entities in the federation provides information about federation entities to the resolver.
+1. Define how resolvers provide data about federation entities using the resolve endpoint.
+2. Define how Intermediate entities and Trust Anchor entities in the federation provides information about federation entities to the resolver.
 
 The goal of this specification is to support development of resolvers that can implement a defined strategy for gathering data about federation
 entities and to provide a standardized API to federation entities to gather information about other entities in the federation.
@@ -135,13 +135,13 @@ An entity may support multiple roles by providing metadata for each supported ro
 (e.g. an OpenID Relying Party may also provide the role of an OAuth Client).
 The OpenID federation standard allows common metadata parameters to be provided under the neutral entity type `federation_entity`.
 
-Storing common metadata parameters for federation services under the common `federation_enttity` introduces some challenges:
+Storing common metadata parameters for federation services under the common `federation_entity` introduces some challenges:
 
 - It makes it more complex to assemble relevant metadata for a federation service from its Entity Configuration
-- Resolvers will not return the common `federation_enttity` metadata content if the resolve request specifies a specific entity type that is not `federation_enttity`.
+- Resolvers will not return the common `federation_entity` metadata content if the resolve request specifies a specific entity type that is not `federation_entity`.
 
 Implementers of this profile MUST provide complete metadata for federation services under the entity type associated with this entity type.
-Interaction with any federation service MUST NOT require obtaining the metadata specified for the `federation_enttity` entity type.
+Interaction with any federation service MUST NOT require obtaining the metadata specified for the `federation_entity` entity type.
 
 <a name="metadata-policy"></a>
 ## 4. Metadata Policy
@@ -161,7 +161,7 @@ This section defines new policy operators, providing additional logic not define
 
 **Identifier**
 
-> intersects
+> `intersects`
 
 **Logic**
 
@@ -186,7 +186,7 @@ the merged policy operator is `"intersects" : ["foo","bar"]` as declared by the 
 
 **Identifier**
 
-> regexp
+> `regexp`
 
 **Logic**
 
@@ -218,7 +218,7 @@ but define different merge rules to allow the TA to stay in control over the enf
 
 **Identifier**
 
-> nm_one_of
+> `nm_one_of`
 
 **Logic**
 
@@ -230,7 +230,7 @@ As defined by the policy operator `one_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1
+> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
 
 > Merge of `nm_one_of` fails if the path also contains a merged `one_of` policy operator with a different value.
 > This condition MUST be treated as an error
@@ -240,7 +240,7 @@ This policy operator must be merged in chain validation as follows:
 
 **Identifier**
 
-> nm_subset_of
+> `nm_subset_of`
 
 **Logic**
 
@@ -269,7 +269,7 @@ This policy operator must be merged in chain validation as follows:
 
 **Identifier**
 
-> nm_superset_of
+> `nm_superset_of`
 
 **Logic**
 
@@ -283,7 +283,7 @@ As defined by the policy operator `superset_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1
+> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
 
 > Merge of `nm_superset_of` fails if the path also contains a merged `superset_of` policy operator with a different value.
 > This condition MUST be treated as an error
@@ -311,9 +311,9 @@ but should instead use the listed equivalent "no merge" policy operator.
 
 | Policy operator | Equivalent no merge policy operator |
 |-----------------|-------------------------------------|
-| one_of          | nm_one_of                           |
-| subset_of       | nm_subset_of                        |
-| superset_of     | nm_superset_of                      |
+| `one_of`        | `nm_one_of`                         |
+| `subset_of`     | `nm_subset_of`                      |
+| `superset_of`   | `nm_superset_of`                    |
 
 
 Use of any policy operators defined in this profile MUST be declared in the `metadata_policy_crit` claim of the Entity Statement.
@@ -352,9 +352,9 @@ The defined request parameters for a discovery request are:
 
 | Parameter     | Requirement | Type               | Description                                                                                                             |
 |---------------|-------------|--------------------|-------------------------------------------------------------------------------------------------------------------------|
-| trust_anchor  | REQUIRED    | Single value       | The Trust Anchor the returned entities must resolve to                                                                  |
-| entity_types  | OPTIONAL    | One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.                           |
-| trust_marks   | OPTIONAL    | One or more values | Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response |
+| `trust_anchor`| REQUIRED    | Single value       | The Trust Anchor the returned entities must resolve to                                                                  |
+| `entity_types`| OPTIONAL    | One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.                           |
+| `trust_marks` | OPTIONAL    | One or more values | Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response |
 
 The following is a non-normative example of an HTTP GET request for a list of Subordinates:
 

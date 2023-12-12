@@ -2,14 +2,14 @@
 
 # The Swedish OpenID Federation - Challenges and Requirements
 
-### Version: 0.1 - 2023-12-11
+### 2023-12-11
 
 ## Abstract
 
 This document addresses challenges when applying the OpenID federation draft standard
-[[https://openid.net/specs/openid-federation-1_0.html](https://openid.net/specs/openid-federation-1_0.html)]
-to a Swedish profile for OpenID federation based on the [[architecture document]](architecture.md).
-A number of requirements for the [[Swedish OpenID Federation Profile]](swedish-profile.md) are specified as the means to meet these challenges.
+[https://openid.net/specs/openid-federation-1_0.html](https://openid.net/specs/openid-federation-1_0.html)
+to a Swedish profile for OpenID federation based on the [introduction document](swedish-oid-fed-introduction.md).
+A number of requirements for the [Swedish OpenID Federation Profile](swedish-oidc-fed-profile.md) are specified as the means to meet these challenges.
 
 ## Reducing complexity for federation services
 
