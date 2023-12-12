@@ -1,6 +1,6 @@
 ![Logo](img/oidc-logo.png)
 
-# The Swedish OpenID Federation - Profile
+# The Swedish OpenID Federation Profile
 
 ### Version: 0.1 - draft 01 - 2023-12-11
 
@@ -102,7 +102,7 @@ The following terms are used in this document to enhance readability:
 ## 2. Federation Structure
 
 <a name="federation-entity-types"></a>
-### 2.1 Federation Entity Types
+### 2.1. Federation Entity Types
 
 The OpenID federation standard does not limit how federation roles can be mixed by a federation entity acting under a single Entity Identifier.
 Mixing the role of an Intermediate Entity with a federation service role may, however, provide challenges and unnecessary complexity.
@@ -117,14 +117,14 @@ This requirement avoids challenges such as:
 
 
 <a name="resolvers"></a>
-### 2.2 Resolvers
+### 2.2. Resolvers
 
 Resolvers are considered essential in this profile to provide easy access to validated federation service data.
 A Resolver in this profile is a Federation Entity that is providing a Resolve Entity Statement endpoint.
 
 Each TA MUST ensure the availability of at least one Resolver that resolves federation service data to the TA federation key.
 
-This Resolver MUST provide a discovery endpoint as defined in \[[section 5](#discovery-endpoint)\].
+This Resolver MUST provide a discovery endpoint as defined in [section 5](#discovery-endpoint).
 
 <a name="metadata"></a>
 ## 3. Metadata
@@ -152,12 +152,12 @@ It is unfortunate if it turns out to be necessary to define the no merge policy 
 It would be much preferable if the standard would allow TA control over the metadata policy in effect.**
 
 <a name="custom-policy-operators"></a>
-### 4.1 Custom policy operators
+### 4.1. Custom policy operators
 
 This section defines new policy operators, providing additional logic not defined in the base standard.
 
 <a name="intersects-value-check"></a>
-#### 4.1.1 Intersects value check
+#### 4.1.1. Intersects value check
 
 **Identifier**
 
@@ -182,7 +182,7 @@ but any subordinate Entity Statements declare a different `intersects` policy op
 the merged policy operator is `"intersects" : ["foo","bar"]` as declared by the most superior Entity Statement.
 
 <a name="regexp-value-check"></a>
-#### 4.1.2 Regexp value check
+#### 4.1.2. Regexp value check
 
 **Identifier**
 
@@ -197,7 +197,7 @@ The value check is successful if, and only if, the regular expression matches al
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1
+> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
 
 
 <a name="no-merge-policy-operators"></a>
@@ -258,14 +258,14 @@ As defined by the policy operator `subset_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1
+> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
 
 > Merge of `nm_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value.
 > This condition MUST be treated as an error
 
 
 <a name="no-merge-superset-of"></a>
-#### 4.2.1 No Merge superset_of
+#### 4.2.1. No Merge superset_of
 
 **Identifier**
 
@@ -290,7 +290,7 @@ This policy operator must be merged in chain validation as follows:
 
 
 <a name="policy-operator-constraints"></a>
-### 4.3 Policy Operator Constraints
+### 4.3. Policy Operator Constraints
 
 Implementations compliant with this profile MUST NOT use policy operators that add any value to the target entity metadata parameter
 that has not been expressed by the target entity.
@@ -343,7 +343,7 @@ and query parameter components encoded in application/x-www-form-urlencoded form
 it MUST NOT contain a fragment component.
 
 <a name="discovery-request"></a>
-### 5.1 Discovery request
+### 5.1. Discovery request
 
 The request MUST be an HTTP request using the GET method to a list endpoint with the following query parameters,
 encoded in application/x-www-form-urlencoded format.
@@ -415,7 +415,7 @@ The cryptographic requirements stated in [[OIDC.Sweden.profile](#oidc-profile)] 
 
 
 <a name="normative-references"></a>
-## 6. Normative References
+## 8. Normative References
 
 <a name="rfc2119"></a>
 **\[RFC2119\]**
