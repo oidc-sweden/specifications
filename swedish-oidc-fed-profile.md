@@ -154,7 +154,7 @@ It would be much preferable if the standard would allow TA control over the meta
 ### 4.1. Prioritized Merge Logic
 
 This profile defines the prioritized merge logic that can be used as the defined merge logic when merging policy operators.
-This merge logic prioritize the most superior policy operator in a validated chain.
+This merge logic prioritizes the most superior policy operator in a validated chain.
 
 This merge logic is defined as: The merged policy operator takes the value of the most superior entity policy operator.
 
@@ -194,10 +194,10 @@ The value check is successful if, and only if, the regular expression matches al
 ### 4.3. Alternative Prioritized Policy Operators
 
 This section demonstrates a possible solution that would allow interconnection of federations,
-while still allowing each TA to stay in control of the enforced metadata policy;
+while still allowing each TA to stay in control of the enforced metadata policy by;
 
 - allowing the TA to be in control over which federation services that are approved under the TA, and
-- without breaking any MUST requirements of the base standard, and;
+- not breaking any MUST requirements of the base standard, and;
 - preventing parties not conforming to this profile from processing metadata policies with a different result.
 
 The policy operators defined in this section duplicate the logic of existing policy operators defined in the OpenID federation base standard,
