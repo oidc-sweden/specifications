@@ -46,13 +46,9 @@ to provide a baseline for security and interoperability for metadata exchange be
 
 6. [**Usage with OpenID Connect**](#usage-with-openid-connect)
 
-   5.1. [OIDC request parameters](#oidc-request-parameters)
+   6.1. [OIDC request parameters](#oidc-request-parameters)
 
-7. [**Security Requirements**](#security-requirements)
-
-   7.1. [Cryptographic Algorithms](#cryptographic-algorithms)
-
-8. [**Normative References**](#normative-references)
+7. [**Normative References**](#normative-references)
 
 ---
 
@@ -87,7 +83,7 @@ to the features and requirements of this specification. Any interaction with ent
 scope for this specification.
 
 <a name="definitions"></a>
-### 1.3 Definitions
+### 1.3. Definitions
 
 The following terms are used in this document to enhance readability:
 
@@ -197,11 +193,11 @@ The value check is successful if, and only if, the regular expression matches al
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
 
 
 <a name="no-merge-policy-operators"></a>
-### 4.2 No Merge Policy Operators
+### 4.2. No Merge Policy Operators
 
 This section demonstrates a possible solution that would allow interconnection of federations,
 while still allowing each TA to stay in control of the enforced metadata policy;
@@ -214,7 +210,7 @@ The policy operators defined in this section duplicate the logic of existing pol
 but define different merge rules to allow the TA to stay in control over the enforced metadata policy.
 
 <a name="no-merge-one-of"></a>
-#### 4.2.1 No Merge one_of
+#### 4.2.1. No Merge one_of
 
 **Identifier**
 
@@ -230,13 +226,13 @@ As defined by the policy operator `one_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
 
 > Merge of `nm_one_of` fails if the path also contains a merged `one_of` policy operator with a different value.
 > This condition MUST be treated as an error
 
 <a name="no-merge-subset-of"></a>
-#### 4.2.1 No Merge subset_of
+#### 4.2.1. No Merge subset_of
 
 **Identifier**
 
@@ -258,7 +254,7 @@ As defined by the policy operator `subset_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
 
 > Merge of `nm_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value.
 > This condition MUST be treated as an error
@@ -283,7 +279,7 @@ As defined by the policy operator `superset_of` in OpenID federation:
 
 This policy operator must be merged in chain validation as follows:
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in 4.1.1.1.
+> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1.](#intersects-value-check).
 
 > Merge of `nm_superset_of` fails if the path also contains a merged `superset_of` policy operator with a different value.
 > This condition MUST be treated as an error
@@ -343,7 +339,7 @@ and query parameter components encoded in application/x-www-form-urlencoded form
 it MUST NOT contain a fragment component.
 
 <a name="discovery-request"></a>
-### 5.1. Discovery request
+### 5.2. Discovery request
 
 The request MUST be an HTTP request using the GET method to a list endpoint with the following query parameters,
 encoded in application/x-www-form-urlencoded format.
@@ -364,12 +360,12 @@ Host: openid.example.com?trust_anchor=https%3A%2F%2Fopenid.example.com%2FTA&enti
 ```
 
 <a name="discovery-response"></a>
-### 5.2 Discovery response
+### 5.3. Discovery response
 
 A successful response MUST return HTTP status code 200 with the content type `application/json`,
 containing a JSON array with the resolved Entity Identifiers matching the request.
 
-If the response is negative, the response is as defined in \[[OpenID federation section 8.8](https://openid.net/specs/openid-federation-1_0.html#name-generic-error-response)\].
+If the response is negative, the response is as defined in \[[OpenID federation](#openid-federation)\] section 8.8.
 
 The following is a non-normative example of a response containing the resolved Entities:
 
@@ -388,9 +384,9 @@ Content-Type: application/json
 ## 6. Usage with OpenID Connect
 
 <a name="oidc-request-parameters"></a>
-### 6.1 OIDC Request Parameters
+### 6.1. OIDC Request Parameters
 
-The \[[OpenID federation standard section 11](https://openid.net/specs/openid-federation-1_0.html#name-openid-connect-client-regis)\] specifies the OPTIONAL inclusion of the request parameter `trust_chain` in OIDC requests.
+\[[OpenID federation](#openid-federation)\] section 11 specifies the OPTIONAL inclusion of the request parameter `trust_chain` in OIDC requests.
 The challenge with this request parameter is that it imposes requirements on the receiving OP to check the consistency of its content.
 
 This profile includes requirements for Resolvers as the source of validated federation service data, making this `trust_chain` parameter
@@ -402,20 +398,9 @@ Implementations of this profile MUST NOT include the `trust_chain` parameter in 
 An OP receiving a request that includes `trust_chain` parameter MAY choose to either respond with an error,
 or to process the request according to the processing requirements specified in OpenID federation.
 
-<a name="security-requirements"></a>
-## 7. Security Requirements
-
-All transactions MUST be protected in transit by TLS as described in \[[NIST.800-52.Rev2](#nist800-52)\].
-
-<a name="cryptographic-algorithms"></a>
-### 5.1. Cryptographic Algorithms
-
-The cryptographic requirements stated in [[OIDC.Sweden.profile](#oidc-profile)] applies to this profile.
-
-
 
 <a name="normative-references"></a>
-## 8. Normative References
+## 7. Normative References
 
 <a name="rfc2119"></a>
 **\[RFC2119\]**
