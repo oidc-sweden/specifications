@@ -124,7 +124,7 @@ A Resolver in this profile is a Federation Entity that is providing a Resolve En
 
 Each TA MUST ensure the availability of at least one Resolver that resolves federation service data to the TA federation key.
 
-This Resolver MUST provide a discovery endpoint as defined in section 5.
+This Resolver MUST provide a discovery endpoint as defined in \[[section 5](#federation-entity-metadata)\].
 
 <a name="metadata"></a>
 ## 3. Metadata
@@ -369,7 +369,7 @@ Host: openid.example.com?trust_anchor=https%3A%2F%2Fopenid.example.com%2FTA&enti
 A successful response MUST return HTTP status code 200 with the content type `application/json`,
 containing a JSON array with the resolved Entity Identifiers matching the request.
 
-If the response is negative, the response is as defined in Section 8.8 of OpenID federation.
+If the response is negative, the response is as defined in \[[OpenID federation section 8.8](https://openid.net/specs/openid-federation-1_0.html#name-generic-error-response)\].
 
 The following is a non-normative example of a response containing the resolved Entities:
 
@@ -390,7 +390,7 @@ Content-Type: application/json
 <a name="oidc-request-parameters"></a>
 ### 6.1 OIDC Request Parameters
 
-The OpenID federation standard (section 11) specifies the OPTIONAL inclusion of the request parameter `trust_chain` in OIDC requests.
+The \[[OpenID federation standard section 11](https://openid.net/specs/openid-federation-1_0.html#name-openid-connect-client-regis)\] specifies the OPTIONAL inclusion of the request parameter `trust_chain` in OIDC requests.
 The challenge with this request parameter is that it imposes requirements on the receiving OP to check the consistency of its content.
 
 This profile includes requirements for Resolvers as the source of validated federation service data, making this `trust_chain` parameter
