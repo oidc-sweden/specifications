@@ -34,7 +34,7 @@ to provide a baseline for security and interoperability for metadata exchange be
 
    4.2. [Custom Policy Operators](#custom-policy-operators)
 
-   4.3. [Prioritized Policy Operators](#prioritized-policy-operators)
+   4.3. [Alternative Prioritized Policy Operators](#alternative-prioritized-policy-operators)
 
    4.4. [Policy Operator Constraints](#policy-operator-constraints)
 
@@ -89,11 +89,11 @@ scope for this specification.
 
 The following terms are used in this document to enhance readability:
 
-| Term                    | Meaning                                                                                                                                                                                                                                                                                                               |
-|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Federation service      | A defined OpenID Connect or OAuth service such as OpenID providers (OP). OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS)                                                                                                                             |
-| Federation node         | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver                                                                                                                                                                           |
-| Federation service data | The data of a federation service that includes metadata and Trust Marks, but also information such as policy. Federation service data is provided as an Entity Statement issued by a Federation Node for a subordinate entity or as Entity Configuration provided as a self signed statement by any federation entity |
+| Term | Meaning                                                                                                                                                                                                                                                                                                               
+| :--- | :--- |
+| Federation service | A defined OpenID Connect- or OAuth service such as OpenID providers (OP), OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS).                                                                                                                           |
+| Federation node | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver. |
+| Federation service data | The data of a federation service that includes metadata and Trust Marks, but also information such as policy. Federation service data is provided as an Entity Statement issued by a Federation Node for a subordinate entity or as Entity Configuration provided as a self signed statement by any federation entity. |
 
 
 <a name="federation-structure"></a>
@@ -135,7 +135,8 @@ The OpenID federation standard allows common metadata parameters to be provided 
 
 Storing common metadata parameters for federation services under the common `federation_entity` introduces some challenges:
 
-- It makes it more complex to assemble relevant metadata for a federation service from its Entity Configuration
+- It makes it more complex to assemble relevant metadata for a federation service from its Entity Configuration.
+
 - Resolvers will not return the common `federation_entity` metadata content if the resolve request specifies a specific entity type that is not `federation_entity`.
 
 Implementers of this profile MUST provide complete metadata for federation services under the entity type associated with this entity type.
@@ -152,14 +153,12 @@ It would be much preferable if the standard would allow TA control over the meta
 <a name="prioritized-merge-logic"></a>
 ### 4.1. Prioritized Merge Logic
 
-This profile defines the prioritized merge logic tha can be used as the defined merge logic when merging policy operators.
-This merge logic proritize the most superior policy operator in a validated chain.
+This profile defines the prioritized merge logic that can be used as the defined merge logic when merging policy operators.
+This merge logic prioritize the most superior policy operator in a validated chain.
 
-This merge logic is defined as:
+This merge logic is defined as: The merged policy operator takes the value of the most superior entity policy operator.
 
-> The merged policy operator takes the value of the most superior entity policy operator
-
-Example: When a superior Entity Statement declares the policy operator `"policy_operator" : ["foo","bar"]`,
+**Example:** When a superior Entity Statement declares the policy operator `"policy_operator" : ["foo","bar"]`,
 but any subordinate Entity Statements declare a different policy operator value,
 the merged policy operator is `"policy_operator" : ["foo","bar"]` as declared by the most superior Entity Statement.
 
@@ -171,39 +170,27 @@ This section defines new policy operators, providing additional logic not define
 <a name="intersects-value-check"></a>
 #### 4.2.1. Intersects Value Check
 
-**Identifier**
+**Identifier:** `intersects`
 
-> `intersects`
-
-**Logic**
-
-The `intersects` policy operator is a value check that holds an array of values.
+**Logic:** The `intersects` policy operator is a value check that holds an array of values.
 The value check is successful when the metadata parameter contains at least one of the values contained in the operator.
 This value check does not alter any content in the metadata parameter.
 The metadata parameter MAY contain any value not contained in the policy operator as long as at least one value matches with the policy
 operator values.
 
-**Merge rules**
-
-Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
+**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
 
 <a name="regexp-value-check"></a>
 #### 4.2.2. Regexp Value Check
 
-**Identifier**
+**Identifier:** `regexp`
 
-> `regexp`
-
-**Logic**
-
-The `regexp` policy operator holds a regular expression.
+**Logic:** The `regexp` policy operator holds a regular expression.
 The value check is successful if, and only if, the regular expression matches all values in the metadata parameter.
 
-**Merge rules**
+**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
 
-Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
-
-<a name="alternative-prioritized-merge-policy-operators"></a>
+<a name="alternative-prioritized-policy-operators"></a>
 ### 4.3. Alternative Prioritized Policy Operators
 
 This section demonstrates a possible solution that would allow interconnection of federations,
@@ -217,35 +204,25 @@ The policy operators defined in this section duplicate the logic of existing pol
 but use the prioritized merge rule to allow the TA to stay in control over the enforced metadata policy.
 
 <a name="prioritized-one-of"></a>
-#### 4.3.1. Prioritized one_of
+#### 4.3.1. Prioritized one\_of
 
-**Identifier**
+**Identifier:** `pr_one_of`
 
-> `pr_one_of`
+**Logic:** As defined by the policy operator `one_of` in \[[OpenID.Federation](#openid-federation)\]:
 
-**Logic**
+> "If the metadata parameter is present, its value MUST be one of those listed in the operator value."
 
-As defined by the policy operator `one_of` in OpenID federation:
+**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
 
->"If the metadata parameter is present, its value MUST be one of those listed in the operator value."
-
-**Merge rules**
-
-Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
-
-> Merge of `pr_one_of` fails if the path also contains a merged `one_of` policy operator with a different value.
-> This condition MUST be treated as an error
+Merge of `pr_one_of` fails if the path also contains a merged `one_of` policy operator with a
+different value. This condition MUST be treated as an error.
 
 <a name="prioritized-subset-of"></a>
-#### 4.3.2. Prioritized subset_of
+#### 4.3.2. Prioritized subset\_of
 
-**Identifier**
+**Identifier:** `pr_subset_of`
 
-> `pr_subset_of`
-
-**Logic**
-
-As defined by the policy operator `subset_of` in OpenID federation:
+**Logic:** As defined by the policy operator `subset_of` in \[[OpenID.Federation](#openid-federation)\]:
 
 >"If the metadata parameter is present,
 >this operator computes the intersection between the values of the operator and the metadata parameter.
@@ -255,36 +232,26 @@ As defined by the policy operator `subset_of` in OpenID federation:
 >for a voluntary metadata parameter, it MUST be removed from the metadata.
 >Note that this behavior makes subset_of a potential value modifier in addition to it being a value check."
 
-**Merge rules**
+**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
 
-Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
-
-> Merge of `pr_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value.
-> This condition MUST be treated as an error
+Merge of `pr_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value. This condition MUST be treated as an error.
 
 
 <a name="prioritized-superset-of"></a>
-#### 4.3.3. Prioritized superset_of
+#### 4.3.3. Prioritized superset\_of
 
-**Identifier**
+**Identifier:** `pr_superset_of`
 
-> `pr_superset_of`
-
-**Logic**
-
-As defined by the policy operator `superset_of` in OpenID federation:
+**Logic:** As defined by the policy operator `superset_of` in \[[OpenID.Federation](#openid-federation)\]:
 
 >"If the metadata parameter is present,
 > its values MUST contain those specified in the operator.
 > By mathematically defining supersets, equality is included."
 
-**Merge rules**
+**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
 
-Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
-
-> Merge of `pr_superset_of` fails if the path also contains a merged `superset_of` policy operator with a different value.
-> This condition MUST be treated as an error
-
+Merge of `pr_superset_of` fails if the path also contains a merged `superset_of` policy operator with
+a different value. This condition MUST be treated as an error.
 
 <a name="policy-operator-constraints"></a>
 ### 4.4. Policy Operator Constraints
@@ -302,15 +269,14 @@ This means that the following policy operators defined in OpenID federation MUST
 **NOTE:** As an alternative to using the policy operators above, an Intermediate Entity can instead add explicit values in the
 metadata claim in its Entity Statement issued for the target entity.
 
-To avoid merge conflicts,
-Implementations compliant with this profile SHOULD not use policy operators in the following table,
-but should instead use the listed equivalent prioritized policy operator.
+To avoid merge conflicts, implementations compliant with this profile SHOULD not use policy operators
+in the following table, but should instead use the listed equivalent prioritized policy operator.
 
 | Policy operator | Equivalent prioritized policy operator |
-|-----------------|-------------------------------------|
-| `one_of`        | `pr_one_of`                         |
-| `subset_of`     | `pr_subset_of`                      |
-| `superset_of`   | `pr_superset_of`                    |
+| :--- | :--- |
+| `one_of` | `pr_one_of` |
+| `subset_of` | `pr_subset_of` |
+| `superset_of` | `pr_superset_of` |
 
 
 Use of any policy operators defined in this profile SHOULD be declared in the `metadata_policy_crit` claim of the Entity Statement.
@@ -336,24 +302,24 @@ This profile defines the `discovery_endpoint` parameter to specify the location 
 A Resolver MUST publish its discovery endpoint location in its `federation_entity` metadata Entity Type using the `discovery_endpoint` parameter.
 
 The discovery endpoint URL MUST use the https scheme and MAY contain port, path,
-and query parameter components encoded in application/x-www-form-urlencoded format;
-it MUST NOT contain a fragment component.
+and query parameter components encoded in application/x-www-form-urlencoded format.
+It MUST NOT contain a fragment component.
 
 <a name="discovery-request"></a>
 ### 5.2. Discovery Request
 
-The request MUST be an HTTP request using the GET method to a list endpoint with the following query parameters,
-encoded in application/x-www-form-urlencoded format.
+The request MUST be an HTTP request using the GET method to a list endpoint with the query parameters,
+encoded in application/x-www-form-urlencoded format, listed below.
 
 The defined request parameters for a discovery request are:
 
-| Parameter     | Requirement | Type               | Description                                                                                                             |
-|---------------|-------------|--------------------|-------------------------------------------------------------------------------------------------------------------------|
-| `trust_anchor`| REQUIRED    | Single value       | The Trust Anchor the returned entities must resolve to                                                                  |
-| `entity_types`| OPTIONAL    | One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.                           |
-| `trust_marks` | OPTIONAL    | One or more values | Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response |
+| Parameter | Requirement | Type | Description |
+| :--- | :--- | :--- | :--- |
+| `trust_anchor`| REQUIRED | Single value | The Trust Anchor the returned entities must resolve to. |                                    
+| `entity_types` | OPTIONAL | One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types. |
+| `trust_marks` | OPTIONAL | One or more values | Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response. |
 
-The following is a non-normative example of an HTTP GET request for a list of Subordinates:
+The following is a non-normative example of an HTTP GET request for a list of subordinates:
 
 ```
 GET /discovery HTTP/1.1
@@ -366,7 +332,8 @@ Host: openid.example.com?trust_anchor=https%3A%2F%2Fopenid.example.com%2FTA&enti
 A successful response MUST return HTTP status code 200 with the content type `application/json`,
 containing a JSON array with the resolved Entity Identifiers matching the request.
 
-If the response is negative, the response is as defined in \[[OpenID federation](#openid-federation)\] section 8.8.
+If the response is negative, the response is as defined in section 8.8 of 
+\[[OpenID federation](#openid-federation)\].
 
 The following is a non-normative example of a response containing the resolved Entities:
 
@@ -387,18 +354,18 @@ Content-Type: application/json
 <a name="oidc-request-parameters"></a>
 ### 6.1. OIDC Request Parameters
 
-\[[OpenID federation](#openid-federation)\] section 11 specifies the OPTIONAL inclusion of the request parameter `trust_chain` in OIDC requests.
-The challenge with this request parameter is that it imposes requirements on the receiving OP to check the consistency of its content.
+Section 11 of \[[OpenID federation](#openid-federation)\] specifies the OPTIONAL inclusion of the
+request parameter `trust_chain` in OIDC requests. The challenge with this request parameter is that
+it imposes requirements on the receiving OP to check the consistency of its content.
 
-This profile includes requirements for Resolvers as the source of validated federation service data, making this `trust_chain` parameter
-obsolete.
-The OP is only expected to use this Resolver to obtain trusted federation service data, including trusted and processed metadata,
-as well as trusted and validated Trust Marks.
+This profile includes requirements for Resolvers as the source of validated federation service data,
+making this `trust_chain` parameter obsolete. The OP is only expected to use this Resolver to obtain
+trusted federation service data, including trusted and processed metadata, as well as trusted and
+validated Trust Marks.
 
-Implementations of this profile MUST NOT include the `trust_chain` parameter in OIDC requests.
-An OP receiving a request that includes `trust_chain` parameter MAY choose to either respond with an error,
+Implementations of this profile MUST NOT include the `trust_chain` parameter in OIDC requests. An OP
+receiving a request that includes `trust_chain` parameter MAY choose to either respond with an error,
 or to process the request according to the processing requirements specified in OpenID federation.
-
 
 <a name="normative-references"></a>
 ## 7. Normative References
@@ -411,6 +378,3 @@ or to process the request according to the processing requirements specified in 
 **\[OpenID.Federation\]**
 > [R. Hedberg, M.B. Jones, A.Å. Solberg, J. Bradley, G. De Marco, V. Dzhuvinov "OpenID Federation 1.0 - draft 30"](https://openid.net/specs/openid-federation-1_0.html).
 
-<a name="nist800-52"></a>
-**\[NIST.800-52.Rev2\]**
-> [NIST Special Publication 800-52, Revision 2, "Guidelines for the Selection, Configuration, and Use of Transport Layer Security (TLS) Implementations"](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf).
