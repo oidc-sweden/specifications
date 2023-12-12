@@ -30,23 +30,23 @@ to provide a baseline for security and interoperability for metadata exchange be
 
 4. [**Metadata Policy**](#metadata-policy)
 
-   4.1. [Custom policy operators](#custom-policy-operators)
+   4.1. [Custom Policy Operators](#custom-policy-operators)
 
    4.2. [No Merge Policy Operators](#no-merge-policy-operators)
 
    4.3. [Policy Operator Constraints](#policy-operator-constraints)
 
-5. [**Discovery endpoint**](#discovery-endpoint)
+5. [**Discovery Endpoint**](#discovery-endpoint)
 
-   5.1. [Federation Entity metadata](#federation-entity-metadata)
+   5.1. [Federation Entity Metadata](#federation-entity-metadata)
 
-   5.2. [Discovery request](#discovery-request)
+   5.2. [Discovery Request](#discovery-request)
 
-   5.3. [Discovery response](#discovery-response)
+   5.3. [Discovery Response](#discovery-response)
 
 6. [**Usage with OpenID Connect**](#usage-with-openid-connect)
 
-   6.1. [OIDC request parameters](#oidc-request-parameters)
+   6.1. [OIDC Request Parameters](#oidc-request-parameters)
 
 7. [**Normative References**](#normative-references)
 
@@ -148,12 +148,12 @@ It is unfortunate if it turns out to be necessary to define the no merge policy 
 It would be much preferable if the standard would allow TA control over the metadata policy in effect.**
 
 <a name="custom-policy-operators"></a>
-### 4.1. Custom policy operators
+### 4.1. Custom Policy Operators
 
 This section defines new policy operators, providing additional logic not defined in the base standard.
 
 <a name="intersects-value-check"></a>
-#### 4.1.1. Intersects value check
+#### 4.1.1. Intersects Value Check
 
 **Identifier**
 
@@ -178,7 +178,7 @@ but any subordinate Entity Statements declare a different `intersects` policy op
 the merged policy operator is `"intersects" : ["foo","bar"]` as declared by the most superior Entity Statement.
 
 <a name="regexp-value-check"></a>
-#### 4.1.2. Regexp value check
+#### 4.1.2. Regexp Value Check
 
 **Identifier**
 
@@ -315,7 +315,7 @@ but should instead use the listed equivalent "no merge" policy operator.
 Use of any policy operators defined in this profile MUST be declared in the `metadata_policy_crit` claim of the Entity Statement.
 
 <a name="discovery-endpoint"></a>
-## 5. Discovery endpoint
+## 5. Discovery Endpoint
 
 The discovery endpoint is exposed by Federation Entities acting as a Resolver.
 This endpoint lists all entities that can be resolved through this resolver that matches the discovery request.
@@ -339,7 +339,7 @@ and query parameter components encoded in application/x-www-form-urlencoded form
 it MUST NOT contain a fragment component.
 
 <a name="discovery-request"></a>
-### 5.2. Discovery request
+### 5.2. Discovery Request
 
 The request MUST be an HTTP request using the GET method to a list endpoint with the following query parameters,
 encoded in application/x-www-form-urlencoded format.
@@ -360,7 +360,7 @@ Host: openid.example.com?trust_anchor=https%3A%2F%2Fopenid.example.com%2FTA&enti
 ```
 
 <a name="discovery-response"></a>
-### 5.3. Discovery response
+### 5.3. Discovery Response
 
 A successful response MUST return HTTP status code 200 with the content type `application/json`,
 containing a JSON array with the resolved Entity Identifiers matching the request.
