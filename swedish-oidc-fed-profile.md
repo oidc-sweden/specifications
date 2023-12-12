@@ -124,7 +124,7 @@ A Resolver in this profile is a Federation Entity that is providing a Resolve En
 
 Each TA MUST ensure the availability of at least one Resolver that resolves federation service data to the TA federation key.
 
-This Resolver MUST provide a discovery endpoint as defined in \[[section 5](#federation-entity-metadata)\].
+This Resolver MUST provide a discovery endpoint as defined in \[[section 5](#discovery-endpoint)\].
 
 <a name="metadata"></a>
 ## 3. Metadata
