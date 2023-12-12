@@ -30,13 +30,15 @@ to provide a baseline for security and interoperability for metadata exchange be
 
 4. [**Metadata Policy**](#metadata-policy)
 
-   4.1. [Custom Policy Operators](#custom-policy-operators)
+   4.1. [Prioritized Merge Logic](#prioritized-merge-logic)
 
-   4.2. [No Merge Policy Operators](#no-merge-policy-operators)
+   4.2. [Custom Policy Operators](#custom-policy-operators)
 
-   4.3. [Policy Operator Constraints](#policy-operator-constraints)
+   4.3. [Prioritized Policy Operators](#prioritized-policy-operators)
 
-5. [**Discovery Endpoint**](#discovery-endpoint)
+   4.4. [Policy Operator Constraints](#policy-operator-constraints)
+
+5. [**Discovery endpoint**](#discovery-endpoint)
 
    5.1. [Federation Entity Metadata](#federation-entity-metadata)
 
@@ -144,16 +146,30 @@ Interaction with any federation service MUST NOT require obtaining the metadata 
 
 **IMPORTANT NOTE: This section is based on the assumption that the current policy merge logic of the base OpenID federation standard remains
 as currently specified.
-It is unfortunate if it turns out to be necessary to define the no merge policy operators in this section.
+It is unfortunate if it turns out to be necessary to define the alternative prioritized policy operators in this section.
 It would be much preferable if the standard would allow TA control over the metadata policy in effect.**
 
+<a name="prioritized-merge-logic"></a>
+### 4.1. Prioritized Merge Logic
+
+This profile defines the prioritized merge logic tha can be used as the defined merge logic when merging policy operators.
+This merge logic proritize the most superior policy operator in a validated chain.
+
+This merge logic is defined as:
+
+> The merged policy operator takes the value of the most superior entity policy operator
+
+Example: When a superior Entity Statement declares the policy operator `"policy_operator" : ["foo","bar"]`,
+but any subordinate Entity Statements declare a different policy operator value,
+the merged policy operator is `"policy_operator" : ["foo","bar"]` as declared by the most superior Entity Statement.
+
 <a name="custom-policy-operators"></a>
-### 4.1. Custom Policy Operators
+### 4.2. Custom Policy Operators
 
 This section defines new policy operators, providing additional logic not defined in the base standard.
 
 <a name="intersects-value-check"></a>
-#### 4.1.1. Intersects Value Check
+#### 4.2.1. Intersects Value Check
 
 **Identifier**
 
@@ -169,16 +185,10 @@ operator values.
 
 **Merge rules**
 
-This policy operator must be merged in chain validation as follows:
-
-> The merged policy operator takes the value of the most superior entity policy operator
-
-Example: When a superior Entity Statement declares the policy operator `"intersects" : ["foo","bar"]`,
-but any subordinate Entity Statements declare a different `intersects` policy operator,
-the merged policy operator is `"intersects" : ["foo","bar"]` as declared by the most superior Entity Statement.
+Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
 
 <a name="regexp-value-check"></a>
-#### 4.1.2. Regexp Value Check
+#### 4.2.2. Regexp Value Check
 
 **Identifier**
 
@@ -191,13 +201,10 @@ The value check is successful if, and only if, the regular expression matches al
 
 **Merge rules**
 
-This policy operator must be merged in chain validation as follows:
+Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
-
-
-<a name="no-merge-policy-operators"></a>
-### 4.2. No Merge Policy Operators
+<a name="alternative-prioritized-merge-policy-operators"></a>
+### 4.3. Alternative Prioritized Policy Operators
 
 This section demonstrates a possible solution that would allow interconnection of federations,
 while still allowing each TA to stay in control of the enforced metadata policy;
@@ -207,14 +214,14 @@ while still allowing each TA to stay in control of the enforced metadata policy;
 - preventing parties not conforming to this profile from processing metadata policies with a different result.
 
 The policy operators defined in this section duplicate the logic of existing policy operators defined in the OpenID federation base standard,
-but define different merge rules to allow the TA to stay in control over the enforced metadata policy.
+but use the prioritized merge rule to allow the TA to stay in control over the enforced metadata policy.
 
-<a name="no-merge-one-of"></a>
-#### 4.2.1. No Merge one_of
+<a name="prioritized-one-of"></a>
+#### 4.3.1. Prioritized one_of
 
 **Identifier**
 
-> `nm_one_of`
+> `pr_one_of`
 
 **Logic**
 
@@ -224,19 +231,17 @@ As defined by the policy operator `one_of` in OpenID federation:
 
 **Merge rules**
 
-This policy operator must be merged in chain validation as follows:
+Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
+> Merge of `pr_one_of` fails if the path also contains a merged `one_of` policy operator with a different value.
+> This condition MUST be treated as an error
 
-> Merge of `nm_one_of` fails if the path also contains a merged `one_of` policy operator with a different value.
-> This condition MUST be treated as an error.
-
-<a name="no-merge-subset-of"></a>
-#### 4.2.1. No Merge subset_of
+<a name="prioritized-subset-of"></a>
+#### 4.3.2. Prioritized subset_of
 
 **Identifier**
 
-> `nm_subset_of`
+> `pr_subset_of`
 
 **Logic**
 
@@ -252,20 +257,18 @@ As defined by the policy operator `subset_of` in OpenID federation:
 
 **Merge rules**
 
-This policy operator must be merged in chain validation as follows:
+Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
-
-> Merge of `nm_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value.
-> This condition MUST be treated as an error.
+> Merge of `pr_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value.
+> This condition MUST be treated as an error
 
 
-<a name="no-merge-superset-of"></a>
-#### 4.2.1. No Merge superset_of
+<a name="prioritized-superset-of"></a>
+#### 4.3.3. Prioritized superset_of
 
 **Identifier**
 
-> `nm_superset_of`
+> `pr_superset_of`
 
 **Logic**
 
@@ -277,16 +280,14 @@ As defined by the policy operator `superset_of` in OpenID federation:
 
 **Merge rules**
 
-This policy operator must be merged in chain validation as follows:
+Prioritized merge logic as defined in [4.1](#prioritized-merge-logic)
 
-> The merged policy operator takes the value of the most superior entity policy operator as described in [4.1.1](#intersects-value-check).
-
-> Merge of `nm_superset_of` fails if the path also contains a merged `superset_of` policy operator with a different value.
-> This condition MUST be treated as an error.
+> Merge of `pr_superset_of` fails if the path also contains a merged `superset_of` policy operator with a different value.
+> This condition MUST be treated as an error
 
 
 <a name="policy-operator-constraints"></a>
-### 4.3. Policy Operator Constraints
+### 4.4. Policy Operator Constraints
 
 Implementations compliant with this profile MUST NOT use policy operators that add any value to the target entity metadata parameter
 that has not been expressed by the target entity.
@@ -303,16 +304,16 @@ metadata claim in its Entity Statement issued for the target entity.
 
 To avoid merge conflicts,
 Implementations compliant with this profile SHOULD not use policy operators in the following table,
-but should instead use the listed equivalent "no merge" policy operator.
+but should instead use the listed equivalent prioritized policy operator.
 
-| Policy operator | Equivalent no merge policy operator |
+| Policy operator | Equivalent prioritized policy operator |
 |-----------------|-------------------------------------|
-| `one_of`        | `nm_one_of`                         |
-| `subset_of`     | `nm_subset_of`                      |
-| `superset_of`   | `nm_superset_of`                    |
+| `one_of`        | `pr_one_of`                         |
+| `subset_of`     | `pr_subset_of`                      |
+| `superset_of`   | `pr_superset_of`                    |
 
 
-Use of any policy operators defined in this profile MUST be declared in the `metadata_policy_crit` claim of the Entity Statement.
+Use of any policy operators defined in this profile SHOULD be declared in the `metadata_policy_crit` claim of the Entity Statement.
 
 <a name="discovery-endpoint"></a>
 ## 5. Discovery Endpoint
@@ -329,7 +330,7 @@ Use of this endpoint SHOULD be used with caution when the federation includes a 
 Resolvers MAY deny or rate limit requests for client services such as OpenID Relying Parties and OAuth Clients.
 
 <a name="federation-entity-metadata"></a>
-### 5.1. Federation Entity metadata
+### 5.1. Federation Entity Metadata
 
 This profile defines the `discovery_endpoint` parameter to specify the location of a Resolver's discovery endpoint.
 A Resolver MUST publish its discovery endpoint location in its `federation_entity` metadata Entity Type using the `discovery_endpoint` parameter.
