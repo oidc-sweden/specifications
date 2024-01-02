@@ -137,7 +137,7 @@ This is defined as the Entity Configuration of the entity.
 All chain validations of federation service data start with an Entity Configuration found at a location that can be derived from the
 Entity Identifier of that federation service.
 A fundamental requirement for successful discovery and chain validation of entity data in OpenID federation
-is therefore that all entities publish a self-issued Entity Configuration document.
+is, therefore, that all entities publish a self-issued Entity Configuration document.
 This document serves as a self-declaration of this entity's capabilities and authorizations through metadata and Trust Marks.
 This Entity Configuration also includes information about superior entities, which is used to build a chain to the target TA.
 
@@ -167,16 +167,57 @@ Each federation node (TA and IE) can express a metadata policy in each Entity St
 That metadata policy expresses rules for acceptance and modification of metadata for the subject of that Entity Statement and for all superior
 entities validated through the subject entity.
 
-The current version of the OpenID federation draft standard specifies a mandatory processing algorithm,
-where all policies of the path are merged to a single policy.
+### Policy processing in chain validation
+
+The OpenID federation draft standard specifies a mandatory policy processing algorithm,
+where all policies of the path are merged to a single policy before being applied to the metadata of the target entity.
+
 This merge algorithm is currently under discussion as it requires close collaboration of federation nodes to define policies
 that do not create merge conflicts or alter intended policy settings by TAs.
 
-The intention of this policy processing is both to allow the federation service to express all its capabilities and requirements using self-issued statements,
-but at the same time define rules within the context of each TA that can enforce constraints on that metadata.
-Because the policy enforces metadata automatically through chain validation,
-the enrollment of federation services can therefore be done without extensive checks on metadata content.
-This allows for a more simplified delegated enrollment process based on self-issued statements.
+The intention of this policy processing is to:
+
+1. Determine if the target entity can be validated through a TA (meet minimum policy requirements)
+2. Limit or alter capabilities expressed in the target entity metadata so that it complies with the policies of the validated chain.
+
+The merge algorithm is designed to guarantee that the metadata of the target entity is compliant with all policies in a chain.
+To achieve this, the merge algorithm will produce one of the following results:
+
+- a merged policy that is compliant with all metadata policies in the path or;
+- return a merge error, failing validation of the target entity metadata.
+
+Some mechanisms used to achieve this result are:
+
+| Policy                           | Merge rule                                                                                                                |
+|----------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| A maximum set of allowed values  | The merged set is the intersection of all maximum sets, ensuring that the metadata value does not extend any maximum set. |
+| A minimum set of required values | The merged set is the union lf all minimum sets, ensuring that the metadata supports all minimum sets.                    |
+| A specific value is required     | The merge process fails if not all policies agrees on the same required value.                                            |
+
+The strength of this approach is that this ensures that all policies of the path will be honored. 
+The challenge with this approach is that this requires very strong harmonization of metadata policy expression to avoid merge conflicts.
+
+A merge conflict is created when it becomes impossible to meet both policies at the same time.
+Example: if one policy requires that options A and B must be supported (minimum set), 
+while another policy requires that only A and C are allowed (maximum set).
+
+Metadata policy rules are managed and merged per metadata parameter as shown in the following illustration:
+
+![Current-merge](img/current-merge.png)
+
+A metadata policy consists of a list of metadata parameter policies. E.g. the policy parameter `acr_values_supported` can have one
+metadata parameter policy and `response_types_supported` can have another policy. Each metadata parameter policy consists of one or
+more policy operators further elaborated in the section "Metadata policy expression" below.
+
+The merge algorithm merges all individual policy operators of each metadata parameter policy into a merged metadata parameter policy.
+The result of such merge policy can lead to the following results:
+
+- The new merged policy is a legal combination of the merged policies
+- Merge error caused by conflicting policy operators
+
+The result, if successful, is a new policy that is compliant with all individual merged policies. 
+If not successful, the result is a merge error.
+
 
 ## Multi federation participation
 
@@ -198,8 +239,17 @@ subordinate federation B to participate in federation A that issued the Entity S
 
 ![Interconnected federations](img/join-feds.png)
 
-All services in federatioin B can now participate in federation A as long as the policy applied by TA in federation A can be defined in
-such way that metadata of services in federation B conforms to the requirements of federation A.
+All services in federation B can now participate in federation A,
+as long as metadata policies in all new cross-federation chains do not create merge conflicts.
+
+The challenge here is if the policies that govern interaction within the context of one federation
+are created in a way that cant be merged with the policies of the other federation.
+This could be the situation, for example, 
+if federation B applies a local policy that requires support for a set of scopes that are not allowed in the context of federation A,
+or a similar situation.
+
+This limitation is addressed in the challenges document.
+
 
 ## Application of OpenID federation in Sweden
 
