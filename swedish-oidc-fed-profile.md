@@ -26,31 +26,31 @@ to provide a baseline for security and interoperability for metadata exchange be
 
    2.2. [Resolvers](#resolvers)
 
-3. [**Metadata**](#metadata)
+3. [**Entity Statements**](#entity-statements)
 
-4. [**Metadata Policy**](#metadata-policy)
+   3.1. [Subject data publication claim](#subject-data-publication-claim)
 
-   4.1. [Prioritized Merge Logic](#prioritized-merge-logic)
+4. [**Metadata**](#metadata)
 
-   4.2. [Custom Policy Operators](#custom-policy-operators)
+5. [**Metadata Policy**](#metadata-policy)
 
-   4.3. [Alternative Prioritized Policy Operators](#alternative-prioritized-policy-operators)
+   5.1. [Custom Policy Operators](#custom-policy-operators)
 
-   4.4. [Policy Operator Constraints](#policy-operator-constraints)
+   5.2. [Policy Operator Constraints](#policy-operator-constraints)
 
-5. [**Discovery endpoint**](#discovery-endpoint)
+6. [**Discovery endpoint**](#discovery-endpoint)
 
-   5.1. [Federation Entity Metadata](#federation-entity-metadata)
+   6.1. [Federation Entity Metadata](#federation-entity-metadata)
 
-   5.2. [Discovery Request](#discovery-request)
+   6.2. [Discovery Request](#discovery-request)
 
-   5.3. [Discovery Response](#discovery-response)
+   6.3. [Discovery Response](#discovery-response)
 
-6. [**Usage with OpenID Connect**](#usage-with-openid-connect)
+7. [**Usage with OpenID Connect**](#usage-with-openid-connect)
 
-   6.1. [OIDC Request Parameters](#oidc-request-parameters)
+   7.1. [OIDC Request Parameters](#oidc-request-parameters)
 
-7. [**Normative References**](#normative-references)
+8. [**Normative References**](#normative-references)
 
 ---
 
@@ -89,10 +89,10 @@ scope for this specification.
 
 The following terms are used in this document to enhance readability:
 
-| Term | Meaning                                                                                                                                                                                                                                                                                                               
-| :--- | :--- |
-| Federation service | A defined OpenID Connect- or OAuth service such as OpenID providers (OP), OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS).                                                                                                                           |
-| Federation node | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver. |
+| Term                    | Meaning                                                                                                                                                                                                                                                                                                                |
+|:------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Federation service      | A defined OpenID Connect- or OAuth service such as OpenID providers (OP), OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS).                                                                                                                            |
+| Federation node         | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver.                                                                                                                                                                           |
 | Federation service data | The data of a federation service that includes metadata and Trust Marks, but also information such as policy. Federation service data is provided as an Entity Statement issued by a Federation Node for a subordinate entity or as Entity Configuration provided as a self signed statement by any federation entity. |
 
 
@@ -124,8 +124,55 @@ Each TA MUST ensure the availability of at least one Resolver that resolves fede
 
 This Resolver MUST provide a discovery endpoint as defined in [section 5](#discovery-endpoint).
 
+Resolvers MUST support extended chain validation that fully supports use of the `skip_subordinates` policy operator and the
+`subject_data_publication` Entity Statement claim with `entity_configuration_publication_type` set to `none`.
+
+
+<a name="entity-statements"></a>
+## 3. Entity Statements
+
+<a name="subject-data-publication-claim"></a>
+### 3.1. Subject data publication claim
+
+This section defines the `subject_data_publication` claim for inclusion in Entity Statements. 
+
+The `subject_data_publication` claim provide information about subject publication of its Entity Configuration data.
+This claim holds a JSON object with the following defined parameters:
+
+| Parameter                               | Definition                                                                                |
+|-----------------------------------------|-------------------------------------------------------------------------------------------|
+| `entity_configuration_publication_type` | REQUIRED. A string value defining the type of publication strategy as outlined below.     |
+| `entity_configuration_location`         | OPTIONAL. The URL where the self signed Entity Configuration of the subject is available. |
+
+Defined `entity_configuration_publication_type` values are:
+
+| Value        | Definition                                                                                                                    |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------|
+| `none`       | The subject does not publish any Entity Configuration.                                                                        |
+| `well_known` | The subject Entity Configuration is stored at the ./well-known location as defined in the OpenID Federation standard          |
+| `custom`     | The subject Entity Configuration is available at another location specified by the `entity_configuration_location` parameter. |
+
+When the `none` option is specified, `entity_configuration_location` MUST be absent and the `metadata` claim of this Entity Statement
+MUST contain the full complete metadata for the subject under its applicable Entity Type Identifiers.
+When this option is specified the `subject_data_publication` claim MUST be listed as critical in the `crit` claim.
+
+When `custom` is specified, `entity_configuration_location` MUST be present.
+When this option is specified the `subject_data_publication` claim MUST be listed as critical in the `crit` claim.
+
+When `well_known_location` is specified, `entity_configuration_location`
+SHOULD be present specifying exactly which URL out of the options allowed by the standard where Entity Configuration is published.
+When this option is specified the `subject_data_publication` claim SHOULD NOT be listed as critical in the `crit` claim.
+
+**Note:**
+\[[OpenID.Federation](#openid-federation)\] (section 7)
+provides two alternative locations for Entity Configuration data relative to the subject's Entity Identifier URL.
+If the location specified by RFC8414 fails, data retrieval SHOULD be retried using the alternate location.
+Specifying the `entity_configuration_location` also for the `well_known` is therefore RECOMMENDED to allow Resolvers to
+know the exact URL and thus avoiding multiple retrieval attempts at multiple URLs.
+
+
 <a name="metadata"></a>
-## 3. Metadata
+## 4. Metadata
 
 The metadata for federation services is specified in the Entity Configuration of that service under the metadata claim.
 The metadata claim holds metadata per entity type.
@@ -143,32 +190,15 @@ Implementers of this profile MUST provide complete metadata for federation servi
 Interaction with any federation service MUST NOT require obtaining the metadata specified for the `federation_entity` entity type.
 
 <a name="metadata-policy"></a>
-## 4. Metadata Policy
-
-**IMPORTANT NOTE: This section is based on the assumption that the current policy merge logic of the base OpenID federation standard remains
-as currently specified.
-It is unfortunate if it turns out to be necessary to define the alternative prioritized policy operators in this section.
-It would be much preferable if the standard would allow TA control over the metadata policy in effect.**
-
-<a name="prioritized-merge-logic"></a>
-### 4.1. Prioritized Merge Logic
-
-This profile defines the prioritized merge logic that can be used as the defined merge logic when merging policy operators.
-This merge logic prioritizes the most superior policy operator in a validated chain.
-
-This merge logic is defined as: The merged policy operator takes the value of the most superior entity policy operator.
-
-**Example:** When a superior Entity Statement declares the policy operator `"policy_operator" : ["foo","bar"]`,
-but any subordinate Entity Statements declare a different policy operator value,
-the merged policy operator is `"policy_operator" : ["foo","bar"]` as declared by the most superior Entity Statement.
+## 5. Metadata Policy
 
 <a name="custom-policy-operators"></a>
-### 4.2. Custom Policy Operators
+### 5.1. Custom Policy Operators
 
-This section defines new policy operators, providing additional logic not defined in the base standard.
+This section defines additional metadata policy operators and their use in the policy merge process.
 
-<a name="intersects-value-check"></a>
-#### 4.2.1. Intersects Value Check
+<a name="intersects"></a>
+#### 5.1.1. Intersects
 
 **Identifier:** `intersects`
 
@@ -178,83 +208,71 @@ This value check does not alter any content in the metadata parameter.
 The metadata parameter MAY contain any value not contained in the policy operator as long as at least one value matches with the policy
 operator values.
 
-**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
+**Merge processing:** The result of merging the values of two `intersects` operators is the intersection of the operator values.
 
-<a name="regexp-value-check"></a>
-#### 4.2.2. Regexp Value Check
+<a name="regexp"></a>
+#### 5.1.2. Regexp
 
 **Identifier:** `regexp`
 
-**Logic:** The `regexp` policy operator holds a regular expression.
-The value check is successful if, and only if, the regular expression matches all values in the metadata parameter.
+**Logic:** The `regexp` policy operator holds one or more regular expressions.
+When a single regular expression is provided, it MAY be provided as a single string value.
+The value check is successful if, and only if, all regular expressions match all values in the metadata parameter.
 
-**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
+**Merge processing:** The result of merging the values of two `regexp` operators is the union of the operator values.
 
-<a name="alternative-prioritized-policy-operators"></a>
-### 4.3. Alternative Prioritized Policy Operators
+#### 5.1.3. Skip subordinates
 
-This section demonstrates a possible solution that would allow interconnection of federations,
-while still allowing each TA to stay in control of the enforced metadata policy by;
+This policy operator allows an issuer of an Entity Statement to skip policy operator merge with subordinate Entity Statements.
+This restriction applies only to the metadata parameter where this operator is included.
+Policy operators for other metadata parameters are still merged unless they also are skipped through the presence of this policy operator.
 
-- allowing the TA to be in control over which federation services that are approved under the TA, and
-- not breaking any MUST requirements of the base standard, and;
-- preventing parties not conforming to this profile from processing metadata policies with a different result.
+**Identifier:** `skip_subordinates`
 
-The policy operators defined in this section duplicate the logic of existing policy operators defined in the OpenID federation base standard,
-but use the prioritized merge rule to allow the TA to stay in control over the enforced metadata policy.
+**Logic:** This operator has no effect on the metadata parameter value. It only has effect on the merge process of subordinate policies.
 
-<a name="prioritized-one-of"></a>
-#### 4.3.1. Prioritized one\_of
+**Merge processing:** If the value of this `skip_subordinates` operator is true, then merge with all subordinate policy operators MUST be
+skipped for the metadata parameter where this operator is present.
+The metadata policy where this operator is present is still merged with any present superior policy operators.
 
-**Identifier:** `pr_one_of`
+**Usage restrictions**
+Use of this policy operator MAY be used in Entity Statements issued to a TA of a subordinate federation that applies a 
+local federation metadata policy that would otherwise cause unwanted merge errors.
+This policy operator SHOULD NOT be included in any Entity Statement issued to a subordinate entity in the same federation that operates
+under a common policy.
 
-**Logic:** As defined by the policy operator `one_of` in \[[OpenID.Federation](#openid-federation)\]:
+When this operator is present, it MUST be marked as critical in the `metadata_policy_crit` claim of the Entity Statement.
 
-> "If the metadata parameter is present, its value MUST be one of those listed in the operator value."
+**Example:**
+The following examples illustrate the use of `skip_subordinates` for a particular metadata parameter, e.g. `scopes_supported`.
 
-**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
+Enforcing `skip_subordinates` at Trust Anchor
 
-Merge of `pr_one_of` fails if the path also contains a merged `one_of` policy operator with a
-different value. This condition MUST be treated as an error.
+```
+TA: {"scopes_supported": {"subset_of": ["A", "B"], "skip_subordinates": true}}
+Intermediate 1: {"scopes_supported": {"subset_of": ["A", "B", “C”]}} (skipped)
+Intermediate 2: {"scopes_supported": {"superset_of": ["B", “C”]}} (skipped)
+```
 
-<a name="prioritized-subset-of"></a>
-#### 4.3.2. Prioritized subset\_of
-
-**Identifier:** `pr_subset_of`
-
-**Logic:** As defined by the policy operator `subset_of` in \[[OpenID.Federation](#openid-federation)\]:
-
->"If the metadata parameter is present,
->this operator computes the intersection between the values of the operator and the metadata parameter.
->If the intersection is non-empty, the parameter is set to the values in the intersection.
->If the intersection is empty, the result is determined by the essential operator:
->For an essential metadata parameter, the result is an error;
->for a voluntary metadata parameter, it MUST be removed from the metadata.
->Note that this behavior makes subset_of a potential value modifier in addition to it being a value check."
-
-**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
-
-Merge of `pr_subset_of` fails if the path also contains a merged `subset_of` policy operator with a different value. This condition MUST be treated as an error.
+> **Merge result** = {"scopes_supported": {“subset_of”: [“A”, “B”]}}
 
 
-<a name="prioritized-superset-of"></a>
-#### 4.3.3. Prioritized superset\_of
+Enforcing `skip_subordinates` at Intermediate Entity
 
-**Identifier:** `pr_superset_of`
+```
+TA: {"scopes_supported": {"subset_of": ["A", "B", “C”]}}
+Intermediate 1: {"scopes_supported": {"subset_of": ["A", "B"], "skip_subordinates": true}}
+Intermediate 2: {"scopes_supported": {"superset_of": ["B", "D"]}} (skipped)
+```
 
-**Logic:** As defined by the policy operator `superset_of` in \[[OpenID.Federation](#openid-federation)\]:
+>**Merge result** = {"scopes_supported": {“subset_of”: [“A”, “B”]}}
 
->"If the metadata parameter is present,
-> its values MUST contain those specified in the operator.
-> By mathematically defining supersets, equality is included."
 
-**Merge rules:** Prioritized merge logic as defined in [4.1](#prioritized-merge-logic).
+The result would have been a merge error in both examples without the presence of the `skip_subordinates` policy operator.
 
-Merge of `pr_superset_of` fails if the path also contains a merged `superset_of` policy operator with
-a different value. This condition MUST be treated as an error.
 
 <a name="policy-operator-constraints"></a>
-### 4.4. Policy Operator Constraints
+### 5.2. Policy Operator Constraints
 
 Implementations compliant with this profile MUST NOT use policy operators that add any value to the target entity metadata parameter
 that has not been expressed by the target entity.
@@ -269,20 +287,8 @@ This means that the following policy operators defined in OpenID federation MUST
 **NOTE:** As an alternative to using the policy operators above, an Intermediate Entity can instead add explicit values in the
 metadata claim in its Entity Statement issued for the target entity.
 
-To avoid merge conflicts, implementations compliant with this profile SHOULD not use policy operators
-in the following table, but should instead use the listed equivalent prioritized policy operator.
-
-| Policy operator | Equivalent prioritized policy operator |
-| :--- | :--- |
-| `one_of` | `pr_one_of` |
-| `subset_of` | `pr_subset_of` |
-| `superset_of` | `pr_superset_of` |
-
-
-Use of any policy operators defined in this profile SHOULD be declared in the `metadata_policy_crit` claim of the Entity Statement.
-
 <a name="discovery-endpoint"></a>
-## 5. Discovery Endpoint
+## 6. Discovery Endpoint
 
 The discovery endpoint is exposed by Federation Entities acting as a Resolver.
 This endpoint lists all entities that can be resolved through this resolver that matches the discovery request.
@@ -296,7 +302,7 @@ Use of this endpoint SHOULD be used with caution when the federation includes a 
 Resolvers MAY deny or rate limit requests for client services such as OpenID Relying Parties and OAuth Clients.
 
 <a name="federation-entity-metadata"></a>
-### 5.1. Federation Entity Metadata
+### 6.1. Federation Entity Metadata
 
 This profile defines the `discovery_endpoint` parameter to specify the location of a Resolver's discovery endpoint.
 A Resolver MUST publish its discovery endpoint location in its `federation_entity` metadata Entity Type using the `discovery_endpoint` parameter.
@@ -306,7 +312,7 @@ and query parameter components encoded in application/x-www-form-urlencoded form
 It MUST NOT contain a fragment component.
 
 <a name="discovery-request"></a>
-### 5.2. Discovery Request
+### 6.2. Discovery Request
 
 The request MUST be an HTTP request using the GET method to a list endpoint with the query parameters,
 encoded in application/x-www-form-urlencoded format, listed below.
@@ -327,7 +333,7 @@ Host: openid.example.com?trust_anchor=https%3A%2F%2Fopenid.example.com%2FTA&enti
 ```
 
 <a name="discovery-response"></a>
-### 5.3. Discovery Response
+### 6.3. Discovery Response
 
 A successful response MUST return HTTP status code 200 with the content type `application/json`,
 containing a JSON array with the resolved Entity Identifiers matching the request.
@@ -349,10 +355,10 @@ Content-Type: application/json
 ```
 
 <a name="usage-with-openid-connect"></a>
-## 6. Usage with OpenID Connect
+## 7. Usage with OpenID Connect
 
 <a name="oidc-request-parameters"></a>
-### 6.1. OIDC Request Parameters
+### 7.1. OIDC Request Parameters
 
 Section 11 of \[[OpenID federation](#openid-federation)\] specifies the OPTIONAL inclusion of the
 request parameter `trust_chain` in OIDC requests. The challenge with this request parameter is that
@@ -368,7 +374,7 @@ receiving a request that includes `trust_chain` parameter MAY choose to either r
 or to process the request according to the processing requirements specified in OpenID federation.
 
 <a name="normative-references"></a>
-## 7. Normative References
+## 8. Normative References
 
 <a name="rfc2119"></a>
 **\[RFC2119\]**
