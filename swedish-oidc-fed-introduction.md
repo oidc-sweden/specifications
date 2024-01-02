@@ -227,11 +227,10 @@ to enroll independently in these federations
 ![Independent enrollment](img/re-enroll.png)
 
 In this illustration, the Relying Party service participates in two federations by independently enrolling to both of them.
-This is a problem, however, if this RP has opted to not create and publish its own Entity Configuration,
-but rather has opted for delegating this to its superior Intermediate entity.
-In this case, the federation service has been assigned an Entity Identifier based on the Intermediate Entity domain name.
-When this federation service enrolls in another federation,
-it may have to change its Entity Identifier if the enrollment requires any modifications to its Entity Configuration.
+This is, however, quite ineffective if the goal is, for example, 
+to allow all RP:s in a federation to access the OP:s of another federation.
+This could be the case if we want to allow all RP:s in a health care federation the opportunity
+to use OP:s in the national eID federation as long as they meet the requirements of the eID federation and the OP:s there.
 
 The metadata policy processing of OpenID federation opens the door to another possibility by connecting these two federations.
 This connection is done by issuing an Entity Statement from one federation to another which allows services in the

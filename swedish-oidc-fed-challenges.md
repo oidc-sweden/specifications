@@ -185,7 +185,7 @@ Metadata policy merge policy using `skip_subordinates` is shown in the following
 
 ![Merge Proposal](img/skip-merge.png)
 
-The `skip_subordinates` policy operator is indicated in the illustration by a black box labeled `Skip sub`.
+The `skip_subordinates` policy operator is indicated in the illustration by a black box labeled `Skip`.
 The Illustration shows how all metadata parameter policies are merged normally, 
 except for those metadata parameter policies that encounter the `skip_subordinates` policy operator.
 When this policy operator is encountered,
