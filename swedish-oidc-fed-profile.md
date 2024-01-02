@@ -34,13 +34,9 @@ to provide a baseline for security and interoperability for metadata exchange be
 
 5. [**Metadata Policy**](#metadata-policy)
 
-   5.1. [Prioritized Merge Logic](#prioritized-merge-logic)
+   5.1. [Custom Policy Operators](#custom-policy-operators)
 
-   5.2. [Custom Policy Operators](#custom-policy-operators)
-
-   5.3. [Alternative Prioritized Policy Operators](#alternative-prioritized-policy-operators)
-
-   5.4. [Policy Operator Constraints](#policy-operator-constraints)
+   5.2. [Policy Operator Constraints](#policy-operator-constraints)
 
 6. [**Discovery endpoint**](#discovery-endpoint)
 
@@ -276,7 +272,7 @@ The result would have been a merge error in both examples without the presence o
 
 
 <a name="policy-operator-constraints"></a>
-### 5.4. Policy Operator Constraints
+### 5.2. Policy Operator Constraints
 
 Implementations compliant with this profile MUST NOT use policy operators that add any value to the target entity metadata parameter
 that has not been expressed by the target entity.
