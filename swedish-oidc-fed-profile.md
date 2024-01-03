@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Federation Profile
 
-### Version: 0.1 - draft 01 - 2023-12-11
+### Version: 0.1 - draft 02 - 2024-01-02
 
 ## Abstract
 
