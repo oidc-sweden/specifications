@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Federation - Introduction
 
-### 2023-12-11
+### 2024-01-02
 
 ## Abstract
 
