@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Federation Profile
 
-### Version: 0.1 - draft 02 - 2024-01-02
+### Version: 0.1 - draft 03 - 2024-01-17
 
 ## Abstract
 
@@ -304,8 +304,8 @@ Resolvers MAY deny or rate limit requests for client services such as OpenID Rel
 <a name="federation-entity-metadata"></a>
 ### 6.1. Federation Entity Metadata
 
-This profile defines the `discovery_endpoint` parameter to specify the location of a Resolver's discovery endpoint.
-A Resolver MUST publish its discovery endpoint location in its `federation_entity` metadata Entity Type using the `discovery_endpoint` parameter.
+This profile defines the `federation_discovery_endpoint` parameter to specify the location of a Resolver's discovery endpoint.
+A Resolver MUST publish its discovery endpoint location in its `federation_discovery_endpoint` metadata Entity Type using the `discovery_endpoint` parameter.
 
 The discovery endpoint URL MUST use the https scheme and MAY contain port, path,
 and query parameter components encoded in application/x-www-form-urlencoded format.
