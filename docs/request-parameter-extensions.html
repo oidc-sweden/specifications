@@ -12,7 +12,7 @@
   <body>
     <article class="markdown-body"><p class="img-container"><img src="img/oidc-logo.png" alt="Logo"></p>
 <h1 id="authentication-request-parameter-extensions-for-the-swedish-openid-connect-profile">Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile</h1>
-<h3 id="version-10---2023-12-11">Version: 1.0 - 2023-12-11</h3>
+<h3 id="version-11---2024-02-01---draft">Version: 1.1 - 2024-02-01 - Draft</h3>
 <h2 id="abstract">Abstract</h2>
 <p>This specification defines authentication request parameter extensions for the Swedish OpenID
 Connect Profile.</p>
@@ -25,14 +25,22 @@ Connect Profile.</p>
 <li><p><a href="#authentication-request-parameter-extensions"><strong>Authentication Request Parameter Extensions</strong></a></p>
 <p> 2.1. <a href="#client-provided-user-message">Client Provided User Message</a></p>
 <p> 2.2. <a href="#requested-authentication-provider">Requested Authentication Provider</a></p>
+<p> 2.3. <a href="#original-client">Original Client</a></p>
+<p> 2.3.1. <a href="#original-client-id">Original Client ID</a></p>
+<p> 2.3.2. <a href="#original-client-token">Original Client Token</a></p>
 </li>
 <li><p><a href="#discovery-parameters"><strong>Discovery Parameters</strong></a></p>
 <p> 3.1. <a href="#user-message-capabilities">User Message Capabilities</a></p>
 <p> 3.1.1. <a href="#user-message-supported">User Message Supported</a></p>
 <p> 3.1.2. <a href="#user-message-supported-mime-types">User Message Supported MIME Types</a></p>
 <p> 3.2. <a href="#requested-authentication-provider-capabilities">Requested Authentication Provider Capabilities</a></p>
+<p> 3.3. <a href="#original-client-capabilities">Original Client Capabilities</a></p>
+<p> 3.3.1. <a href="#original-client-id-supported">Original Client ID Supported</a></p>
+<p> 3.3.2. <a href="#original-client-token-supported">Original Client Token Supported</a></p>
 </li>
 <li><p><a href="#normative-references"><strong>Normative References</strong></a></p>
+</li>
+<li><p><a href="#changes-between-versions"><strong>Changes between Versions</strong></a></p>
 </li>
 </ol>
 <hr>
@@ -50,15 +58,18 @@ compliant with the <a href="#oidc-profile">The Swedish OpenID Connect Profile</a
 <p>These keywords are capitalized when used to unambiguously specify requirements over protocol features and behavior that affect the interoperability and security of implementations. When these words are not capitalized, they are meant in their natural-language sense.</p>
 <p><a name="conformance"></a></p>
 <h3 id="12-conformance">1.2. Conformance</h3>
-<p>This profile defines requirements for OpenID Connect Relying Parties (clients) and OpenID Providers (identity providers). Furthermore, it defines the interaction between a Relying Party and an OpenID Provider.</p>
-<p>When a component compliant with this profile is interacting with other components compliant with this profile, all components MUST fully conform to the features and requirements of this specification. Any interaction with components that are not compliant with this profile is out of scope for this specification.</p>
+<p>This specification defines requirements for OpenID Connect Relying Parties (clients) and OpenID Providers (identity providers). Furthermore, it defines the interaction between a Relying Party and an OpenID Provider.</p>
+<p>When a component compliant with this specification is interacting with other components compliant with
+this specification, all components MUST fully conform to the features and requirements of this
+specification. Any interaction with components that are not compliant with this specification is 
+out of scope for this specification.</p>
 <p><a name="authentication-request-parameter-extensions"></a></p>
 <h2 id="2-authentication-request-parameter-extensions">2. Authentication Request Parameter Extensions</h2>
 <p>This section defines authentication request parameters for some commonly identified use cases.
 The identifiers for all authentication request parameter extensions defined in this specification
 are prefixed with <code>https://id.oidc.se/param</code>.</p>
 <p><a name="client-provided-user-message"></a></p>
-<h4 id="21-client-provided-user-message">2.1. Client Provided User Message</h4>
+<h3 id="21-client-provided-user-message">2.1. Client Provided User Message</h3>
 <p><strong>Parameter:</strong> <code>https://id.oidc.se/param/userMessage</code></p>
 <p><strong>Description:</strong> When the user message claim is included in an authentication request, the issuing
 client requests that the OpenID Provider displays this message to the client in conjunction with
@@ -68,8 +79,8 @@ the user authentication. </p>
 <ul class="list">
 <li><p><code>message</code> - The base64-encoding of the UTF-8 string holding the message to display to the user.</p>
 </li>
-<li><p><code>mime_type</code> - The MIME type of the supplied message. This profile defines two possible values that
-are <code>text/plain</code> (where <code>;charset=UTF-8</code> is an implicit condition) and <code>text/markdown</code><sup>2</sup>.
+<li><p><code>mime_type</code> - The MIME type of the supplied message. This specification defines two possible values
+that are <code>text/plain</code> (where <code>;charset=UTF-8</code> is an implicit condition) and <code>text/markdown</code><sup>2</sup>.
 If no value is given for this field, <code>text/plain</code> MUST be assumed. Other profiles MAY add support for
 additional MIME types. </p>
 </li>
@@ -83,10 +94,10 @@ declared by the OP.</p>
 authenticated. Thus, if the request contains the <code>prompt</code> parameter with the value <code>none</code> (see
 section 2.1.4 of [<a href="#oidc-profile">OIDC.Sweden.Profile</a>]), the OpenID Provider MUST NOT display
 the user message.</p>
-<p>This profile does not specify how the message should be displayed by the OpenID Provider, but if the
-<code>display</code> request parameter (see 3.1.2.1 of [<a href="#openid-core">OpenID.Core</a>]) is included in the request,
-and supported by the OP, the provider SHOULD display the user message according to the value of the
-<code>display</code> parameter.</p>
+<p>This specification does not specify how the message should be displayed by the OpenID Provider, but 
+if the <code>display</code> request parameter (see 3.1.2.1 of [<a href="#openid-core">OpenID.Core</a>]) is included in
+the request, and supported by the OP, the provider SHOULD display the user message according to the
+value of the <code>display</code> parameter.</p>
 <p>The OpenID Provider MUST display the message matching the user interface locale that is in use. If no
 message matches that current locale the OP MUST choose the message without a given language tag
 if such a parameter is available. If no message parameter without a language tag is received, the OP MAY 
@@ -113,7 +124,7 @@ parameter). When used in a Request Object value, per section 6.1 of [<a href="#o
 the JSON is used as the value of the <code>https://id.oidc.se/param/userMessage</code> member.</p>
 <p><strong>[2]:</strong> The Markdown dialect, and potential restrictions for tags, is not regulated in this specification. However, the Markdown SHOULD NOT contain HTML-tags for security reasons.</p>
 <p><a name="requested-authentication-provider"></a></p>
-<h4 id="22-requested-authentication-provider">2.2. Requested Authentication Provider</h4>
+<h3 id="22-requested-authentication-provider">2.2. Requested Authentication Provider</h3>
 <p><strong>Parameter:</strong> <code>https://id.oidc.se/param/authnProvider</code></p>
 <p><strong>Description:</strong> In cases where the OpenID Provider can delegate, or proxy, the user 
 authentication to multiple authentication services, or if the OP offers multiple authentication
@@ -131,6 +142,32 @@ The value of this claim can be used by the Relying Party to request re-authentic
 By assigning the value to the <code>authnProvider</code> request parameter, the RP requests that the user is
 authenticated using the same authentication mechanism that he or she originally was authenticated with.</p>
 <p><strong>Value type:</strong> String, preferably an URI</p>
+<p><a name="original-client"></a></p>
+<h3 id="23-original-client">2.3. Original Client</h3>
+<p>When an authentication proxy service is used there are two Relying Parties (client) identities 
+involved; the client requesting authentication from the proxy provider, and the proxy entity that
+is acting as a client against the (underlying) authentication service being proxied. </p>
+<p>In some cases, an underlying authentication service may need to know about the original
+client (i.e., the client that requested authentication from the proxy service). Typical examples 
+are: requirements for logging and auditing, registration requirements, or that the 
+authentication service wants to display information about the client (in its UI or authentication
+device).</p>
+<p>In cases where an underlying authentication service is an OpenID Provider this specification
+defines request parameters that can be used to supply original client information.</p>
+<p><a name="original-client-id"></a></p>
+<h4 id="231-original-client-id">2.3.1. Original Client ID</h4>
+<p><strong>Parameter:</strong> <code>https://id.oidc.se/param/originalClientId</code></p>
+<p><strong>Description:</strong> Contains the client identifier for the client that requested authentication
+from a proxy authentication service. This ID is generally not the same as <code>client_id</code> which
+is the ID for the client communicating with the OP.</p>
+<p><strong>Value type:</strong> String</p>
+<p><a name="original-client-token"></a></p>
+<h4 id="232-original-client-token">2.3.2. Original Client Token</h4>
+<p><strong>Parameter:</strong> <code>https://id.oidc.se/param/originalClientToken</code></p>
+<p><strong>Description:</strong> A token containing information about the the client that requested authentication
+from a proxy authentication service.</p>
+<p>This specification does not impose any specific format of the token.</p>
+<p><strong>Value type:</strong> A base64-encoded string</p>
 <p><a name="discovery-parameters"></a></p>
 <h2 id="3-discovery-parameters">3. Discovery Parameters</h2>
 <p>This section defines OpenID Connect discovery identifiers that are used to announce support
@@ -141,9 +178,10 @@ are prefixed with <code>https://id.oidc.se/disco</code>.</p>
 discovery parameter value, defined below, in its discovery document.</p>
 <p><a name="user-message-capabilities"></a></p>
 <h3 id="31-user-message-capabilities">3.1. User Message Capabilities</h3>
-<p>This profile defines two OpenID Discovery parameters that may be used by OpenID Providers to announce support for 
-the <code>https://id.oidc.se/param/userMessage</code> authentication request parameter, see section 
-<a href="#client-provided-user-message">2.1</a>, <a href="#client-provided-user-message">Client Provided User Message</a>, above.</p>
+<p>This specification defines two OpenID Discovery parameters that may be used by OpenID Providers
+to announce support for the <code>https://id.oidc.se/param/userMessage</code> authentication request parameter,
+see section <a href="#client-provided-user-message">2.1</a>,
+<a href="#client-provided-user-message">Client Provided User Message</a>, above.</p>
 <p><a name="user-message-supported"></a></p>
 <h4 id="311-user-message-supported">3.1.1. User Message Supported</h4>
 <p><strong>Parameter:</strong> <code>https://id.oidc.se/disco/userMessageSupported</code></p>
@@ -167,6 +205,22 @@ Its value is only relevant if <code>https://id.oidc.se/disco/userMessageSupporte
 <code>https://id.oidc.se/param/authnProvider</code> authentication request parameter, see section
 <a href="#requested-authentication-provider">2.2</a>, 
 <a href="#requested-authentication-provider">Requested Authentication Provider</a>.</p>
+<p><strong>Value type:</strong> Boolean</p>
+<p><a name="original-client-capabilities"></a></p>
+<h3 id="33-original-client-capabilities">3.3. Original Client Capabilities</h3>
+<p><a name="original-client-id-supported"></a></p>
+<h4 id="331-original-client-id-supported">3.3.1. Original Client ID Supported</h4>
+<p><strong>Parameter:</strong> <code>https://id.oidc.se/disco/originalClientIdSupported</code></p>
+<p><strong>Description:</strong> A discovery parameter specifying whether the OpenID Provider supports the 
+<code>https://id.oidc.se/param/originalClientId</code> authentication request parameter,
+see section <a href="#original-client-id">2.3.1</a>, <a href="#original-client-id">Original Client ID</a>.</p>
+<p><strong>Value type:</strong> Boolean</p>
+<p><a name="original-client-token-supported"></a></p>
+<h4 id="332-original-client-token-supported">3.3.2. Original Client Token Supported</h4>
+<p><strong>Parameter:</strong> <code>https://id.oidc.se/disco/originalClientTokenSupported</code></p>
+<p><strong>Description:</strong> A discovery parameter specifying whether the OpenID Provider supports the 
+<code>https://id.oidc.se/param/originalClientToken</code> authentication request parameter,
+see section <a href="#original-client-token">2.3.2</a>, <a href="#original-client-token">Original Client Token</a>.</p>
 <p><strong>Value type:</strong> Boolean</p>
 <p><a name="normative-references"></a></p>
 <h2 id="4-normative-references">4. Normative References</h2>
@@ -200,6 +254,12 @@ Its value is only relevant if <code>https://id.oidc.se/disco/userMessageSupporte
 <blockquote>
 <p><a href="https://www.oidc.se/specifications/swedish-oidc-claims-specification-1_0.html">Claims and Scopes Specification for the Swedish OpenID Connect Profile - Version 1.0</a>.</p>
 </blockquote>
+<p><a name="changes-between-versions"></a></p>
+<h2 id="5-changes-between-versions">5. Changes between Versions</h2>
+<p><strong>Changes between version 1.0 and version 1.1:</strong></p>
+<ul class="list">
+<li>The request parameters <code>https://id.oidc.se/param/originalClientId</code> and <code>https://id.oidc.se/param/originalClientToken</code> were added, as well as the corresponding discovery parameters.</li>
+</ul>
     </article>
   </body>
 </html>
