@@ -2,7 +2,7 @@
 
 # Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile
 
-### Version: 1.1 - 2024-01-18 - Draft
+### Version: 1.1 - 2024-02-01 - Draft
 
 ## Abstract
 
@@ -196,12 +196,12 @@ is acting as a client against the (underlying) authentication service being prox
 
 In some cases, an underlying authentication service may need to know about the original
 client (i.e., the client that requested authentication from the proxy service). Typical examples 
-could be: requirements for logging and auditing, registration requirements, or that the 
+are: requirements for logging and auditing, registration requirements, or that the 
 authentication service wants to display information about the client (in its UI or authentication
 device).
 
-For an underlying authentication service that is an OpenID Provider this specification defines
-request parameters that can be used to supply original client information.
+In cases where an underlying authentication service is an OpenID Provider this specification
+defines request parameters that can be used to supply original client information.
 
 <a name="original-client-id"></a>
 #### 2.3.1. Original Client ID
@@ -210,7 +210,7 @@ request parameters that can be used to supply original client information.
 
 **Description:** Contains the client identifier for the client that requested authentication
 from a proxy authentication service. This ID is generally not the same as `client_id` which
-is the ID for the client communicating the the OP.
+is the ID for the client communicating with the OP.
 
 **Value type:** String
 
