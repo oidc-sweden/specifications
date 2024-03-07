@@ -26,6 +26,8 @@ to provide a baseline for security and interoperability for metadata exchange be
 
    2.2. [Resolvers](#resolvers)
 
+   2.3. [Bridging federation contexts with separate Trust Anchors](#bridging-federation-contexts-with-separate-trust-anchors)
+
 3. [**Entity Statements**](#entity-statements)
 
    3.1. [Subject data publication claim](#subject-data-publication-claim)
@@ -83,10 +85,10 @@ scope for this specification.
 
 The following terms are used in this document to enhance readability:
 
-| Term                           | Meaning                                                                                                                                                                                                                                                                                                                |
-|:-------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Federation service             | A defined OpenID Connect- or OAuth service such as OpenID providers (OP), OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS).                                                                                                                            |
-| Federation node                | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver.                                                                                                                                                                           |
+| Term                           | Meaning                                                                                                                                                                                                                                                                                                                       |
+|:-------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Federation service             | A defined OpenID Connect- or OAuth service such as OpenID providers (OP), OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS).                                                                                                                                   |
+| Federation node                | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver.                                                                                                                                                                                  |
 | federation service information | The data of a federation service that includes metadata and Trust Marks, but also information such as policy. federation service information is provided as an Entity Statement issued by a Federation Node for a subordinate entity or as Entity Configuration provided as a self signed statement by any federation entity. |
 
 
@@ -121,8 +123,8 @@ This Resolver MUST provide a discovery endpoint as defined in [section 5](#disco
 Resolvers MUST support extended chain validation that fully supports use of the `skip_subordinates` policy operator and the
 `subject_data_publication` Entity Statement claim with `entity_configuration_publication_type` set to `none`.
 
-
-### 2.3. Bridging federations contexts with separate Trust Anchors
+<a name="bridging-federation-contexts-with-separate-trust-anchors"></a>
+### 2.3. Bridging federation contexts with separate Trust Anchors
 
 The OpenID federation defines an infrastructure where different federation contexts may co-exist and where there no longer exist distinct borders between what
 belongs to each federation context.
