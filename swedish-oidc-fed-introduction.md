@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Federation - Introduction
 
-### 2024-01-02
+### 2024-02-29
 
 ## Abstract
 
@@ -41,7 +41,7 @@ a SAML federation.
 
 **Intermediate Entity**
 
-The Intermediate Entity (IE) allows delegation of registration of subordinate federation services. This allows distributed
+The Intermediate Entity (IE) allows delegated registration of subordinate federation services. This allows distributed
 administration and enrollment of federation services that can be verified under a common TA.
 
 **Trust Mark Issuer**
@@ -63,59 +63,79 @@ verification of the resolved data from the resolver to be verified by the config
 
 The following terms are used in this document to enhance readability:
 
-| Term                    | Meaning                                                                                                                                                                                                                                                                                                               |
-|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Federation service      | A defined OpenID Connect or OAuth service such as OpenID providers (OP). OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS)                                                                                                                             |
-| Federation node         | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver                                                                                                                                                                           |
-| Federation service data | The data of a federation service that includes metadata and Trust Marks, but also information such as policy. Federation service data is provided as an Entity Statement issued by a Federation Node for a subordinate entity or as Entity Configuration provided as a self signed statement by any federation entity |
+| Term                           | Meaning                                                                                                                                                                                                 |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Federation service             | A defined OpenID Connect or OAuth service such as OpenID providers (OP). OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS)               |
+| Federation node                | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver                                                             |
+| Federation service information | Information about a federation service that are distributed and authenticated using this federation infrastructure. Federation service information includes verified metadata and verified trust marks. |
 
 In addition to these terms, all terms defined by the OpenID federation draft standard apply.
 
 # Federation Architecture
 
-### Chain validation
+### Locating and validating trusted entity information
 
-The core for discovery and verification of federation service data, to support service exchange between federation services,
-is based on the OpenID federation chain validation process.
+The core purpose of the OpenID federation infrastructure is
+to allow services to locate and validate federation service information about other entities with whom they intend to interact.
 
-Chain validation is a process through which federation service data is located and validated through a trusted TA.
-This involves the following steps:
+This is built around two main processes: 
 
-- Locate the Entity Configuration (Self-signed Federation service data) of the federation service target entity
-- Build the chain by finding the sequence of Intermediate Entities that can be used to construct a path to the trusted TA.
-- Obtain Entity Statements from each federation node issued for the subordinate entity in the chain from the TA down to the target entity.
-- Validate all Entity Statements and the target entity's Entity Configuration in the chain via the TA trusted key
-- Process metadata policy of the chain to obtain the validated and approved metadata in the context of the selected TA.
-- Extract all relevant trust Marks from the target entity's Entity Configuration
-- Find All Trust Mark Issuers that have issued relevant Trust Marks and perform this chain validation on each Trust Mark Issuer to evaluate their authorization to issue the Trust Mark and to get their validation key.
-- Verify all relevant Trust Marks
-- Check the revocation status of each relevant Trust Mark
+- **Discovery** 
+- **Chain validation**
 
-### The split between metadata and Trust Marks
+The **discovery process** involves identification and location of information resources
+that can be used to construct a trusted chain of statements from a target entity to a trusted TA.
+It is important to note that discovery can be done using both top-down and bottom-up strategies.
+
+The **bottom-up** strategy (the main strategy for federation services) starts with locating the claimed metadata of the target entity.
+This data is used to locate superior entities until a trusted Trust Anchor service is reached.
+
+The **top-down** strategy is much more resource consuming,
+but it may be suitable for entities that which to build a complete map of all available services in a local cache.
+This strategy starts from a trusted Trust Anchor
+and traverses the full tree of services down to all leaf entities supported by each Trust Anchor.
+
+**Chain validation** is a process through which a chain of statements is validated through the trusted TA keys and policies.
+
+A typical bottom-up discovery with chain validation typically involves the following steps:
+
+1. Locate the Entity Configuration (Self-signed federation service information) of the federation service target entity
+2. Build the chain by finding the sequence of Intermediate Entities that can be used to construct a path to the trusted TA.
+3. Obtain Entity Statements from each federation node issued for the subordinate entity in the chain from the TA down to the target entity.
+4. Validate all Entity Statements and the target entity's Entity Configuration in the chain via the TA trusted key
+5. Process metadata policy of the chain to obtain the validated and approved metadata in the context of the selected TA.
+6. Extract all relevant trust Marks from the target entity's Entity Configuration
+7. Find All Trust Mark Issuers that have issued relevant Trust Marks and perform this chain validation on each Trust Mark Issuer to evaluate their authorization to issue the Trust Mark and to get their validation key.
+8. Verify all relevant Trust Marks
+9. Check the revocation status of each relevant Trust Mark
+
+
+
+### Dividing federation entity information into metadata and Trust Marks
 
 In SAML federation metadata, all the metadata is signed by the federation operator using the federation metadata service.
-This metadata contains both pure configuration data such as service URL:s but also information about authorizations such as the capability
-to provide a certain level of assurance.
+This metadata contains both pure configuration data such as service URL:s but also information about authorizations such as certification
+that the authentication process of an OP meets a certain level of assurance.
 This increases the burden on the federation operator when enrolling services as this process needs to cover both registration of configuration
 data and validation of certifications and authorizations that are relevant for their roles.
 
-The OpenID federation elegantly enhances this situation by separating configuration data from validation of certifications and authorizations.
+The OpenID federation elegantly improves this situation by separating configuration data from validation of certifications and authorizations.
 Configuration data is expressed as metadata, while fulfillment of requirements, certifications and authorizations is handled by Trust Marks,
 issued by authorized Trust Mark Issuers.
 This allows the federation operator to focus on management of configuration data which much more easily can be delegated
 to administrative Intermediate Entities.
 This also allows the federation operator to manage a large federation with a minimum of administrative resources.
 
-### Resolves
+### Resolvers
 
 While the introduction of Intermediate Entities and Trust Mark Issuers makes the federation much easier to manage,
-it also makes discovery and validation of federation service data significantly harder compared with SAML metadata handling.
+it also makes discovery and validation of federation service information significantly harder compared with SAML metadata handling.
 While SAML metadata is quite straightforward to download and validate,
-OpenID Federation service data must be discovered and validated through the quite complex chain validation process described above.
+OpenID federation service information must be discovered and validated through the quite complex chain validation process described above.
 
 To enhance the situation for federation services that do not have the ambition and desire to implement full chain validation,
-OpenID federation has defined the Resolver role to allow easy access to validated federation service data.
-The Resolver offers a simple API where a federation service can request validated Federation service data about another federation service
+OpenID federation has defined the Resolver role to allow easy access to validated federation service information.
+The Resolver offers a simple API where a federation service can request validated federation service information about another federation service
 using a simple HTTP GET request to a resolve endpoint.
 Any federation node can provide such a resolve endpoint, but it can also be the sole dedicated role of a federation node.
 
@@ -134,7 +154,7 @@ federation key and authorization to provide specified roles.
 Each entity in the federation is also required to provide a statement about itself.
 This is defined as the Entity Configuration of the entity.
 
-All chain validations of federation service data start with an Entity Configuration found at a location that can be derived from the
+All chain validations of federation service information start with an Entity Configuration found at a location that can be derived from the
 Entity Identifier of that federation service.
 A fundamental requirement for successful discovery and chain validation of entity data in OpenID federation
 is, therefore, that all entities publish a self-issued Entity Configuration document.
@@ -149,14 +169,15 @@ and requires that the federation services have the capability to publish an Enti
 Arguably, not all federation services may have the capability to meet this requirement.
 It may be important, in such cases, to be able to enroll federation services that do not have the capability to create and/or publish
 a self-signed Entity Configuration this way.
-This can be solved by delegating the creation and publication of EntityStatements to the superior Intermediate Entity.
-Such an Intermediate Entity can provide a suitable Entity Identifier derived from the domain name of that Intermediate Entity.
-This allows the Intermediate Entity to publish the Entity Configuration on behalf of the subject federation service.
-This procedure solves the publication problem,
-but still requires the Entity Configuration to be signed with the entity key of the federation service.
-This challenge still has to be managed between the enrolling federation service and the Intermediate Entity handling the enrollment.
-This manner through which this process is handled is outside the scope of the present standard,
-but there are ongoing discussions on allowing also delegated signing of Entity Configuration data.
+
+This can be solved by delegating the creation and publication of Entity Configurations to the registration Intermediate Entity.
+To do so, the registration Intermediate Entity must:
+
+- Provide a suitable Entity Identifier derived from the domain name of the Intermediate Entity.
+- Hold the federation key representing the registered entity.
+
+**Note:** the federation key in this case is NOT the key used by the entity when operating its service (I.e. the key used to sign requests to an OP).
+The "Federation key" is the key used by this entity to sign data in OpenID federation such as Entity Configuration data.
 
 ### Metadata Policy
 
@@ -171,9 +192,6 @@ entities validated through the subject entity.
 
 The OpenID federation draft standard specifies a mandatory policy processing algorithm,
 where all policies of the path are merged to a single policy before being applied to the metadata of the target entity.
-
-This merge algorithm is currently under discussion as it requires close collaboration of federation nodes to define policies
-that do not create merge conflicts or alter intended policy settings by TAs.
 
 The intention of this policy processing is to:
 
@@ -230,7 +248,7 @@ In this illustration, the Relying Party service participates in two federations 
 This is, however, quite ineffective if the goal is, for example, 
 to allow all RP:s in a federation to access the OP:s of another federation.
 This could be the case if we want to allow all RP:s in a health care federation the opportunity
-to use OP:s in the national eID federation as long as they meet the requirements of the eID federation and the OP:s there.
+to use OP:s in a national eID federation.
 
 The metadata policy processing of OpenID federation opens the door to another possibility by connecting these two federations.
 This connection is done by issuing an Entity Statement from one federation to another which allows services in the
@@ -242,7 +260,7 @@ All services in federation B can now participate in federation A,
 as long as metadata policies in all new cross-federation chains do not create merge conflicts.
 
 The challenge here is if the policies that govern interaction within the context of one federation
-are created in a way that cant be merged with the policies of the other federation.
+are created in a way that can't be merged with the policies of the other federation.
 This could be the situation, for example, 
 if federation B applies a local policy that requires support for a set of scopes that are not allowed in the context of federation A,
 or a similar situation.
@@ -270,7 +288,7 @@ Some examples of a service that needs to participate in multiple federations are
 - OP in the health care federation joins the national eID federation as OP for authenticating medical personnel in governmental services in the national eID federation.
 - Client in the authorization federation also has a need to become an RP in the national eID federation.
 
-The purpose of a national OpenID federation profile should be to define additional requirements to OpenID federation in order to:
+The purpose of a national OpenID federation profile should be to define additional requirements to OpenID federation to:
 
 - Ensure the availability of critical functions and services to provide a low threshold for participation
 - Promote interoperability among implementations and use of common integration tools

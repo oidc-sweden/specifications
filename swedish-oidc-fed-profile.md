@@ -57,14 +57,8 @@ to provide a baseline for security and interoperability for metadata exchange be
 <a name="introduction"></a>
 ## 1. Introduction
 
-This specification defines a profile for OpenID Federation for use within the Swedish public and private sector. It profiles the OpenID
-Federation specification \[[OpenID.Federation](#openid-federation)\] to:
-
-1. Define how resolvers provide data about federation entities using the resolve endpoint.
-2. Define how Intermediate entities and Trust Anchor entities in the federation provides information about federation entities to the resolver.
-
-The goal of this specification is to support development of resolvers that can implement a defined strategy for gathering data about federation
-entities and to provide a standardized API to federation entities to gather information about other entities in the federation.
+This specification defines a profile for OpenID Federation for use within the Swedish public and private sector based on the OpenID
+Federation specification \[[OpenID.Federation](#openid-federation)\].
 
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
@@ -89,11 +83,11 @@ scope for this specification.
 
 The following terms are used in this document to enhance readability:
 
-| Term                    | Meaning                                                                                                                                                                                                                                                                                                                |
-|:------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Federation service      | A defined OpenID Connect- or OAuth service such as OpenID providers (OP), OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS).                                                                                                                            |
-| Federation node         | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver.                                                                                                                                                                           |
-| Federation service data | The data of a federation service that includes metadata and Trust Marks, but also information such as policy. Federation service data is provided as an Entity Statement issued by a Federation Node for a subordinate entity or as Entity Configuration provided as a self signed statement by any federation entity. |
+| Term                           | Meaning                                                                                                                                                                                                                                                                                                                |
+|:-------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Federation service             | A defined OpenID Connect- or OAuth service such as OpenID providers (OP), OpenID relying parties (RP), OAuth Authorization Services (AS), OAuth clients (Client) and Resource Servers (RS).                                                                                                                            |
+| Federation node                | A Federation Entity that is not a Federation service, but serves as either Trust Anchor, Intermediate Entity, Trust Mark Issuer or Resolver.                                                                                                                                                                           |
+| federation service information | The data of a federation service that includes metadata and Trust Marks, but also information such as policy. federation service information is provided as an Entity Statement issued by a Federation Node for a subordinate entity or as Entity Configuration provided as a self signed statement by any federation entity. |
 
 
 <a name="federation-structure"></a>
@@ -117,10 +111,10 @@ This requirement avoids challenges such as:
 <a name="resolvers"></a>
 ### 2.2. Resolvers
 
-Resolvers are considered essential in this profile to provide easy access to validated federation service data.
+Resolvers are considered essential in this profile to provide easy access to validated federation service information.
 A Resolver in this profile is a Federation Entity that is providing a Resolve Entity Statement endpoint.
 
-Each TA MUST ensure the availability of at least one Resolver that resolves federation service data to the TA federation key.
+Each TA MUST ensure the availability of at least one Resolver that resolves federation service information to the TA federation key.
 
 This Resolver MUST provide a discovery endpoint as defined in [section 5](#discovery-endpoint).
 
@@ -128,32 +122,61 @@ Resolvers MUST support extended chain validation that fully supports use of the 
 `subject_data_publication` Entity Statement claim with `entity_configuration_publication_type` set to `none`.
 
 
+### 2.3. Bridging federations contexts with separate Trust Anchors
+
+The OpenID federation defines an infrastructure where different federation contexts may co-exist and where there no longer exist distinct borders between what
+belongs to each federation context.
+
+Each federation context is enforced through a common Trust Anchor
+where this Trust Anchor defines a policy that all subordinate services must be compatible with in order to be validated through this Trust Anchor.
+
+Any federation service, or federation node may chain to more than one Trust Anchor.
+Whether they can be validated through a specific Trust Anchor is decided
+by whether they conform to the policy of that Trust Anchor and the policy of the chain to that Trust Anchor.
+
+It is important to have this in mind when building a hierarchy of federation nodes. The following aspects SHOULD be taken into consideration:
+
+- To optimize registration of federation services using a common Intermediate Entity.
+- To optimize bridging between federation contexts to allow federation services to participate in multiple contexts, and to allow Trust Anchors to effectively extend trust to groups of federation services in an effective manner.
+
+
+The OpenID Federation establishes an infrastructure where various federation contexts can coexist without clear boundaries between them. 
+Each context is defined by a Trust Anchor, 
+which enforces a policy that all subordinate services must comply with to be validated through this Trust Anchor.
+
+A federation service or node may chain to multiple Trust Anchors. 
+Their validation under a specific Trust Anchor depends on their compliance with both the Trust Anchor's policy and the policy of the chain leading to that Trust Anchor.
+
+When constructing a hierarchy of federation nodes,
+it's important to optimize the infrastructure for both delegated registration and for effective chain building between federation services and relevant Trust Anchors.
+
 <a name="entity-statements"></a>
 ## 3. Entity Statements
 
 <a name="subject-data-publication-claim"></a>
 ### 3.1. Subject data publication claim
 
-This section defines the `subject_data_publication` claim for inclusion in Entity Statements. 
+This section defines the `entity_configuration_publication` claim for inclusion in Entity Statements. 
 
 The `subject_data_publication` claim provide information about subject publication of its Entity Configuration data.
 This claim holds a JSON object with the following defined parameters:
 
-| Parameter                               | Definition                                                                                |
-|-----------------------------------------|-------------------------------------------------------------------------------------------|
-| `entity_configuration_publication_type` | REQUIRED. A string value defining the type of publication strategy as outlined below.     |
-| `entity_configuration_location`         | OPTIONAL. The URL where the self signed Entity Configuration of the subject is available. |
+| Parameter              | Definition                                                                                |
+|------------------------|-------------------------------------------------------------------------------------------|
+| `publication_type`     | REQUIRED. A string value defining the type of publication strategy as outlined below.     |
+| `location`             | OPTIONAL. The URL where the self signed Entity Configuration of the subject is available. |
+| `entity_configuration` | OPTIONAL. Complete embedded Entity Configuration JWT                                      |
 
 Defined `entity_configuration_publication_type` values are:
 
-| Value        | Definition                                                                                                                    |
-|--------------|-------------------------------------------------------------------------------------------------------------------------------|
-| `none`       | The subject does not publish any Entity Configuration.                                                                        |
-| `well_known` | The subject Entity Configuration is stored at the ./well-known location as defined in the OpenID Federation standard          |
-| `custom`     | The subject Entity Configuration is available at another location specified by the `entity_configuration_location` parameter. |
+| Value        | Definition                                                                                                           |
+|--------------|----------------------------------------------------------------------------------------------------------------------|
+| `embedded`   | The subject does not publish any Entity Configuration.                                                               |
+| `well_known` | The subject Entity Configuration is stored at the ./well-known location as defined in the OpenID Federation standard |
+| `custom`     | The subject Entity Configuration is available at another location specified by the `location` parameter.             |
 
-When the `none` option is specified, `entity_configuration_location` MUST be absent and the `metadata` claim of this Entity Statement
-MUST contain the full complete metadata for the subject under its applicable Entity Type Identifiers.
+When the `embedded` option is specified, `location`
+MUST be absent and `entity_configuration` MUST contain the Entity Configuration JWT for the subject.
 When this option is specified the `subject_data_publication` claim MUST be listed as critical in the `crit` claim.
 
 When `custom` is specified, `entity_configuration_location` MUST be present.
@@ -167,9 +190,8 @@ When this option is specified the `subject_data_publication` claim SHOULD NOT be
 \[[OpenID.Federation](#openid-federation)\] (section 7)
 provides two alternative locations for Entity Configuration data relative to the subject's Entity Identifier URL.
 If the location specified by RFC8414 fails, data retrieval SHOULD be retried using the alternate location.
-Specifying the `entity_configuration_location` also for the `well_known` is therefore RECOMMENDED to allow Resolvers to
-know the exact URL and thus avoiding multiple retrieval attempts at multiple URLs.
-
+It is therefore RECOMMENDED to specify `location` also for the `well_known` publication type.
+This enables Resolvers to identify the precise URL, thereby eliminating the need for multiple attempts to retrieve data from various URLs.
 
 <a name="metadata"></a>
 ## 4. Metadata
@@ -220,55 +242,6 @@ When a single regular expression is provided, it MAY be provided as a single str
 The value check is successful if, and only if, all regular expressions match all values in the metadata parameter.
 
 **Merge processing:** The result of merging the values of two `regexp` operators is the union of the operator values.
-
-#### 5.1.3. Skip subordinates
-
-This policy operator allows an issuer of an Entity Statement to skip policy operator merge with subordinate Entity Statements.
-This restriction applies only to the metadata parameter where this operator is included.
-Policy operators for other metadata parameters are still merged unless they also are skipped through the presence of this policy operator.
-
-**Identifier:** `skip_subordinates`
-
-**Logic:** This operator has no effect on the metadata parameter value. It only has effect on the merge process of subordinate policies.
-
-**Merge processing:** If the value of this `skip_subordinates` operator is true, then merge with all subordinate policy operators MUST be
-skipped for the metadata parameter where this operator is present.
-The metadata policy where this operator is present is still merged with any present superior policy operators.
-
-**Usage restrictions**
-Use of this policy operator MAY be used in Entity Statements issued to a TA of a subordinate federation that applies a 
-local federation metadata policy that would otherwise cause unwanted merge errors.
-This policy operator SHOULD NOT be included in any Entity Statement issued to a subordinate entity in the same federation that operates
-under a common policy.
-
-When this operator is present, it MUST be marked as critical in the `metadata_policy_crit` claim of the Entity Statement.
-
-**Example:**
-The following examples illustrate the use of `skip_subordinates` for a particular metadata parameter, e.g. `scopes_supported`.
-
-Enforcing `skip_subordinates` at Trust Anchor
-
-```
-TA: {"scopes_supported": {"subset_of": ["A", "B"], "skip_subordinates": true}}
-Intermediate 1: {"scopes_supported": {"subset_of": ["A", "B", “C”]}} (skipped)
-Intermediate 2: {"scopes_supported": {"superset_of": ["B", “C”]}} (skipped)
-```
-
-> **Merge result** = {"scopes_supported": {“subset_of”: [“A”, “B”]}}
-
-
-Enforcing `skip_subordinates` at Intermediate Entity
-
-```
-TA: {"scopes_supported": {"subset_of": ["A", "B", “C”]}}
-Intermediate 1: {"scopes_supported": {"subset_of": ["A", "B"], "skip_subordinates": true}}
-Intermediate 2: {"scopes_supported": {"superset_of": ["B", "D"]}} (skipped)
-```
-
->**Merge result** = {"scopes_supported": {“subset_of”: [“A”, “B”]}}
-
-
-The result would have been a merge error in both examples without the presence of the `skip_subordinates` policy operator.
 
 
 <a name="policy-operator-constraints"></a>
@@ -364,9 +337,9 @@ Section 11 of \[[OpenID federation](#openid-federation)\] specifies the OPTIONAL
 request parameter `trust_chain` in OIDC requests. The challenge with this request parameter is that
 it imposes requirements on the receiving OP to check the consistency of its content.
 
-This profile includes requirements for Resolvers as the source of validated federation service data,
+This profile includes requirements for Resolvers as the source of validated federation service information,
 making this `trust_chain` parameter obsolete. The OP is only expected to use this Resolver to obtain
-trusted federation service data, including trusted and processed metadata, as well as trusted and
+trusted federation service information, including trusted and processed metadata, as well as trusted and
 validated Trust Marks.
 
 Implementations of this profile MUST NOT include the `trust_chain` parameter in OIDC requests. An OP
