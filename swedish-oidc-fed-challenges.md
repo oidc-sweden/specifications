@@ -290,12 +290,12 @@ Each metadata parameter name that provides a single value, where the RP/Client w
 
 Example 1:
 
-> "token_endpoint_auth_method": "client_secret_post"
+> "token_endpoint_auth_method": "client_secret_post"<br>
 > "token_endpoint_auth_method[]": ["private_key_jwt","client_secret_post"]
 
 Example 2:
 
-> "id_token_signed_response_alg": "RS256"
+> "id_token_signed_response_alg": "RS256"<br>
 > "id_token_signed_response_alg[]": ["RS256","ES256"]
 
 The semantics of these declarations are that the original parameter name is used by all legacy peers and is treated according to standard. Peers that suppor the metadata parameter array extension MAY use the corresponding parameter with the "[]" name extension to learn about the client/RP capabilities in the order of preference. If used, the array extension parameter overrides the original parameter.
