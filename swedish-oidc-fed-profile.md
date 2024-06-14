@@ -1,10 +1,4 @@
----
-title: The Swedish OpenID Federation Profile
-date: 2024-06-14
----
-
 ![Logo](img/oidc-logo.png)
-----
 
 # The Swedish OpenID Federation Profile
 

@@ -1,8 +1,3 @@
----
-title: The Swedish OpenID Federation Profile - Challenges and Requirements
-date: 2024-06-14
----
-
 ![Logo](img/oidc-logo.png)
 
 # The Swedish OpenID Federation Profile - Challenges and Requirements
