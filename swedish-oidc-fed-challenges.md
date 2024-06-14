@@ -1,8 +1,13 @@
+---
+title: The Swedish OpenID Federation Profile - Challenges and Requirements
+date: 2024-06-14
+---
+
 ![Logo](img/oidc-logo.png)
 
-# The Swedish OpenID Federation - Challenges and Requirements
+# The Swedish OpenID Federation Profile - Challenges and Requirements
 
-### 2024-03-07
+### 2024-06-14
 
 ## Abstract
 
@@ -13,21 +18,14 @@ A number of requirements for the [Swedish OpenID Federation Profile](swedish-oid
 
 ## 1. Complexity for Federation Services
 
-The full implementation of the current standard presents a significant barrier to entry for federation services 
-desiring to engage with this federation infrastructure. 
-This complexity barrier arises from:
+The full implementation of the current standard presents a significant barrier to entry for federation services desiring to engage with this federation infrastructure. This complexity barrier arises from:
 
 - The relatively intricate process required to gather and validate trusted information about other federation services.
 - The obligation to publish a self-signed Entity Configuration statement at a designated location within their Entity Identifier URL.
 
-Mitigating the first issue can be relatively straightforward, 
-provided all federation entities have access to a Resolver capable of managing this task on their behalf.
+Mitigating the first issue can be relatively straightforward, provided all federation entities have access to a Resolver capable of managing this task on their behalf.
 
-The second issue, however, 
-is more complex but may be significantly improved by two possible strategies.
-
-- Delegating publication of Entity Configuration at the registration Intermediate Entity
-- Embedding the Entity Configuration of the federation service into the superior Entity Statement.
+The second issue, however, is more complex but may be significantly improved by delegating publication of Entity Configuration at the registration Intermediate Entity
 
 A trust chain supporting a federation service might appear as follows:
 
@@ -40,55 +38,37 @@ A trust chain supporting a federation service might appear as follows:
 When the Entity Configuration is published at a ./well-known location under its Entity Identifier URL, this federation service
 is discoverable using the bottom-up strategy.
 
-However, some services may not need to be discoverable using the bottom-up strategy.
-This may be the case for a service
-that only interacts with peers that are using a Resolver to obtain and validate their metadata and Trust Marks.
+The situation for federation services can, however, be simplified significantly if they only need to be discoverable via a resolver that applies a top-down strategy. This means that they do not have to comply with any requirement to publish the Entity Configuration at a ./well-known location, which has a number of desirable down-stream effects:
 
-For these services, the extensibility of the standard makes it possible to eliminate the need to publish the Entity Configuration
-at a ./well-known location by simply embedding it into the Entity Statement issued to federation service A.
+- Creation, signing and publication of all data of the federation service can be delegated to an Intermediate Entity
+- The service can keep its current Entity Identifier without having to provide a ./well-known URL based on that Entity Identifier.
 
-This may be achieved
-by defining a new critical extension claim for Entity Statements that can hold an embedded Entity Configuration for the subject entity.
+Federation services that could be suitable for this type of simplified registration are typically a Relying Party service that only interacts with a limited set of OP services that are using a suitable resolver to locate their metadata. Such RP could easily opt for a simpler registration strategy without any negative side effects. If such RP need to change this strategy in the future, they would have to change strategy and comply with the full set of requirements for bottom-up discovery.
 
-Before validation,
-this embedded Entity Configuration is extracted from its superior Entity Statement and then used in a conventional chain validation process.
-
-The advantage of using this strategy is
-that it allows onboarding of existing services with a minimum of alterations to their existing service.
-While normal hosting of Entity Configuration data requires the service
-to adopt an Entity Identifier that aligns with the hosing Intermediate Entity URL, the embedding strategy allows existing services to 
-retain their current identity.
-This can be a significant advantage if the federation service in question:
-
-1. Participates in several federations using the same Entity Identifier
-2. Only interacts with peers using resolvers and thus has no need to be discoverable using the bottom-up strategy.
-
-Federation entities with embedded Entity Configuration will still be discoverable using the bottom-down strategy by
-entities that support the new critical claim.
-Those who do not support this new critical claim will be forced to reject the chain.
+Support of this simplified option can be achieved by an extension to the OID federation standard in the form of a new critical extension claim for Entity Statements that specifies the URL for locating the Entity Configuration of an entity using top-down discovery.
 
 ### 1.1. Requirements for the Swedish profile
 
 #### 1.1.1. Amendments to OpenID federation
 
-The standard should be amended to support embedded Entity Configurations.
+The standard should be amended to support hosted publication of Entity Configuration at a selected URL independent of the Entity Identifier.
 
-This is achieved by defining a new Entity Statement claim providing information about the location of subject Entity Configuration. 
+This is achieved by defining a new Entity Statement claim providing information about the location of subject Entity Configuration.
 This new Entity Statement claim shall contain information about where the subject Entity Configuration statement is located:
-  - At a specific ./well-known location as required by the standard:
-  - At a location specified by another URL
-  - Embedded in this claim
 
+- At a specific ./well-known location as required by the standard:
+- At a location specified by another URL
+
+The URL MAY be a URL using the data url scheme that embeds the actual entity configuration in the URL.
 
 #### 1.1.2. Requirements to ensure availability of Resolvers
 
-The Swedish profile should contain the following requirements: 
+The Swedish profile should contain the following requirements:
 
 - At least every federation node acting as a TA SHOULD ensure the availability of at least one Resolver that can resolve federation data to that TA
 - The federation resolver of a TA SHOULD be either the TA itself or a registered entity directly under the TA
 
 Federations that do not provide resolvers MUST support bottom-up discovery of all federation entities.
-
 
 ## 2. Policy processing in multi federation setups
 
@@ -136,11 +116,11 @@ but they are incompatible with each other and can never exist in the same chain 
 
 ### 2.2.2 Allowing TA:s to express independent policies
 
-The manner in which the OpenID federation standard can be used to allow independent policies without causing unintentional merge conflicts, 
+The manner in which the OpenID federation standard can be used to allow independent policies without causing unintentional merge conflicts,
 is to use alterantive chain paths where independent and incompatible policies never have to be merged, as shown in the following illustration.
 
-The OpenID federation standard facilitates the implementation of independent policies without leading to unintentional merge conflicts by utilizing alternative chain paths. 
-This approach ensures that independent and incompatible policies remain separate, 
+The OpenID federation standard facilitates the implementation of independent policies without leading to unintentional merge conflicts by utilizing alternative chain paths.
+This approach ensures that independent and incompatible policies remain separate,
 thus avoiding the need for merging. The concept is illustrated below.
 
 ![Bypass policy](img/routing-bypass-policy.png)
@@ -163,19 +143,18 @@ The alternative chain is
 - Entity Statement issued by IE A2 for Leaf Entity A (LE A)
 - Entity Configuration for Leaf Entity A (LE A)
 
-The policies along the path vary based on the Trust Anchor (TA) selected by the relying party. 
-This flexibility permits TAs to enforce completely different independent policies, 
+The policies along the path vary based on the Trust Anchor (TA) selected by the relying party.
+This flexibility permits TAs to enforce completely different independent policies,
 provided these policies can be merged with all other policies within their respective paths.
 
-In the context of the challenge discussed in section 2.1, 
-this approach enables one Trust Anchor (TA) to mandate the support of both `client_secret_post` and `private_key_jwt`, 
+In the context of the challenge discussed in section 2.1,
+this approach enables one Trust Anchor (TA) to mandate the support of both `client_secret_post` and `private_key_jwt`,
 while another TA may require that only `private_key_jwt` is allowed.
-If Leaf Entity A supports both authentication methods, it can comply with both sets of policies. 
-When Leaf Entity A is validated through the first TA, 
-its metadata will reflect both authentication options. 
-When validated through the second TA, 
+If Leaf Entity A supports both authentication methods, it can comply with both sets of policies.
+When Leaf Entity A is validated through the first TA,
+its metadata will reflect both authentication options.
+When validated through the second TA,
 only the `private_key_jwt` method will be listed in its metadata.
-
 
 ### 2.3. Requirements for the Swedish profile
 
@@ -188,13 +167,12 @@ To achieve this the Swedish profile should include the following recommendations
 - Avoid issuing Entity Statements for Leaf Entities directly from Trust Anchors.
 - Consolidate federation services of different types under a common Intermediate Entity that allows them to be chained effectively to multiple Trust Anchors when relevant.
 
-
 ## 3. Metadata policy expression
 
 The OpenID federation draft standard defines the following policy operators:
 
 | Operator    | Definition                                                                                       |
-|-------------|--------------------------------------------------------------------------------------------------|
+| ----------- | ------------------------------------------------------------------------------------------------ |
 | value       | Sets a specific value, regardless of whether metadata already has this parameter present or not. |
 | add         | Add this value if not already present.                                                           |
 | default     | If no value is present (after processing value and add) set this default value.                  |
@@ -206,6 +184,7 @@ The OpenID federation draft standard defines the following policy operators:
 ### 3.1. Problem with value modifiers
 
 These operators are of three types:
+
 - value modifier: Has the capability to change the value to a value that is different from what was declared in the original metadata
 - value restriction: Has the capability of restricting the value defined in original metadata to a subset of the originally declared options
 - value checks: Test the original metadata for compliance, but makes no attempts to modify any metadata.
@@ -214,6 +193,7 @@ These operators are of three types:
 
 The problem with value modifiers is that they can be dangerous if used inappropriately,
 and that they introduce complexity for federation services.
+
 - a value modifier may introduce a value that claims that the entity supports something that this entity actually does not support.
 - The fact that policy can change metadata parameter values may require all federation services to assess what their resolved metadata is at each TA
 
@@ -248,13 +228,12 @@ However, this operator is only included as an example of a custom operator and i
 This value check could, however, be very useful to enforce parameter structure requirements.
 One useful application could be to provide a "regexp" value check to enforce that metadata values holding a URL has the basic structure of a URL.
 
-
 ### 3.3. Requirements for the Swedish profile
 
 - State that value modifiers that add values not specified by the target entity SHOULD NOT be used
 - Define the following custom policy operators (unless defined in the core standard):
-    - `intersects`
-    - `regexp`
+  - `intersects`
+  - `regexp`
 
 ## 4. Discovery support
 
@@ -280,7 +259,6 @@ Define a discovery endpoint for Resolvers that provides a list of resolvable ent
 
 List of resolvable Entity Identifiers matching the request.
 
-
 ## 5. Complete metadata for each entity type
 
 The current standard defines a generic set of metadata parameters that can be included in metadata for any entity type.
@@ -297,3 +275,45 @@ OP metadata will be returned and not the common relevant metadata parameters sto
 ### 5.1. Requirements for the Swedish profile
 
 All metadata parameters that are relevant for a federation service MUST be provided in the metadata for the entity type of that service.
+
+## 6. Mutliple RP/Client metadata options
+
+Client and RP metadata parameters were originally designed to match only a signle peer entity. This is evident by metadata parameters such as:
+
+- token_endpoint_auth_method
+- id_token_signed_response_alg
+
+These metadata parameters can only provide one value, which makes sense if the metadata express the selected option for a particular OP, which capabilities are known in advance. However, this is less useful for expressing the capability or preference of an RP as a declaration towards mulitple OP:s in a federation environment.
+
+### 6.1. Metadata parameter array extension
+
+This section outlines a proposal for a generic metadata extension for Client/RP metadata that can be handled completely transparently by the OIDC fed standard. This is called the metadata parameter array extension and can be provided as a separate extension to OIDC RP and OAuth Client metadata as follows:
+
+**Array name extension**
+
+Each metadata parameter name that provides a single value, where the RP/Client which to provide a list of acceptable values in the order of preference, that metadata parameter name can be extended by the string "[]". This forms the name of a companion metadata parameter with an array of values.
+
+Example 1:
+
+> "token_endpoint_auth_method": "client_secret_post"
+> "token_endpoint_auth_method[]": ["private_key_jwt","client_secret_post"]
+
+Example 2:
+
+> "id_token_signed_response_alg": "RS256"
+> "id_token_signed_response_alg[]": ["RS256","ES256"]
+
+The semantics of these declarations are that the original parameter name is used by all legacy peers and is treated according to standard. Peers that suppor the metadata parameter array extension MAY use the corresponding parameter with the "[]" name extension to learn about the client/RP capabilities in the order of preference. If used, the array extension parameter overrides the original parameter.
+
+**OP/AS support**
+
+An OP may signal support for metadata parameter array extension in RP/Client metadata by including the following metadata parameter:
+
+> "supports_metadata_parameter_array_extension": true
+
+### 6.2. Requirements for the Swedish profile
+
+No actions for the Swedish profile for OIDC federation. The solution outlined above works with standard OIDC federation metadata processing.
+
+A separate specification covering this issue should be created to support the Swedish OpenID Connect profile.
+
