@@ -28,7 +28,7 @@ to provide a baseline for security and interoperability for metadata exchange be
    2.3. [Bridging federation contexts with separate Trust Anchors](#bridging-federation-contexts-with-separate-trust-anchors)
 3. [**Entity Statements**](#entity-statements)
    
-   3.1. [Subject data publication claim](#subject-data-publication-claim)
+   3.1. [Subject Entity Configuration location claim](#subject-entity-configuration-location-claim)
 4. [**Metadata**](#metadata)
 5. [**Metadata Policy**](#metadata-policy)
    
