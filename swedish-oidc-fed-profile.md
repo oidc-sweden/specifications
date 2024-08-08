@@ -258,11 +258,11 @@ encoded in application/x-www-form-urlencoded format, listed below.
 
 The defined request parameters for a discovery request are:
 
-| Parameter | Requirement | Type | Description |
-| :-- | :-- | :-- | :-- |
-|`trust_anchor`|REQUIRED|Single value| The Trust Anchor the returned entities must resolve to.|
-|`entity_types`|OPTIONAL|One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.|
-|`trust_marks`|OPTIONAL|One or more values|Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response.|
+| Parameter     | Requirement | Type | Description |
+|:--------------| :-- | :-- | :-- |
+| `trust_anchor`|REQUIRED|Single value| The Trust Anchor the returned entities must resolve to.|
+| `entity_type` |OPTIONAL|One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.|
+| `trust_mark`  |OPTIONAL|One or more values|Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response.|
 
 The following is a non-normative example of an HTTP GET request for a list of subordinates:
 
