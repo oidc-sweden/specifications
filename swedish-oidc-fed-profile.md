@@ -154,7 +154,7 @@ The `subject_entity_configuration_location` claim provide information about subj
 
 This claim holds a single string value, specifying the URL where the subject Entity Configuration is available. The full Entity Configuration data MAY be embedded in this claim by using the "data" URL scheme \[[RFC2397](#rfc2397)\].
 
-When data URL is used the media type MUST be specified as `application/jose`, the optional `;base64` declaration MUST be omitted and the EntityConfiguration data MUST be provided as a JWS using compact serialization.
+When data URL is used the media type MUST be specified as `application/entity-statement+jwt`, the optional `;base64` declaration MUST be omitted and the EntityConfiguration data MUST be provided as a JWS using compact serialization.
 
 **Note:** The reason for omitting `;base64` is that this is both wrong and redundant for this purpose. It is wrong as the JWS is not a string of base64 encoded data, but rather base64URL encoded fragments separated by "." characters. It is redundant because this format is already defined by the `application/jose` mime type.
 
