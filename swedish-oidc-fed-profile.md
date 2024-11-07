@@ -160,7 +160,7 @@ When data URL is used the media type MUST be specified as `application/jose`, th
 
 Example of embedded Entity Configuration using the data URL scheme:
 
-> "subject_entity_configuration_location": "data:application/jose,eyJhb...Qssw5c"
+> "subject_entity_configuration_location": "data:application/entity-statement+jwt,eyJhb...Qssw5c"
 
 **Note:**
 \[[OpenID.Federation](#openid-federation)\] (section 7)
