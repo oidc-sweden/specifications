@@ -2,7 +2,7 @@
 
 # Authentication Request Parameter Extensions for the Swedish OpenID Connect Profile
 
-### Version: 1.1 - 2024-02-01 - Draft
+### Version: 1.1 - 2024-11-27
 
 ## Abstract
 
