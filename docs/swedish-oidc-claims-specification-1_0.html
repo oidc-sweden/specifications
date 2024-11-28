@@ -47,11 +47,11 @@
 <p><a name="introduction"></a></p>
 <h2 id="1-introduction">1. Introduction</h2>
 <p>This specification aims to provide definitions of a common set of claims (attributes) that
-primarily is be used by Swedish OpenID Connect providers and clients, but can also be used
+primarily are to be used by Swedish OpenID Connect providers and clients, but can also be used
 in a pure OAuth2 context. The goal is to facilitate interoperability by supplying definitions
 for claims that are commonly used independently of the sector of operation.</p>
-<p>Special purpose claims, such as healthcare specific claims, are not covered by this
-specification. However, this specification may serve as the base line for more sector specific
+<p>Special purpose claims, such as healthcare-specific claims, are not covered by this
+specification. However, this specification may serve as the baseline for more sector-specific
 specifications, and in that way ensure that common claims do not have several different
 representations (as is the case for the different SAML attribute specifications in use today).</p>
 <p><a name="requirements-notation-and-conventions"></a></p>
@@ -103,10 +103,10 @@ issuance of the number. Possible levels are:</p>
 claim is released.</p>
 <p><strong>Type:</strong> String holding any of the three values listed above.</p>
 <blockquote>
-<p><strong>Note:</strong> The level of an assigned coordination number may changed over the lifetime of the number.
+<p><strong>Note:</strong> The level of an assigned coordination number may change over the lifetime of the number.
 For example, the level (trustworthiness) may be increased after a supplementary identification, or the
 level may be lowered after an audit where the original identification process was proved to be
-inadequate. This profile does not put any specific requirements on the issuer of this claim, for example
+inadequate. This profile does not put any specific requirements on the issuer of this claim, for example,
 that the current coordination number status must be checked before each time it is issued. This may be
 done by other profiles building upon this profile, but using the claim in the context of this profile
 alone implies that the consuming entity MUST ensure that status of the coordination number before it is
@@ -120,11 +120,11 @@ one year or longer will be assigned a personal identity number (&quot;personnumm
 population register. Prior to being assigned a Swedish personal identity number (&quot;personnummer&quot;), a
 coordination number (see <a href="#swedish-coordination-number">2.1.2</a>) may be issued in order to enable
 communication with various government authorities, healthcare institutions, higher education and banks.</p>
-<p>In most cases regarding people that move to Sweden, a person first holds a coordination number during
+<p>In most cases regarding people who move to Sweden, a person first holds a coordination number during
 a period before he or she is assigned a personal identity number. A typical use case is a person that
-seeks asylum and later is given a residence permit. In this case the person may first hold a coordination
-number and if a residence permit is given a personal identity number will be assigned.</p>
-<p>For a service provider this may lead to problems since the primary identifier for an individual has
+seeks asylum and later is given a residence permit. In this case, the person may first hold a coordination
+number and if a residence permit is given, a personal identity number will be assigned.</p>
+<p>For a service provider, this may lead to problems since the primary identifier for an individual has
 changed. A login with the newly assigned identifier will not match the user account previously used by
 this individual.</p>
 <p>Therefore, this profile defines the <code>previousCoordinationNumber</code> claim to enable matching a previously
@@ -134,7 +134,7 @@ matching at a service provider.</p>
 <p><strong>Type:</strong> See <a href="#swedish-personal-identity-number">2.1.1</a> and <a href="#swedish-coordination-number">2.1.2</a> above.</p>
 <blockquote>
 <p><strong>Note (i):</strong> This claim is a special-purpose claim that most likely only will be used in very 
-specific use cases. Therefore it is not included in any scope definitions below. A service provider
+specific use cases. Therefore, it is not included in any scope definitions below. A service provider
 wishing to potentially receive this claim SHOULD request is explicitly using the <code>claims</code> request
 parameter.</p>
 </blockquote>
@@ -167,12 +167,12 @@ by the organization and the <code>org-number</code> part is according to <a href
 <p><strong>Note (i)</strong>: In the general case, a claims consumer MUST NOT assume a particular format or meaning
 of the personal identifier part since different organizations may use different formats. A claims
 consumer should also be aware that a personal identifier separated from its organizational identifier
-code can not be regarded as unique.</p>
+code cannot be regarded as unique.</p>
 </blockquote>
 <blockquote>
 <p><strong>Note (ii)</strong>: In the description above we write &quot;global personal organizational identities&quot;.
-With global we refer to an identity that is used outside of the issuing organization&#39;s scope/domain.
-The individual&#39;s identity within the organization may be the, but is not required to be,
+With global we refer to an identity used outside the issuing organization&#39;s scope/domain.
+The individual&#39;s identity within the organization may be, but is not required to be, the
 &quot;personal-id&quot; part of the claim.</p>
 </blockquote>
 <p><a name="organization-name"></a></p>
@@ -221,7 +221,7 @@ stored as a claim value.</p>
 <p><a name="device-ip-address"></a></p>
 <h5 id="2333-device-ip-address">2.3.3.3. Device IP Address</h5>
 <p><strong>Claim:</strong> <code>https://id.oidc.se/claim/deviceIp</code></p>
-<p><strong>Description:</strong> If the user authenticated using an online device holding the user credentials (such as a mobile phone) this claim may be used to inform the relying party of the IP address of that device. </p>
+<p><strong>Description:</strong> If the user is authenticated using an online device holding the user credentials (such as a mobile phone), this claim may be used to inform the relying party of the IP address of that device.</p>
 <blockquote>
 <p>Note: This IP does not have to be the same as the User agent address (depending on the authentication scheme).</p>
 </blockquote>
@@ -244,9 +244,9 @@ claim can hold the encoding of an OCSP response, a SAML assertion, or even a sig
 This claim is intended to be released by OpenID Providers that offers several authentication 
 mechanisms (providers). This includes OpenID Providers that delegate, or proxy, the user authentication
 to other services<sup>2</sup>. </p>
-<p>By including this claim in an ID Token the OP informs the Relying Party about the identity of 
+<p>By including this claim in an ID Token, the OP informs the Relying Party about the identity of
 the provider (mechanism or authority) that authenticated the user.</p>
-<p><strong>Type:</strong> String, preferably an URI</p>
+<p><strong>Type:</strong> String, preferably a URI</p>
 <blockquote>
 <p><strong>[1]:</strong> This maps to the &quot;authenticating authority&quot; from the 
 <a href="https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf">SAML v2.0 core specification</a>,
@@ -268,11 +268,11 @@ can be SAML Identity Providers, or any other authentication service.</p>
 </ul>
 <p>This specification defines a number of scopes that are useful within the context of Swedish
 eID usage. </p>
-<p>Many Relying Parties that uses OpenID Connect to authenticate users can not solely depend
+<p>Many Relying Parties that uses OpenID Connect to authenticate users cannot solely depend
 on the user&#39;s session at the OpenID Provider and the <code>sub</code> claim to log in the user to the
 RP application. In the context of Swedish eID there are some obvious claims that are regarded
-to be &quot;primary&quot; identity claims by Relying Parties, for example a Swedish personal identity
-number. Such claims are needed by the Relying Party in order to log in a user to its application.
+to be &quot;primary&quot; identity claims by Relying Parties, for example, a Swedish personal identity
+number. Such claims are needed by the Relying Party to log in a user to its application.
 Therefore, this specification&#39;s scope definitions will define that some claims are to be delivered
 in the ID Token so that a Relying Party can fully log in a user without having to make a,
 potentially, unnecessary call to the UserInfo endpoint.</p>
