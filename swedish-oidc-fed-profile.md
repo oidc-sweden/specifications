@@ -260,7 +260,7 @@ The defined request parameters for a discovery request are:
 
 | Parameter       | Requirement | Type | Description |
 |:----------------| :-- | :-- | :-- |
-| `anchor`        |REQUIRED|Single value| The Trust Anchor the returned entities must resolve to.|
+| `trust_anchor`  |REQUIRED|Single value| The Trust Anchor the returned entities must resolve to.|
 | `type`          |OPTIONAL|One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.|
 | `trust_mark_id` |OPTIONAL|One or more values|Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response.|
 
