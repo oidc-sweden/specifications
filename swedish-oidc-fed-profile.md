@@ -2,7 +2,7 @@
 
 # The Swedish OpenID Federation Profile
 
-### Version: 1.0 - draft 05 - 2024-06-14
+### Version: 1.0 - draft 06 - 2025-01-31
 
 ## Abstract
 
@@ -261,7 +261,7 @@ The defined request parameters for a discovery request are:
 | Parameter       | Requirement | Type | Description |
 |:----------------| :-- | :-- | :-- |
 | `trust_anchor`  |REQUIRED|Single value| The Trust Anchor the returned entities must resolve to.|
-| `type`          |OPTIONAL|One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.|
+| `entity_type`          |OPTIONAL|One or more values | Specifies the requested entity types. An absent parameter is interpreted as all entity types.|
 | `trust_mark_id` |OPTIONAL|One or more values|Specifies the Trust Mark identifiers that must be supported by an entity for this entity to be included in the response.|
 
 The following is a non-normative example of an HTTP GET request for a list of subordinates:
