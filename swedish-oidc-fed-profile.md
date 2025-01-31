@@ -268,7 +268,7 @@ The following is a non-normative example of an HTTP GET request for a list of su
 
 ```
 GET /discovery HTTP/1.1
-Host: openid.example.com?trust_anchor=https%3A%2F%2Fopenid.example.com%2FTA&type=openid_provider
+Host: openid.example.com?trust_anchor=https%3A%2F%2Fopenid.example.com%2FTA&entity_type=openid_provider
 ```
 
 <a name="discovery-response"></a>
