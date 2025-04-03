@@ -683,6 +683,6 @@ dynamically update the sender's JWK Set document entities compliant with this pr
 > [NIST Special Publication 800-52, Revision 2, "Guidelines for the Selection, Configuration, and Use of Transport Layer Security (TLS) Implementations"](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf). 
 
 <a name="nist800-131"></a>
-**\[NIST.800-52.Rev2\]**
+**\[NIST.800-131A.Rev2\]**
 > [NIST Special Publication 800-131A Revision 2, "Transitioning the Use of Cryptographic Algorithms and Key Lengths"](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf)
 
