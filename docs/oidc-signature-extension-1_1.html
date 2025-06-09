@@ -141,10 +141,9 @@ the field MUST NOT be present.</p>
 </li>
 <li><p><code>sign_message</code> - A sign message is the human readable text snippet that is displayed to the user as
 part of the signature<sup>2</sup> or signature approval processes. The <code>sign_message</code> field is a JSON
-object according to the <code>https://id.oidc.se/param/userMessage</code> request parameter as defined in section</p>
+object according to the <code>https://id.oidc.se/param/userMessage</code> request parameter as defined in section 2.1 of [<a href="#request-ext">OIDC.Sweden.Param</a>]. This field MUST be present.</p>
 </li>
 </ul>
-<p>2.1 of [<a href="#request-ext">OIDC.Sweden.Param</a>]. This field MUST be present.</p>
 <p>Profiles extending this specification MAY introduce additional fields.</p>
 <p><strong>Examples:</strong></p>
 <p>Example of using the <code>signRequest</code> parameter for signing. The supplied to-be-signed data is often
