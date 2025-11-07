@@ -44,7 +44,7 @@ The focus of this profile is to make it simple for entities that perform protoco
 <a name="requirements-notation-and-conventions"></a>
 ### 1.1. Requirements Notation and Conventions
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 \[[RFC2119](#rfc2119)\] \[[RFC8174](#rfc8174)\][RFC8174] when, and only when, they appear in all capitals, as shown here.
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 \[[RFC2119](#rfc2119)\] \[[RFC8174](#rfc8174)\] when, and only when, they appear in all capitals, as shown here.
 
 <a name="terminology"></a>
 ### 1.2. Terminology
@@ -127,6 +127,10 @@ Consequently, an OpenID Provider or an OAuth 2.0 Authorization Server functionin
 > - Prefer using short-lived (no revocation will be needed)
 >     - For those, we probably want to include a trust mark-pointer in Entity Configuration.
 >     - Up-side: Trust mark status endpoint will not be required 
+> - Trust mark types, i.e., URL - Recommendation that this URL is related to the Entity Identifier of the TMI.
+> - Trust mark requests: MUST/SHOULD require client authentication at the endpoint
+> - We need to write about a registration entity requesting trust marks on behalf of a registered entity. In some settings, an entity may not even know that it should posses a certain trust mark.
+- > Also, the profile should discuss having the trust marks at a superior entity statement. The main spec. states that trust marks SHOULD only be stored in an entity configuration. A lot of reasons why this is not always a good idea.
 
 ## 7. Metadata
 
