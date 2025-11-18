@@ -40,11 +40,17 @@ It provides clarifications and extensions that enable entities with protocol rol
 
 4. [**Resolving Metadata and Trust Marks**](#resolving-metadata-and-trust-marks)
 
-9. [**References**](#references)
+5. [**Trust Marks**](#trust-marks)
 
-    9.1. [Normative References](#normative-references)
+6. [**Metadata**](#metadata)
 
-    9.2. [Informative References](#informative-references)
+7. [**Federation Policies**](#federation-policies)
+
+8. [**References**](#references)
+
+    8.1. [Normative References](#normative-references)
+
+    8.2. [Informative References](#informative-references)
 
 ---
 
@@ -111,16 +117,16 @@ Therefore, it is RECOMMENDED that entities compliant with this profile use a Fed
 
 A Trust Anchor adhering to this profile MUST ensure the availability of at least one Federation Resolver compliant with the requirements stated in this profile. This resolver MUST support resolving for the given Trust Anchor and MUST be either provided as part of the Trust Anchor or be a subordinate entity to the Trust Anchor.
 
-> May be for several TA. Part of a TA, or stand-alone.
-
-> Trust Anchors and Registration Entities (intermediates) MUST provider resolve endpoint.
-
 [Section 4, Resolving Metadata and Trust Marks](#resolving-metadata-and-trust-marks) specifies further requirements for Federation Resolver usage and implementation. 
 
 <a name="hosted-entity-configurations"></a>
 ### 2.3. Hosted Entity Configurations
 
-TODO
+The specification "OpenID Federation Entity Configuration Hosting", \[[OpenID.Federation.Hosting](#openid-federation-hosting)\], defines the Entity Statement extension claim `ec_location`. The primary purpose of this claim is to enable hosting of a Leaf Entity's Entity Configuration data at an alternate location from that specified in Section 9 of the \[[OpenID.Federation](#openid-federation)\] standard.
+
+Using this claim, an OpenID Federation deployment can allow entities that do not support the \[[OpenID.Federation](#openid-federation)\] standard, or that for other reasons cannot meet its requirements for publishing Entity Configuration at a well-known location, to participate in the federation.
+
+For deployments adhering to this profile it is RECOMMENDED that the `ec_location` extension claim is supported. Furthermore, Superior Entities that support the claim SHOULD include the claim in all published Entity Statements, even if the subject's Entity Configuration is published at the well-known location as specified in \[[OpenID.Federation](#openid-federation)\]. The reason for this is to offer a uniform way for resolvers to locate the subject Entity Configuration.
 
 <a name="federation-hierarchy-requirements-and-recommendations"></a>
 ### 2.4. Federation Hierarchy Requirements and Recommendations
@@ -196,6 +202,7 @@ Can we allow to not include trust chain?
 
 > Simplest way for handling trusted certs - only to resolver.
 
+<a name="trust-marks"></a>
 ## 5. Trust Marks
 
 > - Requirements and recommendations
@@ -212,6 +219,7 @@ Policy that a trustmark older than a configurable value must/should be checked f
 
 Self-signed: loa3-unspecified
 
+<a name="metadata"></a>
 ## 6. Metadata
 
 > - An entity's metadata should be usable also for non-OIDF consumers
@@ -223,7 +231,7 @@ Policy: Own chapter ...
 
 > - Metadata. Make sure to be functioning based on "standard" metadata claims.
 > - No registration at particular OP/AS
-> - ...
+> - Algorithm support
 
 It is each entities responsibility to create metadata that is functional by the intended peers.
 
@@ -240,18 +248,11 @@ Therefore, this profile specifies the following requirements:
 
 - If an Immediate Superior Entity needs to add metadata parameter values to an Entity's resolved metadata it SHOULD do so by declaring these values using metadata declarations in the Entity Statement issued for the Entity, and SHOULD NOT use metadata policy operators.
 
-
-## 8. Cryptographic Requirements
-
-### 8.1. Algorithm Support    
-
-> TODO: Require support of a wider range of algorithms
-
 <a name="references"></a>
-## 9. References
+## 8. References
 
 <a name="normative-references"></a>
-### 9.1. Normative References
+### 8.1. Normative References
 
 <a name="openid-registration"></a>
 **\[OpenID.Registration\]**
@@ -269,6 +270,10 @@ Therefore, this profile specifies the following requirements:
 **\[OpenID.RP.Choices\]**
 > [Jones, M.B., Hedberg, R., Bradley, J., and F. Skokan, "OpenID Connect Relying Party Metadata Choices 1.0", 19 September 2025](https://openid.net/specs/openid-connect-rp-metadata-choices-1_0.html).
 
+<a name="openid-federation-hosting"></a>
+**\[OpenID.Federation.Hosting\]**
+> Santesson, S., Lindström, M., "OpenID Federation Entity Configuration Hosting", November 2025.
+
 <a name="rfc2119"></a>
 **\[RFC2119\]**
 > [Bradner, S., "Key words for use in RFCs to Indicate Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997](https://www.rfc-editor.org/info/rfc2119).
@@ -282,4 +287,4 @@ Therefore, this profile specifies the following requirements:
 > [Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017](https://www.rfc-editor.org/info/rfc8174).
 
 <a name="informative-references"></a>
-### 9.2. Informative References
+### 8.2. Informative References
