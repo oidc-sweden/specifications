@@ -2,7 +2,7 @@
 
 # OpenID Federation Deployment and Interoperability Profile
 
-### Version: 1.0 - Draft 00 - 2025-11-18
+### Version: 1.0 - Draft 00 - 2025-11-20
 
 ## Abstract
 
@@ -171,20 +171,16 @@ Adhering to this requirement, combined with the requirement stated in [Section 2
 
 "OpenID Connect Dynamic Client Registration", \[[OpenID.Registration](#openid-registration)\], and "OAuth 2.0 Dynamic Client Registration Protocol", \[[RFC7591](#rfc7591)\], specify how a client registers at an OpenID Provider or an OAuth 2.0 Authorization Server. Such registrations are performed in a peer-to-peer manner, where a client is registered with a single service. A given client's registration at another service may differ in naming, metadata, and security mechanisms.
 
-In a federative context, however, a client does not register with a specific service. Instead, it registers within the federation itself. This fact implies that the registration data for a client joining the federation needs to be generic in a sense that the registration does not presupposes a particular peer service.
+In a registration against a federation, a client does not register with a specific service. Instead, it registers within the federation itself. This fact implies that the registration data for a client joining the federation needs to be generic in a sense that the registration does not presupposes a particular peer service.
 
-Consequently, an OpenID Provider or an OAuth 2.0 Authorization Server functioning within a federation must be prepared to accept, and incorporate the metadata of an already registered client, to its service configuration.
+Consequently, an OpenID Provider or an OAuth 2.0 Authorization Server compliant with this profile MUST be prepared to accept, and incorporate the metadata of an already registered client, to its service configuration.
 
-> Items to over:
+> Items to cover:
 > 
-> - Write about "registration to the federation" as opposed to "registration at an OP or AS", i.e., registration according section 12 of \[[OpenID.Registration](#openid-registration)\] vs. registration at a Federaion Registration Entity (intermediate).
->     - The latter enables "federation like" registration. In these cases we need to have a mechanism to notify OPs and AS:s that a new entity has been added ...
-> - Hosted entity statements. Why and what is needed. Requires use of resolvers. Will point at extension.
-
-Registration policy. I constraining mechanism ...
-Utökning: ID för policy. Supported registration policies.
-
-Eget kapitel för lagring av Entity Configuration.
+> - The role of a registration entity.
+> - Notification to OP/AS that a new client has been added. Out of scope, but should be mentioned.
+> - Registration policy. Constraining mechanism ...
+> - ID for policy. Supported registration policies.
 
 
 <a name="resolving-metadata-and-trust-marks"></a>
@@ -193,31 +189,24 @@ Eget kapitel för lagring av Entity Configuration.
 > - Resolving Trust Chains and Metadata
 >    - Requirements for resolvers
 >    - Requirements for caching and handling the resolve response
-
-Får inte lita på ett response längre än vad ingående trust marks är giltiga.
-
-Resolver builds from top down!
-
-Can we allow to not include trust chain?
-
-> Simplest way for handling trusted certs - only to resolver.
+>    - A consumer must not trust a response longer than its validity
+>    - Resolver builds from top down!
+>    - Limitation: Trust chains must be included according to the spec, but is not needed in most cases.
+> - Simplest way for handling trusted certs - only to resolver.
 
 <a name="trust-marks"></a>
 ## 5. Trust Marks
 
 > - Requirements and recommendations
 > - Validation process
-> - Prefer using short-lived (no revocation will be needed)
->     - For those, we probably want to include a trust mark-pointer in Entity Configuration.
->     - Up-side: Trust mark status endpoint will not be required 
+> - Short-lived (no revocation will be needed) vs. Long-lived (status check required)
+>     - For short-lived, we probably want to include a trust mark-pointer in Entity Configuration. Up-side: Trust mark status endpoint will not be required 
 > - Trust mark types, i.e., URL - Recommendation that this URL is related to the Entity Identifier of the TMI.
-> - [Trust mark requests: MUST/SHOULD require client authentication at the endpoint]
+> - [Trust mark requests: Require client authentication at the endpoint? Depends on intended usage.]
 > - We need to write about a registration entity requesting trust marks on behalf of a registered entity. In some settings, an entity may not even know that it should posses a certain trust mark.
-- > Also, the profile should discuss having the trust marks at a superior entity statement. The main spec. states that trust marks SHOULD only be stored in an entity configuration. A lot of reasons why this is not always a good idea.
-
-Policy that a trustmark older than a configurable value must/should be checked for validity against a tm status endpoint.
-
-Self-signed: loa3-unspecified
+> - Also, the profile should discuss having the trust marks at a superior entity statement. The main spec. states that trust marks SHOULD only be stored in an entity configuration. A lot of reasons why this is not always a good idea.
+> - Policy that a trustmark older than a configurable value must/should be checked for validity against a tm status endpoint.
+> - Self-signed: for example for `loa3-unspecified`.
 
 <a name="metadata"></a>
 ## 6. Metadata
@@ -226,14 +215,10 @@ Self-signed: loa3-unspecified
 > - Discuss "OpenID Connect Relying Party Metadata Choices". Alternative is to enforce support for a wider range of algorithms.
 > - Raise concern about OAuth scopes in metadata.
 > - An OP/AS cannot get everything it needs from federation metadata. It must probably combine with a client's trust marks and a policy to configure a client's rights etc.
-
-Policy: Own chapter ...
-
 > - Metadata. Make sure to be functioning based on "standard" metadata claims.
 > - No registration at particular OP/AS
 > - Algorithm support
-
-It is each entities responsibility to create metadata that is functional by the intended peers.
+> - It is each entities responsibility to create metadata that is functional by the intended peers.
 
 <a name="federation-policies"></a>
 ## 7. Federation Policies
