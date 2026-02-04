@@ -21,14 +21,14 @@ OpenID Connect Profile.
 
 ## Drafts
 
-### OpenID Connect Federation
+### OpenID Federation
 
-* [The Swedish OpenID Connect Federation Profile](swedish-oidc-fed-profile.md) - Defines a profile for
-OpenID Connect federations for use within the Swedish public and private sectors.
+* Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - *ongoing*
 
-  * [The Swedish OpenID Connect Federation - Introduction](swedish-oidc-fed-introduction.md) - Non-normative document describing how the OpenID federation draft standard works and how it can be used to provide the base of collaborating Swedish OpenID federations.
-  
-  * [The Swedish OpenID Connect Federation - Challenges and Requirements](swedish-oidc-fed-challenges.md) - A work-document where current challenges and requirements are documented.
+* [OpenID Federation Organization Identifier Metadata Parameter 1.0](https://www.oidc.se/openid-federation-organization-identifier/main.html) - This specification defines the `organization_identifier` metadata parameter that allows Entities to declare an unique organization identifier.
 
+* [OpenID Federation Registration Policy 1.0](https://www.oidc.se/openid-federation-registration-policy/main.html) - This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the `registration_policy` Claim.
+
+* [OpenID Federation Entity Configuration Hosting 1.0](https://www.oidc.se/openid-federation-hosting/main.html) - This specification defines an extension to OpenID Federation that enables Subordinate Statements to include a Claim that indicates where a subject’s Entity Configuration is located.
 
 
