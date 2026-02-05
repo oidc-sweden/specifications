@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 00</title>
+<meta content="Martin Lindström" name="author">
+<meta content="Stefan Santesson" name="author">
+<meta content="
+       This document defines a deployment and interoperability profile for OpenID Federation  . The profile introduces a constrained and implementation-focused subset of the OpenID Federation specification, designed to simplify deployment and promote interoperability across federations. 
+       It provides clarifications and extensions that enable entities with protocol roles, such as OpenID Providers, OpenID Connect Relying Parties, OAuth 2.0 Authorization Servers, Clients, and Protected Resources, to join and use an OpenID Federation with minimal effort. The profile also describes mechanisms that allow legacy systems to participate without being fully OpenID Federation-compliant. 
+    " name="description">
+<meta content="xml2rfc 3.16.0" name="generator">
+<meta content="security" name="keyword">
+<meta content="openid" name="keyword">
+<meta content="ssi" name="keyword">
+<meta content="swedish-openid-federation-profile" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.16.0
+    Python 3.10.2
+    appdirs 1.4.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.2
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.2
+    MarkupSafe 2.1.2
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.28.2
+    setuptools 57.5.0
+    six 1.16.0
+    wcwidth 0.2.6
+-->
+<link href="./swedish-openid-federation-profile.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necessary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  display: table;
+  border: none;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre {
+  background-color: #f9f9f9;
+  font-family: var(--font-mono);
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    float: none;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: var(--font-sans);
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  .breakable pre {
+    break-inside: auto;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The following is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+.sourcecode pre,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .artwork > pre,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background slightly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr {
+  break-inside: avoid;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottom margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the compact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div.sourcecode:first-child,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type:only-child {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+</head>
+<body class="xml2rfc">
+<script src="metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
+<td class="left"></td>
+<td class="center">swedish-openid-federation-profile</td>
+<td class="right">February 2026</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Lindström &amp; Santesson</td>
+<td class="center">Standards Track</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">OIDC Sweden</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2026-02-05" class="published">5 February 2026</time>
+    </dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">M. Lindström</div>
+<div class="org">IDsec Solutions</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Santesson</div>
+<div class="org">IDsec Solutions</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 00</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document defines a deployment and interoperability profile for OpenID Federation <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>. The profile introduces a constrained and implementation-focused subset of the OpenID Federation specification, designed to simplify deployment and promote interoperability across federations.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">It provides clarifications and extensions that enable entities with protocol roles, such as OpenID Providers, OpenID Connect Relying Parties, OAuth 2.0 Authorization Servers, Clients, and Protected Resources, to join and use an OpenID Federation with minimal effort. The profile also describes mechanisms that allow legacy systems to participate without being fully OpenID Federation-compliant.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+</section>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-requirements-notation-and-c" class="internal xref">Requirements Notation and Conventions</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-structuring-federation-depl" class="internal xref">Structuring Federation Deployments</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-federation-entity-types" class="internal xref">Federation Entity Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-use-of-resolvers" class="internal xref">Use of Resolvers</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-entity-configuration" class="internal xref">Entity Configuration</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.1">
+                    <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="auto internal xref">2.3.1</a>.  <a href="#name-entity-configuration-validi" class="internal xref">Entity Configuration Validity</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.2">
+                    <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-hosted-entity-configuration" class="internal xref">Hosted Entity Configurations</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="auto internal xref">2.4</a>.  <a href="#name-federation-policies" class="internal xref">Federation Policies</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5">
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-federation-hierarchy-requir" class="internal xref">Federation Hierarchy Requirements and Recommendations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.1">
+                    <p id="section-toc.1-1.2.2.5.2.1.1"><a href="#section-2.5.1" class="auto internal xref">2.5.1</a>.  <a href="#name-chaining-models" class="internal xref">Chaining Models</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.2">
+                    <p id="section-toc.1-1.2.2.5.2.2.1"><a href="#section-2.5.2" class="auto internal xref">2.5.2</a>.  <a href="#name-trust-anchor-and-trust-mark" class="internal xref">Trust Anchor and Trust Mark Issuer Roles</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.3">
+                    <p id="section-toc.1-1.2.2.5.2.3.1"><a href="#section-2.5.3" class="auto internal xref">2.5.3</a>.  <a href="#name-metadata-policy-declaration" class="internal xref">Metadata Policy Declarations</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-entity-registration" class="internal xref">Entity Registration</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-role-of-the-federation-regi" class="internal xref">Role of the Federation Registration Entity</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-use-of-registration-policie" class="internal xref">Use of Registration Policies</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-resolving-metadata-and-trus" class="internal xref">Resolving Metadata and Trust Marks</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-federation-resolver-require" class="internal xref">Federation Resolver Requirements</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-using-a-federation-resolver" class="internal xref">Using a Federation Resolver</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-trust-marks" class="internal xref">Trust Marks</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-metadata" class="internal xref">Metadata</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-notices" class="internal xref">Notices</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-document-history" class="internal xref">Document History</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The OpenID Federation specification <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> defines a general framework for establishing and managing federations of entities participating in identity and authorization protocols such as OpenID Connect and OAuth 2.0. While the standard is powerful and flexible, its generic design allows for a wide range of deployment models, some of which can introduce unnecessary complexity for implementers.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document defines a deployment and interoperability profile for OpenID Federation. Its purpose is to facilitate straightforward and interoperable federation deployments by providing additional constraints, clarifications, and recommendations. The intent is to enable practical implementations that are easy to deploy and maintain, without requiring a deep understanding of all features of the base specification.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">The profile references a limited set of extensions that allow entities such as OpenID Providers (OPs) and OpenID Connect Relying Parties (RPs) to participate in a federation even if they are not fully OpenID Federation-compliant. This enables integration of legacy systems within an OpenID Federation environment while preserving trust and interoperability.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">The focus of this profile is to make it simple for entities that perform protocol roles, such as OPs, RPs, OAuth 2.0 Authorization Servers, Clients, and Protected Resources, to join and use a federation. It defines consistent patterns for registration and metadata resolution, allowing such entities to participate with minimal configuration and operational overhead.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<div id="requirements-notation-and-conventions">
+<section id="section-1.1">
+        <h3 id="name-requirements-notation-and-c">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-requirements-notation-and-c" class="section-name selfRef">Requirements Notation and Conventions</a>
+        </h3>
+<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in
+this document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span>
+          <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-1.2">
+        <h3 id="name-terminology">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.2-1">This document extends <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 1.2</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> by introducing the following terms to improve the readability of this profile:<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-1.2-2">
+          <dt id="section-1.2-2.1">Federation Protocol Entity</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.2">
+            <br>
+An entity within the federation that fulfils a protocol role, such as an OpenID Provider, OpenID Connect Relying Party, OAuth 2.0 Authorization Server, OAuth 2.0 Client, or OAuth 2.0 Protected Resource. This is typically a Leaf Entity.<br><a href="#section-1.2-2.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-2.3">Federation Service Entity</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.4">
+            <br>
+An entity within the federation that does not play a protocol role but instead takes on an operational role within the federation, such as a Trust Anchor, an Intermediate Entity, or a Trust Mark Issuer.<br><a href="#section-1.2-2.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-2.5">Federation Registration Entity</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.6">
+            <br>
+A Superior Entity within the federation with which a Federation Protocol Entity (for example, an OpenID Connect Relying Party) registers to join the federation. This involves the collection of Entity Configuration and metadata, and the creation of an Entity Statement.<br><a href="#section-1.2-2.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-2.7">Federation Resolver</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.8">
+            <br>
+A Federation Service Entity that provides functionality for obtaining Resolved Metadata and Trust Marks for a given Entity.<a href="#section-1.2-2.8" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="structuring_federation_deployments">
+<section id="section-2">
+      <h2 id="name-structuring-federation-depl">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-structuring-federation-depl" class="section-name selfRef">Structuring Federation Deployments</a>
+      </h2>
+<p id="section-2-1">The OpenID Federation standard <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>, is generic and imposes few restrictions on how a federation may be structured. This section introduces a set of requirements and recommendations intended to make OpenID Federation deployments straightforward and easy to maintain.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<div id="federation_entity_types">
+<section id="section-2.1">
+        <h3 id="name-federation-entity-types">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-federation-entity-types" class="section-name selfRef">Federation Entity Types</a>
+        </h3>
+<p id="section-2.1-1"><span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> does not restrict how federation roles may be combined by a Federation Entity operating under a single Entity Identifier. However, combining the role of an Intermediate Entity with that of a Federation Protocol Entity, such as an OpenID Provider, can introduce challenges and unnecessary complexity. Most importantly, it may lead to conflicts between the contents of the <code>metadata</code> Claim and the <code>metadata_policy</code> Claim in subordinate Entity Statements.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">Therefore, implementers of this profile <span class="bcp14">MUST NOT</span> combine the role of a Trust Anchor, Intermediate Entity, Trust Mark Issuer, or Federation Resolver with that of a Federation Protocol Entity under the same Entity Identifier.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">This requirement implies that a Federation Protocol Entity is always a Leaf Entity and that its Entity Configuration <span class="bcp14">MUST NOT</span> include metadata of type <code>federation_entity</code>.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="use_of_resolvers">
+<section id="section-2.2">
+        <h3 id="name-use-of-resolvers">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-use-of-resolvers" class="section-name selfRef">Use of Resolvers</a>
+        </h3>
+<p id="section-2.2-1"><span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 10</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> specifies requirements for how an Entity resolves the Trust Chain and metadata of another Entity with which it wishes to establish trust. This process includes fetching Entity Statements, applying metadata policies and constraints, validating Trust Chains, and handling caching. The procedure is complex and may be difficult for all Federation Protocol Entities within the federation to implement.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-2">Also, this algorithm relies on all participants publishing their Entity Configuration information at a well-known location, as specified in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 9</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>. However, this profile references an alternative way of publishing Entity Configuration (see <a href="#hosted_entity_configurations" class="auto internal xref">Section 2.3.2</a> below), that requires a resolver algorithm starting with a Trust Anchor instead of the bottom-up approach specified in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 10</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2-3">Therefore, it is <span class="bcp14">RECOMMENDED</span> that entities compliant with this profile use a Federation Resolver in order to resolve metadata and trust for peer entities. A Federation Resolver is an entity within the federation that provides a <code>federation_resolve_endpoint</code> as specified in Sections <a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">5.1.1</a> and <a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">8.3</a> of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.2-4">A Trust Anchor adhering to this profile <span class="bcp14">MUST</span> ensure the availability of at least one Federation Resolver compliant with the requirements stated in this profile. This resolver <span class="bcp14">MUST</span> support resolving for the given Trust Anchor. It is <span class="bcp14">RECOMMENDED</span> that the resolver is provided as part of the Trust Anchor itself.<a href="#section-2.2-4" class="pilcrow">¶</a></p>
+<aside id="section-2.2-5">
+          <p id="section-2.2-5.1">If the resolver is provided by a Subordinate Entity to the Trust Anchor, federation participants that entirely relies on the use of the resolver will have to configure two trusted federation keys; both to the Trust Anchor and to the Entity implementing the Federation Resolver. See <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3.3</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>.<a href="#section-2.2-5.1" class="pilcrow">¶</a></p>
+</aside>
+<p id="section-2.2-6"><a href="#resolving_metadata_and_trust_marks" class="auto internal xref">Section 4</a>, <a href="#resolving_metadata_and_trust_marks" class="internal xref">Resolving Metadata and Trust Marks</a>, specifies further requirements for Federation Resolver usage and implementation.<a href="#section-2.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="entity-configuration">
+<section id="section-2.3">
+        <h3 id="name-entity-configuration">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-entity-configuration" class="section-name selfRef">Entity Configuration</a>
+        </h3>
+<p id="section-2.3-1">This section defines requirements and recommendations for Entity Configurations, as defined in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 3</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<div id="entity_configuration_validity">
+<section id="section-2.3.1">
+          <h4 id="name-entity-configuration-validi">
+<a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-entity-configuration-validi" class="section-name selfRef">Entity Configuration Validity</a>
+          </h4>
+<p id="section-2.3.1-1">The validity period of an Entity Configuration is controlled by the <code>exp</code> Claim. Setting a short validity period undermines effective caching and places a burden on the owning Entity to continuously update and sign the Entity Configuration. Conversely, setting long validity periods may delay the propagation of metadata changes, as older versions may remain cached.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<aside id="section-2.3.1-2">
+            <p id="section-2.3.1-2.1">TODO: Suggest that federation policies recommend sensible values for validity.<a href="#section-2.3.1-2.1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-2.2">TODO: Requirement that Entities MUST update Entity Configuration more oftenly than what is stated in the <code>exp</code> Claim.<a href="#section-2.3.1-2.2" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-2.3">TODO: Unclear in main spec. If short-lived Trust Marks are being used. Do they have an effect on EC validity?<a href="#section-2.3.1-2.3" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="hosted_entity_configurations">
+<section id="section-2.3.2">
+          <h4 id="name-hosted-entity-configuration">
+<a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-hosted-entity-configuration" class="section-name selfRef">Hosted Entity Configurations</a>
+          </h4>
+<p id="section-2.3.2-1">The specification "OpenID Federation Entity Configuration Hosting" <span>[<a href="#OpenID.Federation.Hosting" class="cite xref">OpenID.Federation.Hosting</a>]</span> defines the Entity Statement extension Claim <code>ec_location</code>. The primary purpose of this Claim is to enable hosting of a Leaf Entity's Entity Configuration data at an alternate location from that specified in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 9</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-2">Using this Claim, an OpenID Federation deployment can allow entities that do not support the <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> standard, or that for other reasons cannot meet its requirements for publishing Entity Configuration at a well-known location, to participate in the federation.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-3">For deployments adhering to this profile it is <span class="bcp14">RECOMMENDED</span> that the <code>ec_location</code> extension Claim is supported. Furthermore, it is <span class="bcp14">RECOMMENDED</span> that Superior Entities supporting the Claim include the Claim in all published Entity Statements, even if the subject's Entity Configuration is published at the well-known location as specified in <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>. The reason for this is to offer a uniform way for resolvers to locate the subject Entity Configuration.<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="federation_policies">
+<section id="section-2.4">
+        <h3 id="name-federation-policies">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-federation-policies" class="section-name selfRef">Federation Policies</a>
+        </h3>
+<p id="section-2.4-1">An Entity's Entity Configuration contains a <code>metadata</code> Claim in which the Entity declares parameters about its preferences and capabilities. A metadata policy, as specified in Section 6.1 of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>, <span class="bcp14">MAY</span> be added to Subordinate Statements in order to modify the metadata declared by an Entity.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">Metadata policies can be declared by any Entity in a Trust Chain that publishes Subordinate Statements. Unpredictable situations may arise if the merged policy of a Trust Chain adds parameter values that were not originally declared by the Entity to the resulting metadata. Such policy usage may create situations where the metadata resolved for an Entity contains a capability or preference that the Entity cannot handle.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.4-3">Therefore, this profile specifies the following requirements:<a href="#section-2.4-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.4-4.1">
+            <p id="section-2.4-4.1.1">Adding metadata parameter values to an Entity's metadata <span class="bcp14">SHOULD</span> be limited to the Entity itself and its Immediate Superior Entity handling its registration.<a href="#section-2.4-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.4-4.2">
+            <p id="section-2.4-4.2.1">If an Immediate Superior Entity needs to add metadata parameter values to an Entity's resolved metadata it <span class="bcp14">SHOULD</span> do so by declaring these values using metadata declarations in the Entity Statement issued for the Entity, and <span class="bcp14">SHOULD NOT</span> use metadata policy operators.<a href="#section-2.4-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<aside id="section-2.4-5">
+          <p id="section-2.4-5.1">TODO: Consider merging with <a href="#metadata_policy_declarations" class="auto internal xref">Section 2.5.3</a><a href="#section-2.4-5.1" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="federation_hierarchy_requirements_and_recommendations">
+<section id="section-2.5">
+        <h3 id="name-federation-hierarchy-requir">
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-federation-hierarchy-requir" class="section-name selfRef">Federation Hierarchy Requirements and Recommendations</a>
+        </h3>
+<p id="section-2.5-1"><span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> defines an infrastructure in which multiple federation contexts may co-exist without clear boundaries between them. Each federation context is anchored by a common Trust Anchor. A Trust Anchor defines a policy that all subordinate services must satisfy in order for their metadata to be validated through that Trust Anchor.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.5-2">A Federation Protocol Entity or Federation Service Entity may chain to more than one Trust Anchor. Chaining to a Trust Anchor does not, however, guarantee successful validation. Validation succeeds only if the Federation Protocol Entity's metadata conforms to the combined metadata policies of all entities in the Trust Chain up to and including the Trust Anchor.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
+<p id="section-2.5-3">It is therefore important to structure the hierarchy of Federation Service Entities and their metadata policies carefully. The aim is to enforce essential rules while avoiding the unintended blocking of legitimate services due to incompatible policy applications.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
+<p id="section-2.5-4">This section contains sub-sections with requirements and recommendations for structuring a federation hierarchy in order to avoid unnecessary complexity and pitfalls.<a href="#section-2.5-4" class="pilcrow">¶</a></p>
+<div id="chaining_models">
+<section id="section-2.5.1">
+          <h4 id="name-chaining-models">
+<a href="#section-2.5.1" class="section-number selfRef">2.5.1. </a><a href="#name-chaining-models" class="section-name selfRef">Chaining Models</a>
+          </h4>
+<p id="section-2.5.1-1">Federation Protocol Entities <span class="bcp14">SHOULD NOT</span> be chained directly under a Trust Anchor. Instead, they <span class="bcp14">SHOULD</span> be chained to an Intermediate Entity (that is chained to the Trust Anchor). This requirement enables chaining a Federation Protocol Entity to other federation contexts, that is a chain ending at a different Trust Anchor, without the risk of metadata policy conflicts as described above.<a href="#section-2.5.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.5.1-2">It is also <span class="bcp14">RECOMMENDED</span> that Federation Protocol Entities that need to be available under a common Trust Anchor chain to a common Intermediate Entity. This makes it easier for that Trust Anchor to create a chain to groups of Federation Protocol Entities by creating a single chain link to the common Intermediate Entity.<a href="#section-2.5.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.5.1-3">A Trust Anchor <span class="bcp14">SHOULD NOT</span> be chained directly to another Trust Anchor in order to minimise risks of merge conflicts between Trust Anchor metadata policies.<a href="#section-2.5.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="trust_anchor_and_trust_mark_issuer_roles">
+<section id="section-2.5.2">
+          <h4 id="name-trust-anchor-and-trust-mark">
+<a href="#section-2.5.2" class="section-number selfRef">2.5.2. </a><a href="#name-trust-anchor-and-trust-mark" class="section-name selfRef">Trust Anchor and Trust Mark Issuer Roles</a>
+          </h4>
+<p id="section-2.5.2-1">Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support entities recognised by another Trust Anchor must chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See <a href="#chaining_models" class="auto internal xref">Section 2.5.1</a> above.<a href="#section-2.5.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-2">However, this approach is no longer viable when the other Trust Anchor also operates as a Trust Mark Issuer whose Trust Marks are required to be understood by all Entities. Chaining to a Subordinate Entity bypasses the Trust Anchor role and therefore excludes trust in the Trust Mark Issuer. Attempting to resolve this by chaining directly to the Trust Mark Issuer is also problematic because such chaining implicitly creates an additional path through the other Trust Anchor, resulting in two possible trust paths, one of which may fail due to policy conflicts.<a href="#section-2.5.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-3">These issues are inherently difficult to resolve and introduce ambiguity and inconsistency in the trust path evaluation process. Therefore, deployments compliant with this profile <span class="bcp14">SHOULD NOT</span> allow Trust Anchors to also function as Trust Mark Issuers.<a href="#section-2.5.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="metadata_policy_declarations">
+<section id="section-2.5.3">
+          <h4 id="name-metadata-policy-declaration">
+<a href="#section-2.5.3" class="section-number selfRef">2.5.3. </a><a href="#name-metadata-policy-declaration" class="section-name selfRef">Metadata Policy Declarations</a>
+          </h4>
+<p id="section-2.5.3-1">Merge of metadata policies in a Trust Chain may lead to merge conflicts, making it impossible to validate metadata through that chain in any meaningful way. This risk increases if complex policies are defined by lower entities in the chain.<a href="#section-2.5.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.5.3-2">There are basically two types of metadata parameters tied to an Entity; parameters that describe the Entity, for example, its display name, logotype, and organizational belonging, and parameters holding security and functional settings, such as keys, algorithms and URLs.<a href="#section-2.5.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.5.3-3">Deployments compliant with this profile <span class="bcp14">SHOULD</span> concentrate metadata policies that control security and functional settings at Trust Anchors.<a href="#section-2.5.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.5.3-4">Adhering to this requirement, combined with the requirement stated in <a href="#chaining_models" class="auto internal xref">Section 2.5.1</a> about not chaining Federation Protocol Entities directly under a Trust Anchor, enables the construction of alternative paths to other Trust Anchors without having to apply multiple Trust Anchor metadata policies, and thus avoids merge errors caused by incompatible policies.<a href="#section-2.5.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="entity_registration">
+<section id="section-3">
+      <h2 id="name-entity-registration">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-entity-registration" class="section-name selfRef">Entity Registration</a>
+      </h2>
+<p id="section-3-1">"OpenID Connect Dynamic Client Registration" <span>[<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> and "OAuth 2.0 Dynamic Client Registration Protocol" <span>[<a href="#RFC7591" class="cite xref">RFC7591</a>]</span> specify how a Client registers at an OpenID Provider or an OAuth 2.0 Authorization Server. Such registrations are performed in a peer-to-peer manner, where a Client is registered with a single service. A given Client's registration at another service may differ in naming, metadata, and security mechanisms.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">When a Client joins a federation, it registers, not at a specific service, but to the federation itself. This fact implies that the registration data for a Client joining the federation <span class="bcp14">MUST</span> be generic in a sense that the registration does not presupposes a particular peer service. This also applies for other Entity types other than OAuth 2.0 Clients and OpenID Relying Parties.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">Consequently, an OpenID Provider or an OAuth 2.0 Authorization Server compliant with this profile <span class="bcp14">MUST</span> be prepared to accept, and incorporate the metadata of an already registered Client, to its service configuration.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<div id="role_of_the_federation_registration_entity">
+<section id="section-3.1">
+        <h3 id="name-role-of-the-federation-regi">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-role-of-the-federation-regi" class="section-name selfRef">Role of the Federation Registration Entity</a>
+        </h3>
+<p id="section-3.1-1">A Federation Registration Entity is a Superior Entity within the federation with which a Federation Protocol Entity (for example, an OpenID Connect Relying Party) registers to join the federation.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">How the registration is initiated is out of scope for this profile, but one example is that the Federation Registration Entity provides an application to which Entity administrators log in and request registration for their Entity.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The Federation Registration Entity registers an Entity by creating and signing a Subordinate Statement for this Entity. Thus, the following aspects of an Entity being registered are vouched for by its Immediate Superior Entity:<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1-4.1">
+            <p id="section-3.1-4.1.1">The binding of a federation key to an Entity Identifier.<a href="#section-3.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-4.2">
+            <p id="section-3.1-4.2.1">That the Entity holding the federation key is the legitimate Entity representing this Entity Identifier.<a href="#section-3.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-4.3">
+            <p id="section-3.1-4.3.1">That the Entity holding the federation key is a legitimate member of the community implied by membership within a particular federation and can be trusted as such.<a href="#section-3.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-3.1-5">The registration is performed according to a Registration Policy, and in order for other participants within a federation to trust a registered Entity, they must trust and accept the policy under which the Entity joined the federation. See <a href="#use_of_registration_policies" class="auto internal xref">Section 3.2</a> below.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">If the Federation Registration Entity includes metadata policies in Subordinate Statements, these policies <span class="bcp14">SHOULD</span> be limited to fixating descriptive Entity metadata values that were controlled during registration. Typically, such values are display names or organizational belonging. Constraining other metadata values is the responsibility of the Trust Anchor, see <a href="#metadata_policy_declarations" class="auto internal xref">Section 2.5.3</a>.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.1-7">An Intermediate Entity acting as a Federation Registration Entity and compliant with this profile <span class="bcp14">MUST</span> expose a subordinate listing endpoint as defined in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.2</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="use_of_registration_policies">
+<section id="section-3.2">
+        <h3 id="name-use-of-registration-policie">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-use-of-registration-policie" class="section-name selfRef">Use of Registration Policies</a>
+        </h3>
+<p id="section-3.2-1">A Federation Registration Entity that creates a Subordinate Statement for an Entity follows a set of rules, described by a Registration Policy, during the registration process. Such rules may comprise:<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-2.1">
+            <p id="section-3.2-2.1.1">Checks to ensure that the organization behind the Entity has entered into the required agreements necessary for federation membership.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-2.2">
+            <p id="section-3.2-2.2.1">Checks to ensure that the individual requesting that the Entity be added to the federation is authorized to do so, for example by validating that the person is authorized to represent the organization that owns the Entity. This may also involve requirements on the authentication strength for the Entity administrator.<a href="#section-3.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-2.3">
+            <p id="section-3.2-2.3.1">Checks to determine the ownership of domains. This is especially important when Entity Configuration Hosting is supported, see <span><a href="https://www.oidc.se/openid-federation-hosting/main.html" class="relref">Section 4.1</a> of [<a href="#OpenID.Federation.Hosting" class="cite xref">OpenID.Federation.Hosting</a>]</span>.<a href="#section-3.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-2.4">
+            <p id="section-3.2-2.4.1">Assertions that Entity informational metadata parameters such as <code>organization_name</code> and <code>display_name</code> contain values that correspond to the organization behind the Entity.<a href="#section-3.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-3.2-3">It is <span class="bcp14">RECOMMENDED</span> that federation deployments compliant with this profile define Registration Policy URIs for the policies that are used for registering Entities, and that Federation Registration Entities include the <code>registration_policy</code> Claim as defined by <span>[<a href="#OpenID.Federation.RegPolicy" class="cite xref">OpenID.Federation.RegPolicy</a>]</span>.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="resolving_metadata_and_trust_marks">
+<section id="section-4">
+      <h2 id="name-resolving-metadata-and-trus">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-resolving-metadata-and-trus" class="section-name selfRef">Resolving Metadata and Trust Marks</a>
+      </h2>
+<p id="section-4-1">As described in <a href="#use_of_resolvers" class="auto internal xref">Section 2.2</a>, this profile recommends the use of Federation Resolvers to resolve peer metadata and Trust Marks. This section defines requirements and recommendations for both Entities implementing a Federation Resolver and Entities using a Federation Resolver.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="federation_resolver_requirements">
+<section id="section-4.1">
+        <h3 id="name-federation-resolver-require">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-federation-resolver-require" class="section-name selfRef">Federation Resolver Requirements</a>
+        </h3>
+<p id="section-4.1-1">A Trust Anchor or an Intermediate Entity that provides a <code>federation_resolve_endpoint</code> is regarded to be a Federation Resolver.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">This section extends the requirements specified in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> with the following statements:<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">A Federation Resolver <span class="bcp14">MAY</span> include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<aside id="section-4.1-4">
+          <p id="section-4.1-4.1">This functionality may be useful in cases when Trust Marks are being used a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.<a href="#section-4.1-4.1" class="pilcrow">¶</a></p>
+</aside>
+<p id="section-4.1-5">The requirements for the resolve response <code>exp</code> Claim given in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3.2</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is <span class="bcp14">RECOMMENDED</span> that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
+<aside id="section-4.1-6">
+          <p id="section-4.1-6.1">By following this requirement, the Federation Resolver avoids issuing resolve responses with unnecessarily short validity periods. This reduces the frequency of resolve requests, as longer-lived responses are more amenable to caching by consuming parties.<a href="#section-4.1-6.1" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+<div id="using_a_federation_resolver">
+<section id="section-4.2">
+        <h3 id="name-using-a-federation-resolver">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-using-a-federation-resolver" class="section-name selfRef">Using a Federation Resolver</a>
+        </h3>
+<aside id="section-4.2-1">
+          <p id="section-4.2-1.1">TODO: Requirements for caching and handling the resolve response<a href="#section-4.2-1.1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1.2">TODO: A consumer must not trust a response longer than its validity, or?<a href="#section-4.2-1.2" class="pilcrow">¶</a></p>
+<p id="section-4.2-1.3">TODO: Limitation: Trust chains must be included according to the spec, but is not needed in most cases. Mention that most consumers can ignore.<a href="#section-4.2-1.3" class="pilcrow">¶</a></p>
+<p id="section-4.2-1.4">Trust to the resolver if not TA.<a href="#section-4.2-1.4" class="pilcrow">¶</a></p>
+</aside>
+</section>
+</div>
+</section>
+</div>
+<div id="trust_marks">
+<section id="section-5">
+      <h2 id="name-trust-marks">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-trust-marks" class="section-name selfRef">Trust Marks</a>
+      </h2>
+<blockquote id="section-5-1">
+        <ul class="compact">
+<li class="compact" id="section-5-1.1.1">Requirements and recommendations<a href="#section-5-1.1.1" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.2">Validation process<a href="#section-5-1.1.2" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.3">
+            <p id="section-5-1.1.3.1">Short-lived (no revocation will be needed) vs. Long-lived (status check required)<a href="#section-5-1.1.3.1" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-5-1.1.3.2.1">For short-lived, we probably want to include a trust mark-pointer in Entity Configuration. Up-side: Trust mark status endpoint will not be required<a href="#section-5-1.1.3.2.1" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+          <li class="compact" id="section-5-1.1.4">Trust mark types, i.e., URL - Recommendation that this URL is related to the Entity Identifier of the TMI.<a href="#section-5-1.1.4" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.5">[Trust mark requests: Require client authentication at the endpoint? Depends on intended usage.]<a href="#section-5-1.1.5" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.6">We need to write about a registration entity requesting trust marks on behalf of a registered entity. In some settings, an entity may not even know that it should posses a certain trust mark.<a href="#section-5-1.1.6" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.7">Also, the profile should discuss having the trust marks at a superior entity statement. The main spec. states that trust marks SHOULD only be stored in an entity configuration. A lot of reasons why this is not always a good idea.<a href="#section-5-1.1.7" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.8">Policy that a trustmark older than a configurable value must/should be checked for validity against a tm status endpoint.<a href="#section-5-1.1.8" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.9">Self-signed: for example for <code>loa3-unspecified</code>.<a href="#section-5-1.1.9" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-5-1.1.10">Naming<a href="#section-5-1.1.10" class="pilcrow">¶</a>
+</li>
+        </ul>
+</blockquote>
+</section>
+</div>
+<div id="metadata">
+<section id="section-6">
+      <h2 id="name-metadata">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-metadata" class="section-name selfRef">Metadata</a>
+      </h2>
+<blockquote id="section-6-1">
+        <ul class="compact">
+<li class="compact" id="section-6-1.1.1">An entity's metadata should be usable also for non-OIDF consumers<a href="#section-6-1.1.1" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.2">Discuss "OpenID Connect Relying Party Metadata Choices". Alternative is to enforce support for a wider range of algorithms.<a href="#section-6-1.1.2" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.3">Raise concern about OAuth scopes in metadata.<a href="#section-6-1.1.3" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.4">An OP/AS cannot get everything it needs from federation metadata. It must probably combine with a client's trust marks and a policy to configure a client's rights etc.<a href="#section-6-1.1.4" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.5">Metadata. Make sure to be functioning based on "standard" metadata claims.<a href="#section-6-1.1.5" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.6">No registration at particular OP/AS<a href="#section-6-1.1.6" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.7">Algorithm support<a href="#section-6-1.1.7" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.8">It is each entities responsibility to create metadata that is functional by the intended peers.<a href="#section-6-1.1.8" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.9">Client authn<a href="#section-6-1.1.9" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-6-1.1.10">
+            <code>organization_identifier</code><a href="#section-6-1.1.10" class="pilcrow">¶</a>
+</li>
+        </ul>
+</blockquote>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="section-7">
+      <h2 id="name-acknowledgments">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-7-1">We would like to thank the following individuals for their comments, ideas, and contributions to this implementation profile and to the initial set of implementations.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-2.1">
+          <p id="section-7-2.1.1"><span class="contact-name">Per Mützell</span>, Inera<a href="#section-7-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.2">
+          <p id="section-7-2.2.1">Anders Malmros, Inera<a href="#section-7-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.3">
+          <p id="section-7-2.3.1"><span class="contact-name">Stefan Halén</span>, Internetstiftelsen<a href="#section-7-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.4">
+          <p id="section-7-2.4.1"><span class="contact-name">Martin Solberg</span>, <span class="contact-name">e-Hälsomyndigheten</span><a href="#section-7-2.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<section id="section-8">
+      <h2 id="name-normative-references">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="OpenID.Federation">[OpenID.Federation]</dt>
+      <dd>
+<span class="refAuthor">Hedberg, R.</span>, <span class="refAuthor">Jones, M. B.</span>, <span class="refAuthor">Solberg, A.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Marco, G. D.</span>, and <span class="refAuthor">V. Dzhuvinov</span>, <span class="refTitle">"OpenID Federation 1.0"</span>, <time datetime="2025-12-04" class="refDate">4 December 2025</time>, <span>&lt;<a href="https://openid.net/specs/openid-federation-1_0.html">https://openid.net/specs/openid-federation-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenID.Federation.Hosting">[OpenID.Federation.Hosting]</dt>
+      <dd>
+<span class="refAuthor">Lindström, M.</span> and <span class="refAuthor">S. Santesson</span>, <span class="refTitle">"OpenID Federation Entity Configuration Hosting 1.0"</span>, <time datetime="2026-01-09" class="refDate">9 January 2026</time>, <span>&lt;<a href="https://www.oidc.se/openid-federation-hosting/main.html">https://www.oidc.se/openid-federation-hosting/main.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenID.Federation.RegPolicy">[OpenID.Federation.RegPolicy]</dt>
+      <dd>
+<span class="refAuthor">Lindström, M.</span> and <span class="refAuthor">S. Santesson</span>, <span class="refTitle">"OpenID Federation Registration Policy 1.0"</span>, <time datetime="2026-01-12" class="refDate">12 January 2026</time>, <span>&lt;<a href="https://www.oidc.se/openid-federation-registration-policy/main.html">https://www.oidc.se/openid-federation-registration-policy/main.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenID.Registration">[OpenID.Registration]</dt>
+      <dd>
+<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">M.B. Jones</span>, <span class="refTitle">"OpenID Connect Dynamic Client Registration 1.0"</span>, <time datetime="2023-12-15" class="refDate">15 December 2023</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-registration-1_0.html">https://openid.net/specs/openid-connect-registration-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7591">[RFC7591]</dt>
+      <dd>
+<span class="refAuthor">Richer, J., Ed.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Machulak, M.</span>, and <span class="refAuthor">P. Hunt</span>, <span class="refTitle">"OAuth 2.0 Dynamic Client Registration Protocol"</span>, <span class="seriesInfo">RFC 7591</span>, <span class="seriesInfo">DOI 10.17487/RFC7591</span>, <time datetime="2015-07" class="refDate">July 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7591">https://www.rfc-editor.org/info/rfc7591</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+    <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="notices">
+<section id="appendix-A">
+      <h2 id="name-notices">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-notices" class="section-name selfRef">Notices</a>
+      </h2>
+<p id="appendix-A-1">Copyright (c) 2026 OpenID Connect Sweden.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="document-history">
+<section id="appendix-B">
+      <h2 id="name-document-history">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-document-history" class="section-name selfRef">Document History</a>
+      </h2>
+<p id="appendix-B-1">[[ To be removed from the final specification ]]<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">-00<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="appendix-B-3.1">Initial version<a href="#appendix-B-3.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Martin Lindström</span></div>
+<div dir="auto" class="left"><span class="org">IDsec Solutions</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:martin@idsec.se" class="email">martin@idsec.se</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Stefan Santesson</span></div>
+<div dir="auto" class="left"><span class="org">IDsec Solutions</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:stefan@idsec.se" class="email">stefan@idsec.se</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
