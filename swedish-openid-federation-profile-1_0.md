@@ -73,10 +73,10 @@ this document are to be interpreted as described in BCP 14 [@!RFC2119]
 This document extends [@!OpenID.Federation, section 1.2] by introducing the following terms to improve the readability of this profile:
 
 Federation Protocol Entity
-: <br>An entity within the federation that fulfils a protocol role, such as an OpenID Provider, OpenID Connect Relying Party, OAuth 2.0 Authorization Server, OAuth 2.0 Client, or OAuth 2.0 Protected Resource. This is typically a Leaf Entity.<br>
+: <br>An Entity within the federation that fulfils a protocol role, such as an OpenID Provider, OpenID Connect Relying Party, OAuth 2.0 Authorization Server, OAuth 2.0 Client, or OAuth 2.0 Protected Resource. This is typically a Leaf Entity.<br>
 
 Federation Service Entity
-: <br>An entity within the federation that does not play a protocol role but instead takes on an operational role within the federation, such as a Trust Anchor, an Intermediate Entity, or a Trust Mark Issuer.<br>
+: <br>An Entity within the federation that does not play a protocol role but instead takes on an operational role within the federation, such as a Trust Anchor, an Intermediate Entity, or a Trust Mark Issuer.<br>
 
 Federation Registration Entity
 : <br>A Superior Entity within the federation with which a Federation Protocol Entity (for example, an OpenID Connect Relying Party) registers to join the federation. This involves the collection of Entity Configuration and metadata, and the creation of an Entity Statement.<br>
@@ -88,6 +88,26 @@ Federation Resolver
 
 The OpenID Federation standard [@!OpenID.Federation], is generic and imposes few restrictions on how a federation may be structured. This section introduces a set of requirements and recommendations intended to make OpenID Federation deployments straightforward and easy to maintain.
 
+## Responsibilities of a Federation Operator {#responsibilities_of_a_federation_operator}
+
+This section describes the responsibilities of a Federation Operator, as manifested by a Trust Anchor, when establishing and operating a federation.
+
+A Federation Operator **MUST** define Federation Rules that govern the operation of the federation and the conduct of its members. These rules encompass both technical requirements and non-technical processes. The following requirements apply to Federation Rules:
+
+- A Federation Operator **MUST** define clear rules and requirements for joining the federation. One or more Registration Policies **SHOULD** be defined; see (#use_of_registration_policies).
+
+- It is **RECOMMENDED** that the Federation Operator defines protocol-specific requirements, including which underlying standards and profiles federation members are expected to comply with, as well as requirements for Entity metadata.
+
+- A Federation Operator **MUST** define and maintain a Trust Mark Policy. See (#trust_mark_policy).
+
+- It is **RECOMMENDED** that the Federation Operator defines federation-wide security requirements, such as minimum key lengths, key rollover frequency, and client authentication requirements.
+
+- A Federation Operator **SHOULD** define recommended validity periods for Entity Statements in order to promote predictable behaviour and operational stability; see (#entity_statement_validity).
+
+- A Federation Operator **SHOULD** define a base URL, or domain, for the federation. This base URL **SHOULD** be used when defining collision-resistant URLs within the federation context, such as Trust Mark type identifiers.
+
+Some of the above rules are enforced through metadata policies or constraints, while others are enforced by operational means such as audits and controls.
+
 ## Federation Entity Types {#federation_entity_types}
 
 [@!OpenID.Federation] does not restrict how federation roles may be combined by a Federation Entity operating under a single Entity Identifier. However, combining the role of an Intermediate Entity with that of a Federation Protocol Entity, such as an OpenID Provider, can introduce challenges and unnecessary complexity. Most importantly, it may lead to conflicts between the contents of the `metadata` Claim and the `metadata_policy` Claim in subordinate Entity Statements.
@@ -96,13 +116,13 @@ Therefore, implementers of this profile **MUST NOT** combine the role of a Trust
 
 This requirement implies that a Federation Protocol Entity is always a Leaf Entity and that its Entity Configuration **MUST NOT** include metadata of type `federation_entity`.
 
-## Use of Resolvers {#use_of_resolvers}
+## Federation Resolvers {#federation_resolvers}
 
 [@!OpenID.Federation, section 10] specifies requirements for how an Entity resolves the Trust Chain and metadata of another Entity with which it wishes to establish trust. This process includes fetching Entity Statements, applying metadata policies and constraints, validating Trust Chains, and handling caching. The procedure is complex and may be difficult for all Federation Protocol Entities within the federation to implement. 
 
-Also, this algorithm relies on all participants publishing their Entity Configuration information at a well-known location, as specified in [@!OpenID.Federation, section 9]. However, this profile references an alternative way of publishing Entity Configuration (see (#hosted_entity_configurations) below), that requires a resolver algorithm starting with a Trust Anchor instead of the bottom-up approach specified in [@!OpenID.Federation, section 10].
+Also, this algorithm relies on all participants publishing their Entity Configuration information at a well-known location, as specified in [@!OpenID.Federation, section 9]. However, this profile references an alternative way of publishing Entity Configuration (see (#hosted_entity_configurations) below), that requires a chain building algorithm starting with a Trust Anchor instead of the bottom-up approach specified in [@!OpenID.Federation, section 10].
 
-Therefore, it is **RECOMMENDED** that entities compliant with this profile use a Federation Resolver in order to resolve metadata and trust for peer entities. A Federation Resolver is an entity within the federation that provides a `federation_resolve_endpoint` as specified in Sections [@!OpenID.Federation, 5.1.1] and [@!OpenID.Federation, 8.3] of [@!OpenID.Federation].
+Therefore, it is **RECOMMENDED** that Entities compliant with this profile use a Federation Resolver in order to resolve metadata and trust for peer Entities. A Federation Resolver is an Entity within the federation that provides a `federation_resolve_endpoint` as specified in Sections [@!OpenID.Federation, 5.1.1] and [@!OpenID.Federation, 8.3] of [@!OpenID.Federation].
 
 A Trust Anchor adhering to this profile **MUST** ensure the availability of at least one Federation Resolver compliant with the requirements stated in this profile. This resolver **MUST** support resolving for the given Trust Anchor. It is **RECOMMENDED** that the resolver is provided as part of the Trust Anchor itself.
 
@@ -110,47 +130,64 @@ A> If the resolver is provided by a Subordinate Entity to the Trust Anchor, fede
 
 (#resolving_metadata_and_trust_marks), (#resolving_metadata_and_trust_marks, use title), specifies further requirements for Federation Resolver usage and implementation. 
 
-## Entity Configuration
+## Entity Statements {#entity_statements}
 
-This section defines requirements and recommendations for Entity Configurations, as defined in [@!OpenID.Federation, section 3].
+This section defines requirements and recommendations for Entity Statements defined in [@!OpenID.Federation, section 3].
 
-### Entity Configuration Validity {#entity_configuration_validity}
+### Entity Statement Validity {#entity_statement_validity}
 
-The validity period of an Entity Configuration is controlled by the `exp` Claim. Setting a short validity period undermines effective caching and places a burden on the owning Entity to continuously update and sign the Entity Configuration. Conversely, setting long validity periods may delay the propagation of metadata changes, as older versions may remain cached.
+The validity period of an Entity Statement is controlled by the `exp` Claim. Setting a short validity period undermines effective caching and places a burden on the issuing Entity to continuously update and sign the Entity Statement. Conversely, setting long validity periods for Entity Configurations may delay the propagation of metadata changes, as older versions may remain cached.
 
-A> TODO: Suggest that federation policies recommend sensible values for validity. 
+Federation rules **SHOULD** define recommended validity periods for Entity Statements in order to promote predictable behaviour and operational stability. In particular, Federation Operators are responsible for establishing guidance on appropriate validity intervals for Entities within their federation, see (#responsibilities_of_a_federation_operator).
 
-A> TODO: Requirement that Entities MUST update Entity Configuration more oftenly than what is stated in the `exp` Claim. 
+An Entity **MUST** publish updated Entity Configurations at intervals shorter than the validity period indicated by the `exp` Claim. This ensures that a fresh Entity Configuration is available before the previously issued one expires, thereby increasing resilience in case of temporary outages, signing key rollover, or operational disruptions. Entities **SHOULD** publish updated Entity Configurations with sufficient margin to account for caching behaviour and clock skew.
 
-A> TODO: Unclear in main spec. If short-lived Trust Marks are being used. Do they have an effect on EC validity?
+If Trust Marks with short validity periods are used, these may effectively limit the usable validity of an Entity Configuration, see (#requirements_on_trust_mark_issuers). Therefore, federation operators **SHOULD** ensure that Trust Mark Issuers within the federation comply with the Trust Mark validity requirements stated in (#requirements_on_trust_mark_issuers).
 
 ### Hosted Entity Configurations {#hosted_entity_configurations}
 
 The specification "OpenID Federation Entity Configuration Hosting" [@!OpenID.Federation.Hosting] defines the Entity Statement extension Claim `ec_location`. The primary purpose of this Claim is to enable hosting of a Leaf Entity's Entity Configuration data at an alternate location from that specified in [@!OpenID.Federation, section 9].
 
-Using this Claim, an OpenID Federation deployment can allow entities that do not support the [@!OpenID.Federation] standard, or that for other reasons cannot meet its requirements for publishing Entity Configuration at a well-known location, to participate in the federation.
+Using this Claim, an OpenID Federation deployment can allow Entities that do not support the [@!OpenID.Federation] standard, or that for other reasons cannot meet its requirements for publishing Entity Configuration at a well-known location, to participate in the federation.
 
 For deployments adhering to this profile it is **RECOMMENDED** that the `ec_location` extension Claim is supported. Furthermore, it is **RECOMMENDED** that Superior Entities supporting the Claim include the Claim in all published Entity Statements, even if the subject's Entity Configuration is published at the well-known location as specified in [@!OpenID.Federation]. The reason for this is to offer a uniform way for resolvers to locate the subject Entity Configuration.
 
-## Federation Policies {#federation_policies}
+## Controlling Metadata for Subordinates {#controlling_metadata_for_subordinates}
 
-An Entity's Entity Configuration contains a `metadata` Claim in which the Entity declares parameters about its preferences and capabilities. A metadata policy, as specified in Section 6.1 of [@!OpenID.Federation], **MAY** be added to Subordinate Statements in order to modify the metadata declared by an Entity.
+A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the `metadata` Claim in a Subordinate Statement, or by using the `metadata_policy` Claim as defined in [@!OpenID.Registration, section 6.1]. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.
 
-Metadata policies can be declared by any Entity in a Trust Chain that publishes Subordinate Statements. Unpredictable situations may arise if the merged policy of a Trust Chain adds parameter values that were not originally declared by the Entity to the resulting metadata. Such policy usage may create situations where the metadata resolved for an Entity contains a capability or preference that the Entity cannot handle.
+This section specifies requirements and recommendations for metadata control in order to prevent unpredictable behaviour and to avoid metadata merge conflicts when chaining across federation contexts.
 
-Therefore, this profile specifies the following requirements:
+An Entity's Entity Configuration contains a `metadata` Claim in which the Entity declares parameters describing its preferences and capabilities. A metadata policy, as specified in Section 6.1 of [@!OpenID.Federation], may be included in Subordinate Statements to modify the metadata declared by an Entity.
 
-- Adding metadata parameter values to an Entity's metadata **SHOULD** be limited to the Entity itself and its Immediate Superior Entity handling its registration.
+Since any Entity in a Trust Chain that issues Subordinate Statements may define metadata policies, the effective metadata of an Entity is the result of merging all applicable policies along the chain. If a policy introduces parameter values that were not originally declared by the Entity, the resolved metadata may include capabilities or preferences that the Entity does not support. This can lead to unpredictable or invalid configurations.
 
-- If an Immediate Superior Entity needs to add metadata parameter values to an Entity's resolved metadata it **SHOULD** do so by declaring these values using metadata declarations in the Entity Statement issued for the Entity, and **SHOULD NOT** use metadata policy operators.
+Furthermore, merging multiple metadata policies in a Trust Chain may lead to merge conflicts, making it impossible to validate the metadata through that chain in a meaningful way. The risk of such conflicts increases when complex policies are defined by lower-level Entities in the chain.
 
-A> TODO: Consider merging with (#metadata_policy_declarations)
+This profile therefore specifies the following requirements:
+
+- Adding metadata parameter values to an Entity's metadata SHOULD be limited to the Entity itself and its Immediate Superior Entity responsible for registering the Entity in the federation.
+
+- An Immediate Superior Entity that needs to add metadata parameter values to an Entity's resolved metadata SHOULD declare these values directly in the `metadata` Claim of the Entity Statement issued for the Entity, and SHOULD NOT use metadata policy operators for this purpose.
+
+Metadata policies **SHOULD** be used to constrain, filter, or refine metadata values declared by the Entity, and **SHOULD NOT** be used to introduce capabilities or preferences that are unknown to the Entity.
+
+Metadata parameters can broadly be divided into two categories:
+
+- Descriptive parameters that characterise the Entity, such as display name, logotype, and organizational affiliation.
+
+- Protocol parameters that define security and functional settings, such as keys, algorithms, and endpoint URLs.
+
+Deployments compliant with this profile SHOULD concentrate metadata policies that control security and functional settings at Trust Anchors.
+
+Adhering to this requirement, together with the requirement in (#chaining_models) that Federation Protocol Entities are not chained directly under a Trust Anchor, enables the construction of alternative trust paths towards other Trust Anchors without requiring the application of multiple Trust Anchor metadata policies. This reduces the risk of merge conflicts caused by incompatible policies.
+
 
 ## Federation Hierarchy Requirements and Recommendations {#federation_hierarchy_requirements_and_recommendations}
 
 [@!OpenID.Federation] defines an infrastructure in which multiple federation contexts may co-exist without clear boundaries between them. Each federation context is anchored by a common Trust Anchor. A Trust Anchor defines a policy that all subordinate services must satisfy in order for their metadata to be validated through that Trust Anchor.
 
-A Federation Protocol Entity or Federation Service Entity may chain to more than one Trust Anchor. Chaining to a Trust Anchor does not, however, guarantee successful validation. Validation succeeds only if the Federation Protocol Entity's metadata conforms to the combined metadata policies of all entities in the Trust Chain up to and including the Trust Anchor.
+A Federation Protocol Entity or Federation Service Entity may chain to more than one Trust Anchor. Chaining to a Trust Anchor does not, however, guarantee successful validation. Validation succeeds only if the Federation Protocol Entity's metadata conforms to the combined metadata policies of all Entities in the Trust Chain up to and including the Trust Anchor.
 
 It is therefore important to structure the hierarchy of Federation Service Entities and their metadata policies carefully. The aim is to enforce essential rules while avoiding the unintended blocking of legitimate services due to incompatible policy applications.
 
@@ -166,21 +203,11 @@ A Trust Anchor **SHOULD NOT** be chained directly to another Trust Anchor in ord
 
 ### Trust Anchor and Trust Mark Issuer Roles {#trust_anchor_and_trust_mark_issuer_roles}
 
-Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support entities recognised by another Trust Anchor must chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See (#chaining_models) above.
+Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support Entities recognised by another Trust Anchor must chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See (#chaining_models) above.
 
 However, this approach is no longer viable when the other Trust Anchor also operates as a Trust Mark Issuer whose Trust Marks are required to be understood by all Entities. Chaining to a Subordinate Entity bypasses the Trust Anchor role and therefore excludes trust in the Trust Mark Issuer. Attempting to resolve this by chaining directly to the Trust Mark Issuer is also problematic because such chaining implicitly creates an additional path through the other Trust Anchor, resulting in two possible trust paths, one of which may fail due to policy conflicts.
 
 These issues are inherently difficult to resolve and introduce ambiguity and inconsistency in the trust path evaluation process. Therefore, deployments compliant with this profile **SHOULD NOT** allow Trust Anchors to also function as Trust Mark Issuers.
-
-### Metadata Policy Declarations {#metadata_policy_declarations}
-
-Merge of metadata policies in a Trust Chain may lead to merge conflicts, making it impossible to validate metadata through that chain in any meaningful way. This risk increases if complex policies are defined by lower entities in the chain.
-
-There are basically two types of metadata parameters tied to an Entity; parameters that describe the Entity, for example, its display name, logotype, and organizational belonging, and parameters holding security and functional settings, such as keys, algorithms and URLs.
-
-Deployments compliant with this profile **SHOULD** concentrate metadata policies that control security and functional settings at Trust Anchors.
-
-Adhering to this requirement, combined with the requirement stated in (#chaining_models) about not chaining Federation Protocol Entities directly under a Trust Anchor, enables the construction of alternative paths to other Trust Anchors without having to apply multiple Trust Anchor metadata policies, and thus avoids merge errors caused by incompatible policies.
 
 # Entity Registration {#entity_registration}
 
@@ -206,7 +233,7 @@ The Federation Registration Entity registers an Entity by creating and signing a
 
 The registration is performed according to a Registration Policy, and in order for other participants within a federation to trust a registered Entity, they must trust and accept the policy under which the Entity joined the federation. See (#use_of_registration_policies) below.
 
-If the Federation Registration Entity includes metadata policies in Subordinate Statements, these policies **SHOULD** be limited to fixating descriptive Entity metadata values that were controlled during registration. Typically, such values are display names or organizational belonging. Constraining other metadata values is the responsibility of the Trust Anchor, see (#metadata_policy_declarations).   
+If the Federation Registration Entity includes metadata values in Subordinate Statements, these values **SHOULD** be limited to fixing descriptive Entity metadata that was controlled during registration. Typically, such values include display names or organizational affiliation. Constraining other metadata values is the responsibility of the Trust Anchor, see (#controlling_metadata_for_subordinates).
 
 An Intermediate Entity acting as a Federation Registration Entity and compliant with this profile **MUST** expose a subordinate listing endpoint as defined in [@!OpenID.Registration, section 8.2].
 
@@ -226,7 +253,7 @@ It is **RECOMMENDED** that federation deployments compliant with this profile de
 
 # Resolving Metadata and Trust Marks {#resolving_metadata_and_trust_marks}
 
-As described in (#use_of_resolvers), this profile recommends the use of Federation Resolvers to resolve peer metadata and Trust Marks. This section defines requirements and recommendations for both Entities implementing a Federation Resolver and Entities using a Federation Resolver.
+As described in (#federation_resolvers), this profile recommends the use of Federation Resolvers to resolve peer metadata and Trust Marks. This section defines requirements and recommendations for both Entities implementing a Federation Resolver and Entities using a Federation Resolver.
 
 ## Federation Resolver Requirements {#federation_resolver_requirements}
 
@@ -234,37 +261,78 @@ A Trust Anchor or an Intermediate Entity that provides a `federation_resolve_end
 
 This section extends the requirements specified in [@!OpenID.Registration, section 8.3] with the following statements:
 
-A Federation Resolver **MAY** include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer.
-
-A> This functionality may be useful in cases when Trust Marks are being used a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.
+A Federation Resolver **MAY** include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer. This functionality may be useful in cases when Trust Marks are being used a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.
 
 The requirements for the resolve response `exp` Claim given in [@!OpenID.Registration, section 8.3.2] states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is **RECOMMENDED** that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.
 
-A> By following this requirement, the Federation Resolver avoids issuing resolve responses with unnecessarily short validity periods. This reduces the frequency of resolve requests, as longer-lived responses are more amenable to caching by consuming parties.
+By following this requirement, the Federation Resolver avoids issuing resolve responses with unnecessarily short validity periods. This reduces the frequency of resolve requests, as longer-lived responses are more amenable to caching by consuming parties.
 
 ## Using a Federation Resolver {#using_a_federation_resolver}
 
-A> TODO: Requirements for caching and handling the resolve response
+The resolve endpoint, request and response formats are defined in [@!OpenID.Federation, section 8.3].
 
-A> TODO: A consumer must not trust a response longer than its validity, or?
+### Sending a Resolve Request {#sending_a_resolve_request}
 
-A> TODO: Limitation: Trust chains must be included according to the spec, but is not needed in most cases. Mention that most consumers can ignore.
+An Entity wishing to obtain the resolved metadata and Trust Marks of a peer Entity sends a resolve request to the `federation_resolve_endpoint` of a trusted Federation Resolver, as described in [@!OpenID.Federation, section 8.3.1].
 
-A> Trust to the resolver if not TA.
+If the caller has prior knowledge of the Trust Anchor under which the subject Entity is registered, it **MUST** include only that Trust Anchor in the `trust_anchor` parameter. Including additional Trust Anchor values when the correct one is already known introduces unnecessary ambiguity and **SHOULD NOT** be done. The `trust_anchor` parameter may be specified multiple times only when the caller genuinely does not know under which Trust Anchor the subject is registered and wishes to delegate that determination to the resolver.
+
+### Processing the Resolve Response {#processing_the_resolve_response}
+
+If the Federation Resolver is not implemented by the Trust Anchor itself, the caller may need to explicitly configure trust in the resolver. See (#federation_resolvers) for requirements on how Trust Anchors ensure resolver availability and on configuring trust for resolvers that are not hosted by a Trust Anchor.
+
+A consumer **MUST NOT** use a resolve response beyond its validity period as indicated by the `exp` Claim of the response JWT. The `exp` value reflects the shortest validity among the underlying Trust Chain and any included Trust Marks.
+
+Implementations **SHOULD** implement caching of resolve responses. A cached response **MAY** be reused for subsequent requests for the same subject and trust context, that is, the same combination of subject Entity Identifier and Trust Anchor, provided the response has not yet expired. This reduces the frequency of calls to the Federation Resolver and improves overall federation performance.
+
+Although the resolve response includes the Trust Chain in the `trust_chain` Claim as required by [@!OpenID.Federation, section 8.3.2], most consumers resolving peer metadata for the purpose of establishing protocol-level trust do not need to process or validate the Trust Chain themselves, as the Federation Resolver has already performed this validation. Such consumers **MAY** ignore the `trust_chain` Claim in the resolve response.
 
 # Trust Marks {#trust_marks}
 
-> - Requirements and recommendations
-> - Validation process
-> - Short-lived (no revocation will be needed) vs. Long-lived (status check required)
->     - For short-lived, we probably want to include a trust mark-pointer in Entity Configuration. Up-side: Trust mark status endpoint will not be required 
-> - Trust mark types, i.e., URL - Recommendation that this URL is related to the Entity Identifier of the TMI.
-> - [Trust mark requests: Require client authentication at the endpoint? Depends on intended usage.]
-> - We need to write about a registration entity requesting trust marks on behalf of a registered entity. In some settings, an entity may not even know that it should posses a certain trust mark.
-> - Also, the profile should discuss having the trust marks at a superior entity statement. The main spec. states that trust marks SHOULD only be stored in an entity configuration. A lot of reasons why this is not always a good idea.
-> - Policy that a trustmark older than a configurable value must/should be checked for validity against a tm status endpoint.
-> - Self-signed: for example for `loa3-unspecified`.
-> - Naming
+## Trust Mark Policy {#trust_mark_policy}
+
+A Federation Operator **MUST** define a Trust Mark Policy for the federation. The Trust Mark Policy **MUST** define:
+
+- Rules and processes for designating which actors may act as federation-accredited Trust Mark Issuers.
+
+- Rules and requirements applicable to federation-accredited Trust Mark Issuers. The requirements stated in (#requirements_on_trust_mark_issuers) apply, but the policy may define additional requirements, such as the authorization criteria that determine whether a Trust Mark can be issued to a given Entity.
+
+- Rules and processes for defining Trust Mark types recognized by the federation, including which Trust Mark Issuer(s) may issue each Trust Mark type.
+
+- The URL identifiers for Trust Mark types recognized within the federation.<br /><br />Note: The definition of these identifiers cannot be delegated to Trust Mark Issuers, since it is the responsibility of the Federation Operator to ensure that they are collision-resistant across multiple federations, see [@!OpenID.Federation, section 7.1].
+
+- Whether Trust Mark Issuers may issue Trust Mark types that are not recognized federation-wide, for example Trust Marks intended for specific purposes or specific Entity audiences.
+
+A Trust Mark Policy **MAY** also define rules or recommendations for the validation of Trust Marks, see [@!OpenID.Federation, section 7.3]. If validation rules are defined, it is **RECOMMENDED** that these also cover requirements for Trust Mark status checking.  
+
+**Note**: Only a federation-accredited Trust Mark Issuer is allowed to issue Trust Mark types that are recognized by the federation. A Trust Mark Issuer is considered federation-accredited when it appears in the `trust_mark_issuers` Claim of the Trust Anchor's Entity Configuration, as defined in [@!OpenID.Federation, section 7]. This Claim also identifies which Trust Mark types are recognized by the federation, and which Trust Mark Issuers are authorized to issue each type.
+
+## Requirements on Trust Mark Issuers {#requirements_on_trust_mark_issuers}
+
+A Federation Service Entity that exposes a Trust Mark endpoint as defined in [@!OpenID.Registration, section 8.3.3], is a Trust Mark Issuer.
+
+A Trust Mark Issuer wishing to issue Trust Marks that should be recognized within the federation 
+**MUST** coordinate with, and apply at, the Federation Operator (Trust Anchor) to have both the Trust Mark Issuer and the Trust Mark type listed in Trust Anchor's `trust_mark_issuers` Entity Configuration Claim. In these cases, it is the responsibility of the Federation Operator to define the Trust Mark type identifier to be used.
+
+The Trust Mark Issuer is responsible for maintaining a repository of the Entities that are entitled to specific Trust Mark types, including the authorizations and limitations that apply to them. The procedures by which an Entity applies for a Trust Mark, and the procedures used to determine whether a Trust Mark is granted, are outside the scope of this profile.
+
+If short-lived Trust Mark instances, that is, JWTs with an `exp` Claim set to a near-term time, are issued, this affects the validity of Entity Configurations that include such Trust Marks. Consequently, the validity period of resolve responses issued by a Federation Resolver may also need to be reduced.
+
+The practical consequences include the following:
+
+- Leaf Entities have to obtain new Trust Mark instances frequently and update and re-sign their Entity Configurations accordingly.
+
+- Federation Resolvers will be required to issue resolve responses with short validity periods, since a resolve response cannot exceed the validity of the artefacts it contains, see [@!OpenID.Registration, section 8.3.2]. This limits the ability to cache resolve responses within the federation and increases the number of invocations to Federation Resolvers.
+
+Therefore, the following requirements apply to Trust Mark Issuers that are compliant with this profile:
+
+- The validity period of a Trust Mark JWT **SHOULD** be aligned with the validity of the underlying authorization that determines the Entity’s entitlement to the Trust Mark. If that authorization is not time-limited, the Trust Mark Issuer **SHOULD NOT** include an `exp` Claim in the Trust Mark JWT.
+
+- A Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Registration, section 8.4]. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.
+
+A Federation Service Entity can choose to require client authentication for its federation endpoints. 
+
+When a Trust Mark Issuer deployment is configured to require client authentication for its Trust Mark endpoint, see [@!OpenID.Registration, section 8.6], the Federation Operator **SHOULD** be consulted to obtain information about which Entities are permitted to request a Trust Mark on behalf of another Entity. Typically, these are Federation Resolvers that retrieve a subject’s Trust Marks as part of the resolve process, see (#federation_resolver_requirements), (#federation_resolver_requirements, use title), or an Intermediate Entity acting as a Federation Registration Entity that retrieves Trust Marks on behalf of Entities being registered.
 
 # Metadata {#metadata}
 
@@ -283,6 +351,8 @@ A> Trust to the resolver if not TA.
 # Acknowledgments
 
 We would like to thank the following individuals for their comments, ideas, and contributions to this implementation profile and to the initial set of implementations.
+
+- Henric Norlander, Nod\[9\]
 
 - [@Per Mützell], Inera
 
