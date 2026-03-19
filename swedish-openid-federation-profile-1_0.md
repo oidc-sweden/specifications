@@ -251,6 +251,9 @@ A Federation Registration Entity that creates a Subordinate Statement for an Ent
 
 It is **RECOMMENDED** that federation deployments compliant with this profile define Registration Policy URIs for the policies that are used for registering Entities, and that Federation Registration Entities include the `registration_policy` Claim as defined by [@!OpenID.Federation.RegPolicy].
 
+**Note**: A Trust Mark could in theory be used to represent that a certain policy was applied during registration of an Entity to the federation. However, there is an important distinction between Registration Policies and Trust Marks. Whether an Entity holds a particular Trust Mark is typically checked by other Entities after its metadata and Trust Marks have been resolved and validated. Registration Policies, on the other hand, operate as part of the Trust Chain building process and are enforced through constraints defined by the federation. 
+
+
 # Resolving Metadata and Trust Marks {#resolving_metadata_and_trust_marks}
 
 As described in (#federation_resolvers), this profile recommends the use of Federation Resolvers to resolve peer metadata and Trust Marks. This section defines requirements and recommendations for both Entities implementing a Federation Resolver and Entities using a Federation Resolver.
