@@ -1222,7 +1222,7 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">OIDC Sweden</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-18" class="published">18 March 2026</time>
+<time datetime="2026-03-19" class="published">19 March 2026</time>
     </dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
@@ -1627,6 +1627,7 @@ A Federation Service Entity that provides functionality for obtaining Resolved M
 </li>
         </ul>
 <p id="section-3.2-3">It is <span class="bcp14">RECOMMENDED</span> that federation deployments compliant with this profile define Registration Policy URIs for the policies that are used for registering Entities, and that Federation Registration Entities include the <code>registration_policy</code> Claim as defined by <span>[<a href="#OpenID.Federation.RegPolicy" class="cite xref">OpenID.Federation.RegPolicy</a>]</span>.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4"><strong>Note</strong>: A Trust Mark could in theory be used to represent that a certain policy was applied during registration of an Entity to the federation. However, there is an important distinction between Registration Policies and Trust Marks. Whether an Entity holds a particular Trust Mark is typically checked by other Entities after its metadata and Trust Marks have been resolved and validated. Registration Policies, on the other hand, operate as part of the Trust Chain building process and are enforced through constraints defined by the federation.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
