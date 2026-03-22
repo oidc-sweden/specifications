@@ -94,11 +94,11 @@ This section describes the responsibilities of a Federation Operator, as manifes
 
 A Federation Operator **MUST** define Federation Rules that govern the operation of the federation and the conduct of its members. These rules encompass both technical requirements and non-technical processes. The following requirements apply to Federation Rules:
 
-- A Federation Operator **MUST** define clear rules and requirements for joining the federation. One or more Registration Policies **SHOULD** be defined; see (#use_of_registration_policies).
+- A Federation Operator **MUST** define rules and requirements for joining the federation. It is **RECOMMENDED** that Registration Policies are defined; see (#use_of_registration_policies).
 
-- It is **RECOMMENDED** that the Federation Operator defines protocol-specific requirements, including which underlying standards and profiles federation members are expected to comply with, as well as requirements for Entity metadata.
+- A Federation Operator **SHOULD** define protocol-specific requirements, including which underlying standards and profiles federation members are required to comply with. This includes interoperability requirements such as regulated algorithm support and requirements for Entity metadata. See (#adapting_oauth_2_0_and_openid_connect_for_openid_federation), (#adapting_oauth_2_0_and_openid_connect_for_openid_federation, use title).
 
-- A Federation Operator **MUST** define and maintain a Trust Mark Policy. See (#trust_mark_policy).
+- A Federation Operator **SHOULD** define and maintain a Trust Mark Policy. See (#trust_mark_policy).
 
 - It is **RECOMMENDED** that the Federation Operator defines federation-wide security requirements, such as minimum key lengths, key rollover frequency, and client authentication requirements.
 
@@ -126,7 +126,7 @@ Therefore, it is **RECOMMENDED** that Entities compliant with this profile use a
 
 A Trust Anchor adhering to this profile **MUST** ensure the availability of at least one Federation Resolver compliant with the requirements stated in this profile. This resolver **MUST** support resolving for the given Trust Anchor. It is **RECOMMENDED** that the resolver is provided as part of the Trust Anchor itself.
 
-A> If the resolver is provided by a Subordinate Entity to the Trust Anchor, federation participants that entirely relies on the use of the resolver will have to configure two trusted federation keys; both to the Trust Anchor and to the Entity implementing the Federation Resolver. See [@!OpenID.Registration, section 8.3.3].
+A> If the resolver is provided by a Subordinate Entity to the Trust Anchor, federation participants that entirely relies on the use of the resolver will have to configure two trusted federation keys; both to the Trust Anchor and to the Entity implementing the Federation Resolver. See [@!OpenID.Federation, section 8.3.3].
 
 (#resolving_metadata_and_trust_marks), (#resolving_metadata_and_trust_marks, use title), specifies further requirements for Federation Resolver usage and implementation. 
 
@@ -154,7 +154,7 @@ For deployments adhering to this profile it is **RECOMMENDED** that the `ec_loca
 
 ## Controlling Metadata for Subordinates {#controlling_metadata_for_subordinates}
 
-A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the `metadata` Claim in a Subordinate Statement, or by using the `metadata_policy` Claim as defined in [@!OpenID.Registration, section 6.1]. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.
+A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the `metadata` Claim in a Subordinate Statement, or by using the `metadata_policy` Claim as defined in [@!OpenID.Federation, section 6.1]. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.
 
 This section specifies requirements and recommendations for metadata control in order to prevent unpredictable behaviour and to avoid metadata merge conflicts when chaining across federation contexts.
 
@@ -235,7 +235,7 @@ The registration is performed according to a Registration Policy, and in order f
 
 If the Federation Registration Entity includes metadata values in Subordinate Statements, these values **SHOULD** be limited to fixing descriptive Entity metadata that was controlled during registration. Typically, such values include display names or organizational affiliation. Constraining other metadata values is the responsibility of the Trust Anchor, see (#controlling_metadata_for_subordinates).
 
-An Intermediate Entity acting as a Federation Registration Entity and compliant with this profile **MUST** expose a subordinate listing endpoint as defined in [@!OpenID.Registration, section 8.2].
+An Intermediate Entity acting as a Federation Registration Entity and compliant with this profile **MUST** expose a subordinate listing endpoint as defined in [@!OpenID.Federation, section 8.2].
 
 ## Use of Registration Policies {#use_of_registration_policies}
 
@@ -253,7 +253,6 @@ It is **RECOMMENDED** that federation deployments compliant with this profile de
 
 **Note**: A Trust Mark could in theory be used to represent that a certain policy was applied during registration of an Entity to the federation. However, there is an important distinction between Registration Policies and Trust Marks. Whether an Entity holds a particular Trust Mark is typically checked by other Entities after its metadata and Trust Marks have been resolved and validated. Registration Policies, on the other hand, operate as part of the Trust Chain building process and are enforced through constraints defined by the federation. 
 
-
 # Resolving Metadata and Trust Marks {#resolving_metadata_and_trust_marks}
 
 As described in (#federation_resolvers), this profile recommends the use of Federation Resolvers to resolve peer metadata and Trust Marks. This section defines requirements and recommendations for both Entities implementing a Federation Resolver and Entities using a Federation Resolver.
@@ -262,11 +261,11 @@ As described in (#federation_resolvers), this profile recommends the use of Fede
 
 A Trust Anchor or an Intermediate Entity that provides a `federation_resolve_endpoint` is regarded to be a Federation Resolver. 
 
-This section extends the requirements specified in [@!OpenID.Registration, section 8.3] with the following statements:
+This section extends the requirements specified in [@!OpenID.Federation, section 8.3] with the following statements:
 
 A Federation Resolver **MAY** include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer. This functionality may be useful in cases when Trust Marks are being used a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.
 
-The requirements for the resolve response `exp` Claim given in [@!OpenID.Registration, section 8.3.2] states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is **RECOMMENDED** that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.
+The requirements for the resolve response `exp` Claim given in [@!OpenID.Federation, section 8.3.2] states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is **RECOMMENDED** that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.
 
 By following this requirement, the Federation Resolver avoids issuing resolve responses with unnecessarily short validity periods. This reduces the frequency of resolve requests, as longer-lived responses are more amenable to caching by consuming parties.
 
@@ -294,7 +293,7 @@ Although the resolve response includes the Trust Chain in the `trust_chain` Clai
 
 ## Trust Mark Policy {#trust_mark_policy}
 
-A Federation Operator **MUST** define a Trust Mark Policy for the federation. The Trust Mark Policy **MUST** define:
+A Federation Operator **SHOULD** define a Trust Mark Policy for the federation. The Trust Mark Policy **MUST** define:
 
 - Rules and processes for designating which actors may act as federation-accredited Trust Mark Issuers.
 
@@ -312,7 +311,7 @@ A Trust Mark Policy **MAY** also define rules or recommendations for the validat
 
 ## Requirements on Trust Mark Issuers {#requirements_on_trust_mark_issuers}
 
-A Federation Service Entity that exposes a Trust Mark endpoint as defined in [@!OpenID.Registration, section 8.3.3], is a Trust Mark Issuer.
+A Federation Service Entity that exposes a Trust Mark endpoint as defined in [@!OpenID.Federation, section 8.3.3], is a Trust Mark Issuer.
 
 A Trust Mark Issuer wishing to issue Trust Marks that should be recognized within the federation 
 **MUST** coordinate with, and apply at, the Federation Operator (Trust Anchor) to have both the Trust Mark Issuer and the Trust Mark type listed in Trust Anchor's `trust_mark_issuers` Entity Configuration Claim. In these cases, it is the responsibility of the Federation Operator to define the Trust Mark type identifier to be used.
@@ -325,31 +324,107 @@ The practical consequences include the following:
 
 - Leaf Entities have to obtain new Trust Mark instances frequently and update and re-sign their Entity Configurations accordingly.
 
-- Federation Resolvers will be required to issue resolve responses with short validity periods, since a resolve response cannot exceed the validity of the artefacts it contains, see [@!OpenID.Registration, section 8.3.2]. This limits the ability to cache resolve responses within the federation and increases the number of invocations to Federation Resolvers.
+- Federation Resolvers will be required to issue resolve responses with short validity periods, since a resolve response cannot exceed the validity of the artefacts it contains, see [@!OpenID.Federation, section 8.3.2]. This limits the ability to cache resolve responses within the federation and increases the number of invocations to Federation Resolvers.
 
 Therefore, the following requirements apply to Trust Mark Issuers that are compliant with this profile:
 
 - The validity period of a Trust Mark JWT **SHOULD** be aligned with the validity of the underlying authorization that determines the Entity’s entitlement to the Trust Mark. If that authorization is not time-limited, the Trust Mark Issuer **SHOULD NOT** include an `exp` Claim in the Trust Mark JWT.
 
-- A Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Registration, section 8.4]. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.
+- A Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Federation, section 8.4]. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.
 
 A Federation Service Entity can choose to require client authentication for its federation endpoints. 
 
-When a Trust Mark Issuer deployment is configured to require client authentication for its Trust Mark endpoint, see [@!OpenID.Registration, section 8.6], the Federation Operator **SHOULD** be consulted to obtain information about which Entities are permitted to request a Trust Mark on behalf of another Entity. Typically, these are Federation Resolvers that retrieve a subject’s Trust Marks as part of the resolve process, see (#federation_resolver_requirements), (#federation_resolver_requirements, use title), or an Intermediate Entity acting as a Federation Registration Entity that retrieves Trust Marks on behalf of Entities being registered.
+When a Trust Mark Issuer deployment is configured to require client authentication for its Trust Mark endpoint, see [@!OpenID.Federation, section 8.6], the Federation Operator **SHOULD** be consulted to obtain information about which Entities are permitted to request a Trust Mark on behalf of another Entity. Typically, these are Federation Resolvers that retrieve a subject’s Trust Marks as part of the resolve process, see (#federation_resolver_requirements), (#federation_resolver_requirements, use title), or an Intermediate Entity acting as a Federation Registration Entity that retrieves Trust Marks on behalf of Entities being registered.
 
-# Metadata {#metadata}
+# Federation Algorithm Requirements {#federation_algorithm_requirements}
 
-> - An entity's metadata should be usable also for non-OIDF consumers
-> - Discuss "OpenID Connect Relying Party Metadata Choices". Alternative is to enforce support for a wider range of algorithms.
-> - Raise concern about OAuth scopes in metadata.
-> - An OP/AS cannot get everything it needs from federation metadata. It must probably combine with a client's trust marks and a policy to configure a client's rights etc.
-> - Metadata. Make sure to be functioning based on "standard" metadata claims.
-> - No registration at particular OP/AS
-> - Algorithm support
-> - It is each entities responsibility to create metadata that is functional by the intended peers.
-> - Client authn
-> - `organization_identifier`
+Within an OpenID Federation deployment, each Entity has at least one federation key. An Entity's federation key is used when signing its Entity Statement, see [@!OpenID.Federation, section 3], and a Federation Service Entity also uses its federation key to sign responses and objects returned from federation endpoints, see [@!OpenID.Federation, section 8].
 
+To ensure interoperability at the algorithm level for federation operations, this profile mandates a common set of signature algorithms that all compliant Entities **MUST** support for signature validation. These algorithms are:
+
+- `RS256`, RSASSA-PKCS1-v1_5 using SHA-256, as defined in [@!RFC7518, section 3.3].
+
+- `RS384`, RSASSA-PKCS1-v1_5 using SHA-384, as defined in [@!RFC7518, section 3.3].
+
+- `RS512`, RSASSA-PKCS1-v1_5 using SHA-512, as defined in [@!RFC7518, section 3.3].
+
+- `ES256`, ECDSA using P-256 and SHA-256, as defined in [@!RFC7518, section 3.4].
+
+- `ES384`, ECDSA using P-384 and SHA-384, as defined in [@!RFC7518, section 3.4].
+
+- `ES512`, ECDSA using P-521 and SHA-512, as defined in [@!RFC7518, section 3.4].
+
+Additional signature algorithms, such as RSASSA-PSS, **MAY** be added to the above list by profiles or federation rules that extend this profile.
+
+If a Federation Service Entity requires client authentication using `private_key_jwt` at any of its federation endpoints, see [@!OpenID.Federation, section 8.8.1], the `endpoint_auth_signing_alg_values_supported` metadata parameter **MUST** be assigned the list of mandatory signature algorithms, see [@!OpenID.Federation, section 5.1.1].
+
+# Adapting OAuth 2.0 and OpenID Connect for OpenID Federation {#adapting_oauth_2_0_and_openid_connect_for_openid_federation}
+
+This document is a profile for OpenID Federation and should refrain from introducing protocol-specific requirements for the use of OAuth 2.0 and OpenID Connect — such requirements should be addressed in protocol-specific standards and profiles.
+
+However, OAuth 2.0 and OpenID Connect predate the introduction of OpenID Federation, and some concepts of these protocols do not mix naturally with a federated environment.
+
+Both OAuth 2.0 and OpenID Connect assume that there is a registration phase where the client (an OAuth 2.0 Client or OpenID Connect Relying Party) registers at the server (an OAuth 2.0 Authorization Server or OpenID Connect OpenID Provider), and the parameters needed for future protocol exchanges are negotiated based on the server's capabilities and policies and the client's requirements. The client metadata returned in a registration response therefore reflects what has been approved by the Authorization Server or OpenID Provider.
+
+In an OpenID Federation context, the client instead presents its metadata to the federation, and the server consumes that metadata after resolving the client's Entity Statement. While [@!OpenID.Federation, section 12] defines methods for registering a Relying Party at an OpenID Provider, the metadata made available to the federation still needs to be generic, since it will presumably be consumed by multiple OpenID Providers and Authorization Servers.
+
+This section provides requirements for the use of OAuth 2.0 and OpenID Connect in an OpenID Federation context.
+
+## Algorithm Support {#algorithm_support}
+
+In both OAuth 2.0 and OpenID Connect, a client or Relying Party declares **one** algorithm in its registration data for each specific usage. For example, `token_endpoint_auth_signing_alg` [@!OpenID.Registration] declares which signature algorithm a Relying Party uses when signing a JWT for authentication at the OpenID Provider token endpoint. The Relying Party selects a suitable algorithm based on the `token_endpoint_auth_signing_alg_values_supported` in the OpenID Provider's Discovery Document [@!OpenID.Discovery].
+
+In a federation, where a client's metadata may be consumed by several peers, this approach breaks down, since different servers (Authorization Servers or OpenID Providers) may support different sets of algorithms, and the intersection of those sets may be empty.
+
+"OpenID Connect Relying Party Metadata Choices 1.0" [@!OpenID.RP.Choices] attempts to solve this problem by introducing metadata parameters through which a Relying Party can declare which algorithms it supports, allowing the OpenID Provider to use these values during client registration. This approach works in deployments where all Relying Parties and all OpenID Providers fully support that specification.
+
+However, this profile does not impose such requirements. Instead, it specifies a set of algorithms that are mandatory to support. This ensures that legacy systems that are not fully OpenID Federation-compliant can still function within the federation.
+
+OAuth 2.0 Clients, OAuth 2.0 Authorization Servers, OpenID Connect Relying Parties, and OpenID Connect OpenID Providers compliant with this profile **MUST** adhere to the algorithm requirements specified below.
+
+All compliant Entities **MUST** support validation of signatures using any of the following algorithms:
+
+- `RS256`, RSASSA-PKCS1-v1_5 using SHA-256, as defined in [@!RFC7518, section 3.3].
+- `RS384`, RSASSA-PKCS1-v1_5 using SHA-384, as defined in [@!RFC7518, section 3.3].
+- `RS512`, RSASSA-PKCS1-v1_5 using SHA-512, as defined in [@!RFC7518, section 3.3].
+- `ES256`, ECDSA using P-256 and SHA-256, as defined in [@!RFC7518, section 3.4].
+- `ES384`, ECDSA using P-384 and SHA-384, as defined in [@!RFC7518, section 3.4].
+- `ES512`, ECDSA using P-521 and SHA-512, as defined in [@!RFC7518, section 3.4].
+
+All compliant Entities **MUST** support encryption using any of the following algorithms:
+
+- `RSA-OAEP`, RSAES OAEP using default parameters, as defined in [@!RFC7518, section 4.3].
+- `RSA-OAEP-256`, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in [@!RFC7518, section 4.3].
+- `ECDH-ES`, ECDH Ephemeral Static direct key agreement, as defined in [@!RFC7518, section 4.6].
+
+An Entity holding an RSA protocol key **MUST** support decryption using any of the following algorithms:
+
+- `RSA-OAEP`, RSAES OAEP using default parameters, as defined in [@!RFC7518, section 4.3].
+- `RSA-OAEP-256`, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in [@!RFC7518, section 4.3].
+
+An Entity holding an EC protocol key **MUST** support decryption using the following algorithm:
+
+- `ECDH-ES`, ECDH Ephemeral Static direct key agreement, as defined in [@!RFC7518, section 4.6].
+
+Profiles extending this profile, or a Federation Operator's federation rules, **MAY** mandate additional algorithms to support.
+
+## Client Authentication Methods {#client_authentication_methods}
+
+Similarly to algorithms, the `token_endpoint_auth_method` parameter [@!RFC7591][@!OpenID.Registration] can only hold **one** value. In a federation, a single set of client metadata may be resolved and consumed by any number of servers. This may cause interoperability problems if two servers that the client needs to interact with have different and non-overlapping requirements for client authentication, as the client would be unable to satisfy both simultaneously.
+
+It is **RECOMMENDED** that the Federation Operator defines requirements for which client authentication methods OAuth 2.0 Authorization Servers and OpenID Connect OpenID Providers should support, in order to avoid such interoperability problems. This can be done by referring to a specific profile, or by including such requirements in the federation rules. 
+
+## Additional Considerations {#additional_considerations}
+
+This section presents a non-exhaustive list of topics where a Federation Operator, or members of the federation, need to be aware of potential interoperability issues or semantic differences between non-federation OAuth 2.0 and OpenID Connect and their use within an OpenID Federation deployment.
+
+Within OpenID Federation, resolved metadata for a client Entity is metadata produced by the client itself, possibly modified by metadata policies. It is therefore the client's self-declared metadata. In contrast, in a non-federation OAuth 2.0 or OpenID Connect deployment, client metadata is the result of a registration operation, and the metadata parameters have been approved and authorized by the Authorization Server or OpenID Provider. An Authorization Server or OpenID Provider functioning within an OpenID Federation deployment **MUST** be aware of this difference, and employ appropriate mechanisms when consuming client metadata obtained from the federation.
+
+**OAuth 2.0 Scopes**: An Authorization Server declares its supported scopes using the `scopes_supported` parameter [@!RFC8414], and an OAuth 2.0 client's metadata may contain a `scope` parameter [@!RFC7591] listing the scopes it intends to use when requesting tokens. In a non-federation deployment, these scopes may have been authorized as part of the registration process (see above). In an OpenID Federation deployment, other mechanisms are needed to establish trust in such scope declarations.
+
+Furthermore, in a peer-to-peer registration, any scopes referenced are in the context of that specific registration. In an OpenID Federation deployment, generic scope values such as `read` or `write` may be ambiguous, since a client may interact with multiple Authorization Servers. One approach to mitigating this is to use distinct scope values mapped to specific resources or functions.
+
+**OpenID Connect Subject Types**: [@!OpenID.Registration, section 2] defines the `subject_type` metadata parameter, which is used by an OpenID Connect Relying Party to declare whether it requires subject identifiers in tokens to be `public` or `pairwise`. Correspondingly, an OpenID Provider's Discovery metadata contains the `subject_types_supported` parameter [@!OpenID.Discovery], listing the subject types the OpenID Provider supports. If OpenID Providers within the federation do not support both types, interoperability issues may arise. It is **RECOMMENDED** that the Federation Operator, via referenced profiles or federation rules, requires OpenID Providers to support both the `public` and `pairwise` subject types.
 
 # Acknowledgments
 
@@ -402,6 +477,25 @@ We would like to thank the following individuals for their comments, ideas, and 
   </front>
 </reference>
 
+<reference anchor="OpenID.Discovery" target="https://openid.net/specs/openid-connect-discovery-1_0.html">
+  <front>
+    <title>OpenID Connect Discovery 1.0</title>
+    <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+      <organization abbrev="NAT.Consulting (was at NRI)">NAT.Consulting</organization>
+    </author>
+    <author fullname="John Bradley" initials="J." surname="Bradley">
+      <organization abbrev="Yubico (was at Ping Identity)">Yubico</organization>
+    </author>
+    <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+      <organization abbrev="Self-Issued Consulting (was at Microsoft)">Self-Issued Consulting</organization>
+    </author>
+    <author initials="E." surname="Jay">
+      <organization abbrev="Illumila">Illumila</organization>
+    </author>
+    <date day="15" month="December" year="2023"/>
+  </front>
+</reference>
+
 <reference anchor="OpenID.Federation" target="https://openid.net/specs/openid-federation-1_0.html">
   <front>
     <title>OpenID Federation 1.0</title>
@@ -442,7 +536,7 @@ We would like to thank the following individuals for their comments, ideas, and 
     <author fullname="F. Skokan">
       <organization>Okta</organization>
     </author>
-    <date day="8" month="January" year="2026"/>
+    <date day="12" month="March" year="2026"/>
   </front>
 </reference>
 

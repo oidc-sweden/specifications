@@ -1222,7 +1222,7 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">OIDC Sweden</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-19" class="published">19 March 2026</time>
+<time datetime="2026-03-22" class="published">22 March 2026</time>
     </dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
@@ -1341,22 +1341,36 @@ li > p:last-of-type:only-child {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-metadata" class="internal xref">Metadata</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-federation-algorithm-requir" class="internal xref">Federation Algorithm Requirements</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-adapting-oauth-20-and-openi" class="internal xref">Adapting OAuth 2.0 and OpenID Connect for OpenID Federation</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-algorithm-support" class="internal xref">Algorithm Support</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-client-authentication-metho" class="internal xref">Client Authentication Methods</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-additional-considerations" class="internal xref">Additional Considerations</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-notices" class="internal xref">Notices</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-document-history" class="internal xref">Document History</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-notices" class="internal xref">Notices</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-document-history" class="internal xref">Document History</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1433,13 +1447,13 @@ A Federation Service Entity that provides functionality for obtaining Resolved M
 <p id="section-2.1-2">A Federation Operator <span class="bcp14">MUST</span> define Federation Rules that govern the operation of the federation and the conduct of its members. These rules encompass both technical requirements and non-technical processes. The following requirements apply to Federation Rules:<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-3.1">
-            <p id="section-2.1-3.1.1">A Federation Operator <span class="bcp14">MUST</span> define clear rules and requirements for joining the federation. One or more Registration Policies <span class="bcp14">SHOULD</span> be defined; see <a href="#use_of_registration_policies" class="auto internal xref">Section 3.2</a>.<a href="#section-2.1-3.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.1.1">A Federation Operator <span class="bcp14">MUST</span> define rules and requirements for joining the federation. It is <span class="bcp14">RECOMMENDED</span> that Registration Policies are defined; see <a href="#use_of_registration_policies" class="auto internal xref">Section 3.2</a>.<a href="#section-2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.2">
-            <p id="section-2.1-3.2.1">It is <span class="bcp14">RECOMMENDED</span> that the Federation Operator defines protocol-specific requirements, including which underlying standards and profiles federation members are expected to comply with, as well as requirements for Entity metadata.<a href="#section-2.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.2.1">A Federation Operator <span class="bcp14">SHOULD</span> define protocol-specific requirements, including which underlying standards and profiles federation members are required to comply with. This includes interoperability requirements such as regulated algorithm support and requirements for Entity metadata. See <a href="#adapting_oauth_2_0_and_openid_connect_for_openid_federation" class="auto internal xref">Section 7</a>, <a href="#adapting_oauth_2_0_and_openid_connect_for_openid_federation" class="internal xref">Adapting OAuth 2.0 and OpenID Connect for OpenID Federation</a>.<a href="#section-2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.3">
-            <p id="section-2.1-3.3.1">A Federation Operator <span class="bcp14">MUST</span> define and maintain a Trust Mark Policy. See <a href="#trust_mark_policy" class="auto internal xref">Section 5.1</a>.<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.3.1">A Federation Operator <span class="bcp14">SHOULD</span> define and maintain a Trust Mark Policy. See <a href="#trust_mark_policy" class="auto internal xref">Section 5.1</a>.<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.4">
             <p id="section-2.1-3.4.1">It is <span class="bcp14">RECOMMENDED</span> that the Federation Operator defines federation-wide security requirements, such as minimum key lengths, key rollover frequency, and client authentication requirements.<a href="#section-2.1-3.4.1" class="pilcrow">¶</a></p>
@@ -1474,7 +1488,7 @@ A Federation Service Entity that provides functionality for obtaining Resolved M
 <p id="section-2.3-3">Therefore, it is <span class="bcp14">RECOMMENDED</span> that Entities compliant with this profile use a Federation Resolver in order to resolve metadata and trust for peer Entities. A Federation Resolver is an Entity within the federation that provides a <code>federation_resolve_endpoint</code> as specified in Sections <a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">5.1.1</a> and <a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">8.3</a> of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.3-4">A Trust Anchor adhering to this profile <span class="bcp14">MUST</span> ensure the availability of at least one Federation Resolver compliant with the requirements stated in this profile. This resolver <span class="bcp14">MUST</span> support resolving for the given Trust Anchor. It is <span class="bcp14">RECOMMENDED</span> that the resolver is provided as part of the Trust Anchor itself.<a href="#section-2.3-4" class="pilcrow">¶</a></p>
 <aside id="section-2.3-5">
-          <p id="section-2.3-5.1">If the resolver is provided by a Subordinate Entity to the Trust Anchor, federation participants that entirely relies on the use of the resolver will have to configure two trusted federation keys; both to the Trust Anchor and to the Entity implementing the Federation Resolver. See <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3.3</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>.<a href="#section-2.3-5.1" class="pilcrow">¶</a></p>
+          <p id="section-2.3-5.1">If the resolver is provided by a Subordinate Entity to the Trust Anchor, federation participants that entirely relies on the use of the resolver will have to configure two trusted federation keys; both to the Trust Anchor and to the Entity implementing the Federation Resolver. See <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.3.3</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-2.3-5.1" class="pilcrow">¶</a></p>
 </aside>
 <p id="section-2.3-6"><a href="#resolving_metadata_and_trust_marks" class="auto internal xref">Section 4</a>, <a href="#resolving_metadata_and_trust_marks" class="internal xref">Resolving Metadata and Trust Marks</a>, specifies further requirements for Federation Resolver usage and implementation.<a href="#section-2.3-6" class="pilcrow">¶</a></p>
 </section>
@@ -1513,7 +1527,7 @@ A Federation Service Entity that provides functionality for obtaining Resolved M
         <h3 id="name-controlling-metadata-for-su">
 <a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-controlling-metadata-for-su" class="section-name selfRef">Controlling Metadata for Subordinates</a>
         </h3>
-<p id="section-2.5-1">A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the <code>metadata</code> Claim in a Subordinate Statement, or by using the <code>metadata_policy</code> Claim as defined in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 6.1</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.5-1">A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the <code>metadata</code> Claim in a Subordinate Statement, or by using the <code>metadata_policy</code> Claim as defined in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 6.1</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
 <p id="section-2.5-2">This section specifies requirements and recommendations for metadata control in order to prevent unpredictable behaviour and to avoid metadata merge conflicts when chaining across federation contexts.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
 <p id="section-2.5-3">An Entity's Entity Configuration contains a <code>metadata</code> Claim in which the Entity declares parameters describing its preferences and capabilities. A metadata policy, as specified in Section 6.1 of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>, may be included in Subordinate Statements to modify the metadata declared by an Entity.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
 <p id="section-2.5-4">Since any Entity in a Trust Chain that issues Subordinate Statements may define metadata policies, the effective metadata of an Entity is the result of merging all applicable policies along the chain. If a policy introduces parameter values that were not originally declared by the Entity, the resolved metadata may include capabilities or preferences that the Entity does not support. This can lead to unpredictable or invalid configurations.<a href="#section-2.5-4" class="pilcrow">¶</a></p>
@@ -1603,7 +1617,7 @@ A Federation Service Entity that provides functionality for obtaining Resolved M
         </ul>
 <p id="section-3.1-5">The registration is performed according to a Registration Policy, and in order for other participants within a federation to trust a registered Entity, they must trust and accept the policy under which the Entity joined the federation. See <a href="#use_of_registration_policies" class="auto internal xref">Section 3.2</a> below.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">If the Federation Registration Entity includes metadata values in Subordinate Statements, these values <span class="bcp14">SHOULD</span> be limited to fixing descriptive Entity metadata that was controlled during registration. Typically, such values include display names or organizational affiliation. Constraining other metadata values is the responsibility of the Trust Anchor, see <a href="#controlling_metadata_for_subordinates" class="auto internal xref">Section 2.5</a>.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
-<p id="section-3.1-7">An Intermediate Entity acting as a Federation Registration Entity and compliant with this profile <span class="bcp14">MUST</span> expose a subordinate listing endpoint as defined in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.2</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
+<p id="section-3.1-7">An Intermediate Entity acting as a Federation Registration Entity and compliant with this profile <span class="bcp14">MUST</span> expose a subordinate listing endpoint as defined in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.2</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="use_of_registration_policies">
@@ -1644,9 +1658,9 @@ A Federation Service Entity that provides functionality for obtaining Resolved M
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-federation-resolver-require" class="section-name selfRef">Federation Resolver Requirements</a>
         </h3>
 <p id="section-4.1-1">A Trust Anchor or an Intermediate Entity that provides a <code>federation_resolve_endpoint</code> is regarded to be a Federation Resolver.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">This section extends the requirements specified in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> with the following statements:<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">This section extends the requirements specified in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.3</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> with the following statements:<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1-3">A Federation Resolver <span class="bcp14">MAY</span> include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer. This functionality may be useful in cases when Trust Marks are being used a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4">The requirements for the resolve response <code>exp</code> Claim given in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3.2</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is <span class="bcp14">RECOMMENDED</span> that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">The requirements for the resolve response <code>exp</code> Claim given in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.3.2</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is <span class="bcp14">RECOMMENDED</span> that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.1-5">By following this requirement, the Federation Resolver avoids issuing resolve responses with unnecessarily short validity periods. This reduces the frequency of resolve requests, as longer-lived responses are more amenable to caching by consuming parties.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1690,7 +1704,7 @@ A Federation Service Entity that provides functionality for obtaining Resolved M
         <h3 id="name-trust-mark-policy">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-trust-mark-policy" class="section-name selfRef">Trust Mark Policy</a>
         </h3>
-<p id="section-5.1-1">A Federation Operator <span class="bcp14">MUST</span> define a Trust Mark Policy for the federation. The Trust Mark Policy <span class="bcp14">MUST</span> define:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">A Federation Operator <span class="bcp14">SHOULD</span> define a Trust Mark Policy for the federation. The Trust Mark Policy <span class="bcp14">MUST</span> define:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-2.1">
             <p id="section-5.1-2.1.1">Rules and processes for designating which actors may act as federation-accredited Trust Mark Issuers.<a href="#section-5.1-2.1.1" class="pilcrow">¶</a></p>
@@ -1719,7 +1733,7 @@ Note: The definition of these identifiers cannot be delegated to Trust Mark Issu
         <h3 id="name-requirements-on-trust-mark-">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-requirements-on-trust-mark-" class="section-name selfRef">Requirements on Trust Mark Issuers</a>
         </h3>
-<p id="section-5.2-1">A Federation Service Entity that exposes a Trust Mark endpoint as defined in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3.3</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>, is a Trust Mark Issuer.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">A Federation Service Entity that exposes a Trust Mark endpoint as defined in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.3.3</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>, is a Trust Mark Issuer.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">A Trust Mark Issuer wishing to issue Trust Marks that should be recognized within the federation
 <span class="bcp14">MUST</span> coordinate with, and apply at, the Federation Operator (Trust Anchor) to have both the Trust Mark Issuer and the Trust Mark type listed in Trust Anchor's <code>trust_mark_issuers</code> Entity Configuration Claim. In these cases, it is the responsibility of the Federation Operator to define the Trust Mark type identifier to be used.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">The Trust Mark Issuer is responsible for maintaining a repository of the Entities that are entitled to specific Trust Mark types, including the authorizations and limitations that apply to them. The procedures by which an Entity applies for a Trust Mark, and the procedures used to determine whether a Trust Mark is granted, are outside the scope of this profile.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
@@ -1730,7 +1744,7 @@ Note: The definition of these identifiers cannot be delegated to Trust Mark Issu
             <p id="section-5.2-6.1.1">Leaf Entities have to obtain new Trust Mark instances frequently and update and re-sign their Entity Configurations accordingly.<a href="#section-5.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-6.2">
-            <p id="section-5.2-6.2.1">Federation Resolvers will be required to issue resolve responses with short validity periods, since a resolve response cannot exceed the validity of the artefacts it contains, see <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.3.2</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>. This limits the ability to cache resolve responses within the federation and increases the number of invocations to Federation Resolvers.<a href="#section-5.2-6.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-6.2.1">Federation Resolvers will be required to issue resolve responses with short validity periods, since a resolve response cannot exceed the validity of the artefacts it contains, see <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.3.2</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>. This limits the ability to cache resolve responses within the federation and increases the number of invocations to Federation Resolvers.<a href="#section-5.2-6.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-5.2-7">Therefore, the following requirements apply to Trust Mark Issuers that are compliant with this profile:<a href="#section-5.2-7" class="pilcrow">¶</a></p>
@@ -1739,77 +1753,174 @@ Note: The definition of these identifiers cannot be delegated to Trust Mark Issu
             <p id="section-5.2-8.1.1">The validity period of a Trust Mark JWT <span class="bcp14">SHOULD</span> be aligned with the validity of the underlying authorization that determines the Entity’s entitlement to the Trust Mark. If that authorization is not time-limited, the Trust Mark Issuer <span class="bcp14">SHOULD NOT</span> include an <code>exp</code> Claim in the Trust Mark JWT.<a href="#section-5.2-8.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-8.2">
-            <p id="section-5.2-8.2.1">A Trust Mark Issuer <span class="bcp14">MUST</span> expose a Trust Mark Status endpoint, as defined in <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.4</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.<a href="#section-5.2-8.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-8.2.1">A Trust Mark Issuer <span class="bcp14">MUST</span> expose a Trust Mark Status endpoint, as defined in <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.4</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.<a href="#section-5.2-8.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-5.2-9">A Federation Service Entity can choose to require client authentication for its federation endpoints.<a href="#section-5.2-9" class="pilcrow">¶</a></p>
-<p id="section-5.2-10">When a Trust Mark Issuer deployment is configured to require client authentication for its Trust Mark endpoint, see <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 8.6</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span>, the Federation Operator <span class="bcp14">SHOULD</span> be consulted to obtain information about which Entities are permitted to request a Trust Mark on behalf of another Entity. Typically, these are Federation Resolvers that retrieve a subject’s Trust Marks as part of the resolve process, see <a href="#federation_resolver_requirements" class="auto internal xref">Section 4.1</a>, <a href="#federation_resolver_requirements" class="internal xref">Federation Resolver Requirements</a>, or an Intermediate Entity acting as a Federation Registration Entity that retrieves Trust Marks on behalf of Entities being registered.<a href="#section-5.2-10" class="pilcrow">¶</a></p>
+<p id="section-5.2-10">When a Trust Mark Issuer deployment is configured to require client authentication for its Trust Mark endpoint, see <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.6</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>, the Federation Operator <span class="bcp14">SHOULD</span> be consulted to obtain information about which Entities are permitted to request a Trust Mark on behalf of another Entity. Typically, these are Federation Resolvers that retrieve a subject’s Trust Marks as part of the resolve process, see <a href="#federation_resolver_requirements" class="auto internal xref">Section 4.1</a>, <a href="#federation_resolver_requirements" class="internal xref">Federation Resolver Requirements</a>, or an Intermediate Entity acting as a Federation Registration Entity that retrieves Trust Marks on behalf of Entities being registered.<a href="#section-5.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
-<div id="metadata">
+<div id="federation_algorithm_requirements">
 <section id="section-6">
-      <h2 id="name-metadata">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-metadata" class="section-name selfRef">Metadata</a>
+      <h2 id="name-federation-algorithm-requir">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-federation-algorithm-requir" class="section-name selfRef">Federation Algorithm Requirements</a>
       </h2>
-<blockquote id="section-6-1">
-        <ul class="compact">
-<li class="compact" id="section-6-1.1.1">An entity's metadata should be usable also for non-OIDF consumers<a href="#section-6-1.1.1" class="pilcrow">¶</a>
+<p id="section-6-1">Within an OpenID Federation deployment, each Entity has at least one federation key. An Entity's federation key is used when signing its Entity Statement, see <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 3</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>, and a Federation Service Entity also uses its federation key to sign responses and objects returned from federation endpoints, see <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">To ensure interoperability at the algorithm level for federation operations, this profile mandates a common set of signature algorithms that all compliant Entities <span class="bcp14">MUST</span> support for signature validation. These algorithms are:<a href="#section-6-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-3.1">
+          <p id="section-6-3.1.1"><code>RS256</code>, RSASSA-PKCS1-v1_5 using SHA-256, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact" id="section-6-1.1.2">Discuss "OpenID Connect Relying Party Metadata Choices". Alternative is to enforce support for a wider range of algorithms.<a href="#section-6-1.1.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-6-3.2">
+          <p id="section-6-3.2.1"><code>RS384</code>, RSASSA-PKCS1-v1_5 using SHA-384, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact" id="section-6-1.1.3">Raise concern about OAuth scopes in metadata.<a href="#section-6-1.1.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-6-3.3">
+          <p id="section-6-3.3.1"><code>RS512</code>, RSASSA-PKCS1-v1_5 using SHA-512, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-6-3.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact" id="section-6-1.1.4">An OP/AS cannot get everything it needs from federation metadata. It must probably combine with a client's trust marks and a policy to configure a client's rights etc.<a href="#section-6-1.1.4" class="pilcrow">¶</a>
+        <li class="normal" id="section-6-3.4">
+          <p id="section-6-3.4.1"><code>ES256</code>, ECDSA using P-256 and SHA-256, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.4</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-6-3.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact" id="section-6-1.1.5">Metadata. Make sure to be functioning based on "standard" metadata claims.<a href="#section-6-1.1.5" class="pilcrow">¶</a>
+        <li class="normal" id="section-6-3.5">
+          <p id="section-6-3.5.1"><code>ES384</code>, ECDSA using P-384 and SHA-384, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.4</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-6-3.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact" id="section-6-1.1.6">No registration at particular OP/AS<a href="#section-6-1.1.6" class="pilcrow">¶</a>
+        <li class="normal" id="section-6-3.6">
+          <p id="section-6-3.6.1"><code>ES512</code>, ECDSA using P-521 and SHA-512, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.4</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-6-3.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact" id="section-6-1.1.7">Algorithm support<a href="#section-6-1.1.7" class="pilcrow">¶</a>
+      </ul>
+<p id="section-6-4">Additional signature algorithms, such as RSASSA-PSS, <span class="bcp14">MAY</span> be added to the above list by profiles or federation rules that extend this profile.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">If a Federation Service Entity requires client authentication using <code>private_key_jwt</code> at any of its federation endpoints, see <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 8.8.1</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>, the <code>endpoint_auth_signing_alg_values_supported</code> metadata parameter <span class="bcp14">MUST</span> be assigned the list of mandatory signature algorithms, see <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 5.1.1</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="adapting_oauth_2_0_and_openid_connect_for_openid_federation">
+<section id="section-7">
+      <h2 id="name-adapting-oauth-20-and-openi">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-adapting-oauth-20-and-openi" class="section-name selfRef">Adapting OAuth 2.0 and OpenID Connect for OpenID Federation</a>
+      </h2>
+<p id="section-7-1">This document is a profile for OpenID Federation and should refrain from introducing protocol-specific requirements for the use of OAuth 2.0 and OpenID Connect — such requirements should be addressed in protocol-specific standards and profiles.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">However, OAuth 2.0 and OpenID Connect predate the introduction of OpenID Federation, and some concepts of these protocols do not mix naturally with a federated environment.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">Both OAuth 2.0 and OpenID Connect assume that there is a registration phase where the client (an OAuth 2.0 Client or OpenID Connect Relying Party) registers at the server (an OAuth 2.0 Authorization Server or OpenID Connect OpenID Provider), and the parameters needed for future protocol exchanges are negotiated based on the server's capabilities and policies and the client's requirements. The client metadata returned in a registration response therefore reflects what has been approved by the Authorization Server or OpenID Provider.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">In an OpenID Federation context, the client instead presents its metadata to the federation, and the server consumes that metadata after resolving the client's Entity Statement. While <span><a href="https://openid.net/specs/openid-federation-1_0.html" class="relref">Section 12</a> of [<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> defines methods for registering a Relying Party at an OpenID Provider, the metadata made available to the federation still needs to be generic, since it will presumably be consumed by multiple OpenID Providers and Authorization Servers.<a href="#section-7-4" class="pilcrow">¶</a></p>
+<p id="section-7-5">This section provides requirements for the use of OAuth 2.0 and OpenID Connect in an OpenID Federation context.<a href="#section-7-5" class="pilcrow">¶</a></p>
+<div id="algorithm_support">
+<section id="section-7.1">
+        <h3 id="name-algorithm-support">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-algorithm-support" class="section-name selfRef">Algorithm Support</a>
+        </h3>
+<p id="section-7.1-1">In both OAuth 2.0 and OpenID Connect, a client or Relying Party declares <strong>one</strong> algorithm in its registration data for each specific usage. For example, <code>token_endpoint_auth_signing_alg</code> <span>[<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> declares which signature algorithm a Relying Party uses when signing a JWT for authentication at the OpenID Provider token endpoint. The Relying Party selects a suitable algorithm based on the <code>token_endpoint_auth_signing_alg_values_supported</code> in the OpenID Provider's Discovery Document <span>[<a href="#OpenID.Discovery" class="cite xref">OpenID.Discovery</a>]</span>.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">In a federation, where a client's metadata may be consumed by several peers, this approach breaks down, since different servers (Authorization Servers or OpenID Providers) may support different sets of algorithms, and the intersection of those sets may be empty.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">"OpenID Connect Relying Party Metadata Choices 1.0" <span>[<a href="#OpenID.RP.Choices" class="cite xref">OpenID.RP.Choices</a>]</span> attempts to solve this problem by introducing metadata parameters through which a Relying Party can declare which algorithms it supports, allowing the OpenID Provider to use these values during client registration. This approach works in deployments where all Relying Parties and all OpenID Providers fully support that specification.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-4">However, this profile does not impose such requirements. Instead, it specifies a set of algorithms that are mandatory to support. This ensures that legacy systems that are not fully OpenID Federation-compliant can still function within the federation.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.1-5">OAuth 2.0 Clients, OAuth 2.0 Authorization Servers, OpenID Connect Relying Parties, and OpenID Connect OpenID Providers compliant with this profile <span class="bcp14">MUST</span> adhere to the algorithm requirements specified below.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.1-6">All compliant Entities <span class="bcp14">MUST</span> support validation of signatures using any of the following algorithms:<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-7.1-7.1">
+            <code>RS256</code>, RSASSA-PKCS1-v1_5 using SHA-256, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-7.1" class="pilcrow">¶</a>
 </li>
-          <li class="compact" id="section-6-1.1.8">It is each entities responsibility to create metadata that is functional by the intended peers.<a href="#section-6-1.1.8" class="pilcrow">¶</a>
+          <li class="compact" id="section-7.1-7.2">
+            <code>RS384</code>, RSASSA-PKCS1-v1_5 using SHA-384, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-7.2" class="pilcrow">¶</a>
 </li>
-          <li class="compact" id="section-6-1.1.9">Client authn<a href="#section-6-1.1.9" class="pilcrow">¶</a>
+          <li class="compact" id="section-7.1-7.3">
+            <code>RS512</code>, RSASSA-PKCS1-v1_5 using SHA-512, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-7.3" class="pilcrow">¶</a>
 </li>
-          <li class="compact" id="section-6-1.1.10">
-            <code>organization_identifier</code><a href="#section-6-1.1.10" class="pilcrow">¶</a>
+          <li class="compact" id="section-7.1-7.4">
+            <code>ES256</code>, ECDSA using P-256 and SHA-256, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.4</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-7.4" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-7.1-7.5">
+            <code>ES384</code>, ECDSA using P-384 and SHA-384, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.4</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-7.5" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-7.1-7.6">
+            <code>ES512</code>, ECDSA using P-521 and SHA-512, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 3.4</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-7.6" class="pilcrow">¶</a>
 </li>
         </ul>
-</blockquote>
+<p id="section-7.1-8">All compliant Entities <span class="bcp14">MUST</span> support encryption using any of the following algorithms:<a href="#section-7.1-8" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-7.1-9.1">
+            <code>RSA-OAEP</code>, RSAES OAEP using default parameters, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 4.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-9.1" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-7.1-9.2">
+            <code>RSA-OAEP-256</code>, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 4.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-9.2" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-7.1-9.3">
+            <code>ECDH-ES</code>, ECDH Ephemeral Static direct key agreement, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 4.6</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-9.3" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-7.1-10">An Entity holding an RSA protocol key <span class="bcp14">MUST</span> support decryption using any of the following algorithms:<a href="#section-7.1-10" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-7.1-11.1">
+            <code>RSA-OAEP</code>, RSAES OAEP using default parameters, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 4.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-11.1" class="pilcrow">¶</a>
+</li>
+          <li class="compact" id="section-7.1-11.2">
+            <code>RSA-OAEP-256</code>, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 4.3</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-11.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-7.1-12">An Entity holding an EC protocol key <span class="bcp14">MUST</span> support decryption using the following algorithm:<a href="#section-7.1-12" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-7.1-13.1">
+            <code>ECDH-ES</code>, ECDH Ephemeral Static direct key agreement, as defined in <span><a href="https://rfc-editor.org/rfc/rfc7518" class="relref">Section 4.6</a> of [<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>.<a href="#section-7.1-13.1" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-7.1-14">Profiles extending this profile, or a Federation Operator's federation rules, <span class="bcp14">MAY</span> mandate additional algorithms to support.<a href="#section-7.1-14" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="client_authentication_methods">
+<section id="section-7.2">
+        <h3 id="name-client-authentication-metho">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-client-authentication-metho" class="section-name selfRef">Client Authentication Methods</a>
+        </h3>
+<p id="section-7.2-1">Similarly to algorithms, the <code>token_endpoint_auth_method</code> parameter <span>[<a href="#RFC7591" class="cite xref">RFC7591</a>]</span><span>[<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> can only hold <strong>one</strong> value. In a federation, a single set of client metadata may be resolved and consumed by any number of servers. This may cause interoperability problems if two servers that the client needs to interact with have different and non-overlapping requirements for client authentication, as the client would be unable to satisfy both simultaneously.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">It is <span class="bcp14">RECOMMENDED</span> that the Federation Operator defines requirements for which client authentication methods OAuth 2.0 Authorization Servers and OpenID Connect OpenID Providers should support, in order to avoid such interoperability problems. This can be done by referring to a specific profile, or by including such requirements in the federation rules.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="additional_considerations">
+<section id="section-7.3">
+        <h3 id="name-additional-considerations">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-additional-considerations" class="section-name selfRef">Additional Considerations</a>
+        </h3>
+<p id="section-7.3-1">This section presents a non-exhaustive list of topics where a Federation Operator, or members of the federation, need to be aware of potential interoperability issues or semantic differences between non-federation OAuth 2.0 and OpenID Connect and their use within an OpenID Federation deployment.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">Within OpenID Federation, resolved metadata for a client Entity is metadata produced by the client itself, possibly modified by metadata policies. It is therefore the client's self-declared metadata. In contrast, in a non-federation OAuth 2.0 or OpenID Connect deployment, client metadata is the result of a registration operation, and the metadata parameters have been approved and authorized by the Authorization Server or OpenID Provider. An Authorization Server or OpenID Provider functioning within an OpenID Federation deployment <span class="bcp14">MUST</span> be aware of this difference, and employ appropriate mechanisms when consuming client metadata obtained from the federation.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3"><strong>OAuth 2.0 Scopes</strong>: An Authorization Server declares its supported scopes using the <code>scopes_supported</code> parameter <span>[<a href="#RFC8414" class="cite xref">RFC8414</a>]</span>, and an OAuth 2.0 client's metadata may contain a <code>scope</code> parameter <span>[<a href="#RFC7591" class="cite xref">RFC7591</a>]</span> listing the scopes it intends to use when requesting tokens. In a non-federation deployment, these scopes may have been authorized as part of the registration process (see above). In an OpenID Federation deployment, other mechanisms are needed to establish trust in such scope declarations.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">Furthermore, in a peer-to-peer registration, any scopes referenced are in the context of that specific registration. In an OpenID Federation deployment, generic scope values such as <code>read</code> or <code>write</code> may be ambiguous, since a client may interact with multiple Authorization Servers. One approach to mitigating this is to use distinct scope values mapped to specific resources or functions.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.3-5"><strong>OpenID Connect Subject Types</strong>: <span><a href="https://openid.net/specs/openid-connect-registration-1_0.html" class="relref">Section 2</a> of [<a href="#OpenID.Registration" class="cite xref">OpenID.Registration</a>]</span> defines the <code>subject_type</code> metadata parameter, which is used by an OpenID Connect Relying Party to declare whether it requires subject identifiers in tokens to be <code>public</code> or <code>pairwise</code>. Correspondingly, an OpenID Provider's Discovery metadata contains the <code>subject_types_supported</code> parameter <span>[<a href="#OpenID.Discovery" class="cite xref">OpenID.Discovery</a>]</span>, listing the subject types the OpenID Provider supports. If OpenID Providers within the federation do not support both types, interoperability issues may arise. It is <span class="bcp14">RECOMMENDED</span> that the Federation Operator, via referenced profiles or federation rules, requires OpenID Providers to support both the <code>public</code> and <code>pairwise</code> subject types.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-acknowledgments">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-7-1">We would like to thank the following individuals for their comments, ideas, and contributions to this implementation profile and to the initial set of implementations.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">We would like to thank the following individuals for their comments, ideas, and contributions to this implementation profile and to the initial set of implementations.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7-2.1">
-          <p id="section-7-2.1.1">Henric Norlander, Nod[9]<a href="#section-7-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8-2.1">
+          <p id="section-8-2.1.1">Henric Norlander, Nod[9]<a href="#section-8-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-2.2">
-          <p id="section-7-2.2.1"><span class="contact-name">Per Mützell</span>, Inera<a href="#section-7-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-8-2.2">
+          <p id="section-8-2.2.1"><span class="contact-name">Per Mützell</span>, Inera<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-2.3">
-          <p id="section-7-2.3.1">Anders Malmros, Inera<a href="#section-7-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-8-2.3">
+          <p id="section-8-2.3.1">Anders Malmros, Inera<a href="#section-8-2.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-2.4">
-          <p id="section-7-2.4.1"><span class="contact-name">Stefan Halén</span>, Internetstiftelsen<a href="#section-7-2.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-8-2.4">
+          <p id="section-8-2.4.1"><span class="contact-name">Stefan Halén</span>, Internetstiftelsen<a href="#section-8-2.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-2.5">
-          <p id="section-7-2.5.1"><span class="contact-name">Martin Solberg</span>, <span class="contact-name">e-Hälsomyndigheten</span><a href="#section-7-2.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-8-2.5">
+          <p id="section-8-2.5.1"><span class="contact-name">Martin Solberg</span>, <span class="contact-name">e-Hälsomyndigheten</span><a href="#section-8-2.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
 </div>
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-normative-references">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
+<dt id="OpenID.Discovery">[OpenID.Discovery]</dt>
+      <dd>
+<span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.B.</span>, and <span class="refAuthor">E. Jay</span>, <span class="refTitle">"OpenID Connect Discovery 1.0"</span>, <time datetime="2023-12-15" class="refDate">15 December 2023</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-discovery-1_0.html">https://openid.net/specs/openid-connect-discovery-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="OpenID.Federation">[OpenID.Federation]</dt>
       <dd>
 <span class="refAuthor">Hedberg, R.</span>, <span class="refAuthor">Jones, M. B.</span>, <span class="refAuthor">Solberg, A.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Marco, G. D.</span>, and <span class="refAuthor">V. Dzhuvinov</span>, <span class="refTitle">"OpenID Federation 1.0"</span>, <time datetime="2025-12-04" class="refDate">4 December 2025</time>, <span>&lt;<a href="https://openid.net/specs/openid-federation-1_0.html">https://openid.net/specs/openid-federation-1_0.html</a>&gt;</span>. </dd>
@@ -1822,6 +1933,10 @@ Note: The definition of these identifiers cannot be delegated to Trust Mark Issu
       <dd>
 <span class="refAuthor">Lindström, M.</span> and <span class="refAuthor">S. Santesson</span>, <span class="refTitle">"OpenID Federation Registration Policy 1.0"</span>, <time datetime="2026-01-12" class="refDate">12 January 2026</time>, <span>&lt;<a href="https://www.oidc.se/openid-federation-registration-policy/main.html">https://www.oidc.se/openid-federation-registration-policy/main.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="OpenID.RP.Choices">[OpenID.RP.Choices]</dt>
+      <dd>
+<span class="refAuthor">Jones, M. B.</span>, <span class="refAuthor">Hedberg, R.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">F. Skokan</span>, <span class="refTitle">"OpenID Connect Relying Party Metadata Choices 1.0"</span>, <time datetime="2026-03-12" class="refDate">12 March 2026</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-rp-metadata-choices-1_0.html">https://openid.net/specs/openid-connect-rp-metadata-choices-1_0.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="OpenID.Registration">[OpenID.Registration]</dt>
       <dd>
 <span class="refAuthor">Sakimura, N.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">M.B. Jones</span>, <span class="refTitle">"OpenID Connect Dynamic Client Registration 1.0"</span>, <time datetime="2023-12-15" class="refDate">15 December 2023</time>, <span>&lt;<a href="https://openid.net/specs/openid-connect-registration-1_0.html">https://openid.net/specs/openid-connect-registration-1_0.html</a>&gt;</span>. </dd>
@@ -1830,13 +1945,21 @@ Note: The definition of these identifiers cannot be delegated to Trust Mark Issu
       <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC7518">[RFC7518]</dt>
+      <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refTitle">"JSON Web Algorithms (JWA)"</span>, <span class="seriesInfo">RFC 7518</span>, <span class="seriesInfo">DOI 10.17487/RFC7518</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7518">https://www.rfc-editor.org/info/rfc7518</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC7591">[RFC7591]</dt>
       <dd>
 <span class="refAuthor">Richer, J., Ed.</span>, <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Machulak, M.</span>, and <span class="refAuthor">P. Hunt</span>, <span class="refTitle">"OAuth 2.0 Dynamic Client Registration Protocol"</span>, <span class="seriesInfo">RFC 7591</span>, <span class="seriesInfo">DOI 10.17487/RFC7591</span>, <time datetime="2015-07" class="refDate">July 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7591">https://www.rfc-editor.org/info/rfc7591</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8414">[RFC8414]</dt>
+    <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Sakimura, N.</span>, and <span class="refAuthor">J. Bradley</span>, <span class="refTitle">"OAuth 2.0 Authorization Server Metadata"</span>, <span class="seriesInfo">RFC 8414</span>, <span class="seriesInfo">DOI 10.17487/RFC8414</span>, <time datetime="2018-06" class="refDate">June 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8414">https://www.rfc-editor.org/info/rfc8414</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
