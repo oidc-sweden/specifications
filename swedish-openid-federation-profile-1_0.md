@@ -331,10 +331,6 @@ Therefore, the following requirements apply to Trust Mark Issuers that are compl
 
 - A Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Federation, section 8.4]. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.
 
-A Federation Service Entity can choose to require client authentication for its federation endpoints. 
-
-When a Trust Mark Issuer deployment is configured to require client authentication for its Trust Mark endpoint, see [@!OpenID.Federation, section 8.6], the Federation Operator **SHOULD** be consulted to obtain information about which Entities are permitted to request a Trust Mark on behalf of another Entity. Typically, these are Federation Resolvers that retrieve a subject’s Trust Marks as part of the resolve process, see (#federation_resolver_requirements), (#federation_resolver_requirements, use title), or an Intermediate Entity acting as a Federation Registration Entity that retrieves Trust Marks on behalf of Entities being registered.
-
 # Federation Algorithm Requirements {#federation_algorithm_requirements}
 
 Within an OpenID Federation deployment, each Entity has at least one federation key. An Entity's federation key is used when signing its Entity Statement, see [@!OpenID.Federation, section 3], and a Federation Service Entity also uses its federation key to sign responses and objects returned from federation endpoints, see [@!OpenID.Federation, section 8].
