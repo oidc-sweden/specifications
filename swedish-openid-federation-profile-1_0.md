@@ -313,8 +313,7 @@ A Trust Mark Policy **MAY** also define rules or recommendations for the validat
 
 A Federation Service Entity that exposes a Trust Mark endpoint as defined in [@!OpenID.Federation, section 8.3.3], is a Trust Mark Issuer.
 
-A Trust Mark Issuer wishing to issue Trust Marks that should be recognized within the federation 
-**MUST** coordinate with, and apply at, the Federation Operator (Trust Anchor) to have both the Trust Mark Issuer and the Trust Mark type listed in Trust Anchor's `trust_mark_issuers` Entity Configuration Claim. In these cases, it is the responsibility of the Federation Operator to define the Trust Mark type identifier to be used.
+For a Trust Mark to be recognized within the federation, the Trust Mark Issuer and the Federation Operator (Trust Anchor) **SHOULD** establish a bilateral agreement covering both the issuance of the Trust Mark type and its inclusion in the Trust Anchor's `trust_mark_issuers` Entity Configuration Claim. As part of this agreement, the Federation Operator defines the Trust Mark type identifier to be used.
 
 The Trust Mark Issuer is responsible for maintaining a repository of the Entities that are entitled to specific Trust Mark types, including the authorizations and limitations that apply to them. The procedures by which an Entity applies for a Trust Mark, and the procedures used to determine whether a Trust Mark is granted, are outside the scope of this profile.
 
