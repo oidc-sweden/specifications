@@ -73,7 +73,7 @@ this document are to be interpreted as described in BCP 14 [@!RFC2119]
 This document extends [@!OpenID.Federation, section 1.2] by introducing the following terms to improve the readability of this profile:
 
 Federation Protocol Entity
-: <br>An Entity within the federation that fulfils a protocol role, such as an OpenID Provider, OpenID Connect Relying Party, OAuth 2.0 Authorization Server, OAuth 2.0 Client, or OAuth 2.0 Protected Resource. This is typically a Leaf Entity.<br>
+: <br>An Entity within the federation that fulfils a protocol role, such as an OpenID Provider, OpenID Connect Relying Party, OAuth 2.0 Authorization Server, OAuth 2.0 Client, or OAuth 2.0 Protected Resource.<br>
 
 Federation Service Entity
 : <br>An Entity within the federation that does not play a protocol role but instead takes on an operational role within the federation, such as a Trust Anchor, an Intermediate Entity, or a Trust Mark Issuer.<br>
@@ -110,7 +110,7 @@ Some of the above rules are enforced through metadata policies or constraints, w
 
 ## Federation Entity Types {#federation_entity_types}
 
-[@!OpenID.Federation] does not restrict how federation roles may be combined by a Federation Entity operating under a single Entity Identifier. However, combining the role of an Intermediate Entity with that of a Federation Protocol Entity, such as an OpenID Provider, can introduce challenges and unnecessary complexity. Most importantly, it may lead to conflicts between the contents of the `metadata` Claim and the `metadata_policy` Claim in subordinate Entity Statements.
+[@!OpenID.Federation] does not restrict how federation roles may be combined by a Federation Entity operating under a single Entity Identifier. However, combining the role of an Intermediate Entity with that of a Federation Protocol Entity, such as an OpenID Provider, can introduce challenges and unnecessary complexity. Most importantly, it may lead to conflicts between the contents of the `metadata` Claim and the `metadata_policy` Claim in subordinate Entity Statements, see (#controlling_metadata_for_subordinates).
 
 Therefore, implementers of this profile **MUST NOT** combine the role of a Trust Anchor, Intermediate Entity, Trust Mark Issuer, or Federation Resolver with that of a Federation Protocol Entity under the same Entity Identifier.
 
@@ -285,7 +285,7 @@ If the Federation Resolver is not implemented by the Trust Anchor itself, the ca
 
 A consumer **MUST NOT** use a resolve response beyond its validity period as indicated by the `exp` Claim of the response JWT. The `exp` value reflects the shortest validity among the underlying Trust Chain and any included Trust Marks.
 
-Implementations **SHOULD** implement caching of resolve responses. A cached response **MAY** be reused for subsequent requests for the same subject and trust context, that is, the same combination of subject Entity Identifier and Trust Anchor, provided the response has not yet expired. This reduces the frequency of calls to the Federation Resolver and improves overall federation performance.
+Implementations **SHOULD** implement caching of resolve responses. A cached response **MAY** be reused for subsequent requests for the same subject and trust context, that is, the same combination of subject Entity Identifier and Trust Anchor, provided the response has not yet expired. This reduces the frequency of calls to the Federation Resolver and improves overall federation performance. However, it is **RECOMMENDED** that implementations refresh cached responses before the time indicated by the `exp` Claim, in order to remain resilient against resolvers being temporarily unavailable and to ensure that metadata changes are propagated more quickly.
 
 Although the resolve response includes the Trust Chain in the `trust_chain` Claim as required by [@!OpenID.Federation, section 8.3.2], most consumers resolving peer metadata for the purpose of establishing protocol-level trust do not need to process or validate the Trust Chain themselves, as the Federation Resolver has already performed this validation. Such consumers **MAY** ignore the `trust_chain` Claim in the resolve response.
 
