@@ -359,67 +359,57 @@ This document is a profile for OpenID Federation and should refrain from introdu
 
 However, OAuth 2.0 and OpenID Connect predate the introduction of OpenID Federation, and some concepts of these protocols do not mix naturally with a federated environment.
 
-Both OAuth 2.0 and OpenID Connect assume that there is a registration phase where the client (an OAuth 2.0 Client or OpenID Connect Relying Party) registers at the server (an OAuth 2.0 Authorization Server or OpenID Connect OpenID Provider), and the parameters needed for future protocol exchanges are negotiated based on the server's capabilities and policies and the client's requirements. The client metadata returned in a registration response therefore reflects what has been approved by the Authorization Server or OpenID Provider.
+Both OAuth 2.0 and OpenID Connect assume that there is a registration phase in which the client (an OAuth 2.0 Client or OpenID Connect Relying Party) registers at the server (an OAuth 2.0 Authorization Server or OpenID Connect OpenID Provider), and the parameters needed for future protocol exchanges are negotiated based on the server's capabilities and policies and the client's requirements. The client metadata returned in a registration response therefore reflects what has been approved by the Authorization Server or OpenID Provider.
 
 In an OpenID Federation context, the client instead presents its metadata to the federation, and the server consumes that metadata after resolving the client's Entity Statement. While [@!OpenID.Federation, section 12] defines methods for registering a Relying Party at an OpenID Provider, the metadata made available to the federation still needs to be generic, since it will presumably be consumed by multiple OpenID Providers and Authorization Servers.
 
-This section provides requirements for the use of OAuth 2.0 and OpenID Connect in an OpenID Federation context.
+"OpenID Connect Relying Party Metadata Choices 1.0" [@!OpenID.RP.Choices] addresses the above issues for OpenID Connect, and to some extent also for OAuth 2.0: a Relying Party can declare all the choices it supports for metadata parameters, allowing the OpenID Provider to use these values during client registration.
 
-## Algorithm Support {#algorithm_support}
+For federation deployments based on this profile, it is **RECOMMENDED** that support for the parameters defined in [@!OpenID.RP.Choices] be mandatory for federation participants.
 
-In both OAuth 2.0 and OpenID Connect, a client or Relying Party declares **one** algorithm in its registration data for each specific usage. For example, `token_endpoint_auth_signing_alg` [@!OpenID.Registration] declares which signature algorithm a Relying Party uses when signing a JWT for authentication at the OpenID Provider token endpoint. The Relying Party selects a suitable algorithm based on the `token_endpoint_auth_signing_alg_values_supported` in the OpenID Provider's Discovery Document [@!OpenID.Discovery].
+A federation deployment that does not mandate support for [@!OpenID.RP.Choices] **SHOULD** at least address the following areas in its federation rules:
 
-In a federation, where a client's metadata may be consumed by several peers, this approach breaks down, since different servers (Authorization Servers or OpenID Providers) may support different sets of algorithms, and the intersection of those sets may be empty.
+**Mandatory Algorithm Support**
+: <br>In both OAuth 2.0 and OpenID Connect, a client or Relying Party declares **one** algorithm in its registration data for each specific usage. For example, `token_endpoint_auth_signing_alg` [@!OpenID.Registration] declares which signature algorithm a Relying Party uses when signing a JWT for authentication at the OpenID Provider token endpoint. The Relying Party selects a suitable algorithm based on the `token_endpoint_auth_signing_alg_values_supported` value in the OpenID Provider's Discovery Document [@!OpenID.Discovery].<br><br>In a federation, where a client's metadata may be consumed by several peers, this approach breaks down, since different servers (Authorization Servers or OpenID Providers) may support different sets of algorithms, and the intersection of those sets may be empty.<br><br>To handle this problem without the aid of the parameters defined in [@!OpenID.RP.Choices], federation rules need to contain a list of algorithms that are mandatory for federation participants to support. Such a list **MUST** cover:
 
-"OpenID Connect Relying Party Metadata Choices 1.0" [@!OpenID.RP.Choices] attempts to solve this problem by introducing metadata parameters through which a Relying Party can declare which algorithms it supports, allowing the OpenID Provider to use these values during client registration. This approach works in deployments where all Relying Parties and all OpenID Providers fully support that specification.
+  - A set of algorithms that are mandatory to support for validation of signatures. **RECOMMENDED** algorithms are:
+  
+    - `RS256`, RSASSA-PKCS1-v1_5 using SHA-256, as defined in [@!RFC7518, section 3.3].
+    - `RS384`, RSASSA-PKCS1-v1_5 using SHA-384, as defined in [@!RFC7518, section 3.3].
+    - `RS512`, RSASSA-PKCS1-v1_5 using SHA-512, as defined in [@!RFC7518, section 3.3].
+    - `ES256`, ECDSA using P-256 and SHA-256, as defined in [@!RFC7518, section 3.4].
+    - `ES384`, ECDSA using P-384 and SHA-384, as defined in [@!RFC7518, section 3.4].
+    - `ES512`, ECDSA using P-521 and SHA-512, as defined in [@!RFC7518, section 3.4].
+  
+  - A set of algorithms that are mandatory to support for asymmetric encryption. **RECOMMENDED** algorithms are:
+  
+    - `RSA-OAEP`, RSAES OAEP using default parameters, as defined in [@!RFC7518, section 4.3].
+    - `RSA-OAEP-256`, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in [@!RFC7518, section 4.3].
+    - `ECDH-ES`, ECDH Ephemeral Static direct key agreement, as defined in [@!RFC7518, section 4.6].
+  
+  - Algorithms that an Entity holding an RSA protocol key needs to support for decryption. **RECOMMENDED** algorithms are:
+  
+    - `RSA-OAEP`, RSAES OAEP using default parameters, as defined in [@!RFC7518, section 4.3].
+    - `RSA-OAEP-256`, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in [@!RFC7518, section 4.3].
 
-However, this profile does not impose such requirements. Instead, it specifies a set of algorithms that are mandatory to support. This ensures that legacy systems that are not fully OpenID Federation-compliant can still function within the federation.
+  - Algorithms that an Entity holding an EC protocol key needs to support for decryption. The **RECOMMENDED** algorithm is:
+  
+    - `ECDH-ES`, ECDH Ephemeral Static direct key agreement, as defined in [@!RFC7518, section 4.6].
 
-OAuth 2.0 Clients, OAuth 2.0 Authorization Servers, OpenID Connect Relying Parties, and OpenID Connect OpenID Providers compliant with this profile **MUST** adhere to the algorithm requirements specified below.
+**Interoperability Requirements for Client Authentication Methods**
+: <br>Similarly to algorithms, the `token_endpoint_auth_method` parameter [@!RFC7591][@!OpenID.Registration] can hold only **one** value. In a federation, a single set of client metadata may be resolved and consumed by any number of servers. If support for the `token_endpoint_auth_methods_supported` parameter, as defined in [@!OpenID.RP.Choices, section 2], is not mandated, this may cause interoperability problems if two servers that the client needs to interact with have different and non-overlapping requirements for client authentication, as the client would be unable to satisfy both simultaneously.<br><br>It is **RECOMMENDED** that the Federation Operator define requirements for which client authentication methods OAuth 2.0 Authorization Servers and OpenID Connect OpenID Providers should support, in order to avoid such interoperability problems.<br>
 
-All compliant Entities **MUST** support validation of signatures using any of the following algorithms:
+**Requirements for OpenID Connect Subject Types**
+: <br>[@!OpenID.Registration, section 2] defines the `subject_type` metadata parameter, which is used by an OpenID Connect Relying Party to declare whether it requires subject identifiers in tokens to be `public` or `pairwise`. Correspondingly, an OpenID Provider's Discovery metadata contains the `subject_types_supported` parameter [@!OpenID.Discovery], listing the subject types the OpenID Provider supports. If OpenID Providers within the federation do not support both types, interoperability issues may arise. It is **RECOMMENDED** that the Federation Operator, via referenced profiles or federation rules, require OpenID Providers to support both the `public` and `pairwise` subject types.<br>
 
-- `RS256`, RSASSA-PKCS1-v1_5 using SHA-256, as defined in [@!RFC7518, section 3.3].
-- `RS384`, RSASSA-PKCS1-v1_5 using SHA-384, as defined in [@!RFC7518, section 3.3].
-- `RS512`, RSASSA-PKCS1-v1_5 using SHA-512, as defined in [@!RFC7518, section 3.3].
-- `ES256`, ECDSA using P-256 and SHA-256, as defined in [@!RFC7518, section 3.4].
-- `ES384`, ECDSA using P-384 and SHA-384, as defined in [@!RFC7518, section 3.4].
-- `ES512`, ECDSA using P-521 and SHA-512, as defined in [@!RFC7518, section 3.4].
+## OAuth 2.0 Considerations {#oauth_20_considerations}
 
-All compliant Entities **MUST** support encryption using any of the following algorithms:
+"OpenID Connect Relying Party Metadata Choices 1.0" [@!OpenID.RP.Choices] defines client metadata parameters in which an OpenID Connect Relying Party can declare a set of supported values, instead of only one, for existing parameters. This addresses the problems discussed in the previous section. However, [@!OpenID.RP.Choices] does not address OAuth 2.0-specific issues, where the `scope` parameter [@!RFC7591] needs special attention.
 
-- `RSA-OAEP`, RSAES OAEP using default parameters, as defined in [@!RFC7518, section 4.3].
-- `RSA-OAEP-256`, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in [@!RFC7518, section 4.3].
-- `ECDH-ES`, ECDH Ephemeral Static direct key agreement, as defined in [@!RFC7518, section 4.6].
-
-An Entity holding an RSA protocol key **MUST** support decryption using any of the following algorithms:
-
-- `RSA-OAEP`, RSAES OAEP using default parameters, as defined in [@!RFC7518, section 4.3].
-- `RSA-OAEP-256`, RSAES OAEP using SHA-256 and MGF1 with SHA-256, as defined in [@!RFC7518, section 4.3].
-
-An Entity holding an EC protocol key **MUST** support decryption using the following algorithm:
-
-- `ECDH-ES`, ECDH Ephemeral Static direct key agreement, as defined in [@!RFC7518, section 4.6].
-
-Profiles extending this profile, or a Federation Operator's federation rules, **MAY** mandate additional algorithms to support.
-
-## Client Authentication Methods {#client_authentication_methods}
-
-Similarly to algorithms, the `token_endpoint_auth_method` parameter [@!RFC7591][@!OpenID.Registration] can only hold **one** value. In a federation, a single set of client metadata may be resolved and consumed by any number of servers. This may cause interoperability problems if two servers that the client needs to interact with have different and non-overlapping requirements for client authentication, as the client would be unable to satisfy both simultaneously.
-
-It is **RECOMMENDED** that the Federation Operator defines requirements for which client authentication methods OAuth 2.0 Authorization Servers and OpenID Connect OpenID Providers should support, in order to avoid such interoperability problems. This can be done by referring to a specific profile, or by including such requirements in the federation rules. 
-
-## Additional Considerations {#additional_considerations}
-
-This section presents a non-exhaustive list of topics where a Federation Operator, or members of the federation, need to be aware of potential interoperability issues or semantic differences between non-federation OAuth 2.0 and OpenID Connect and their use within an OpenID Federation deployment.
-
-Within OpenID Federation, resolved metadata for a client Entity is metadata produced by the client itself, possibly modified by metadata policies. It is therefore the client's self-declared metadata. In contrast, in a non-federation OAuth 2.0 or OpenID Connect deployment, client metadata is the result of a registration operation, and the metadata parameters have been approved and authorized by the Authorization Server or OpenID Provider. An Authorization Server or OpenID Provider functioning within an OpenID Federation deployment **MUST** be aware of this difference, and employ appropriate mechanisms when consuming client metadata obtained from the federation.
-
-**OAuth 2.0 Scopes**: An Authorization Server declares its supported scopes using the `scopes_supported` parameter [@!RFC8414], and an OAuth 2.0 client's metadata may contain a `scope` parameter [@!RFC7591] listing the scopes it intends to use when requesting tokens. In a non-federation deployment, these scopes may have been authorized as part of the registration process (see above). In an OpenID Federation deployment, other mechanisms are needed to establish trust in such scope declarations.
+An Authorization Server declares its supported scopes using the `scopes_supported` parameter [@!RFC8414], and an OAuth 2.0 client's metadata may contain a `scope` parameter [@!RFC7591] listing the scopes it intends to use when requesting tokens. In a non-federation deployment, these scopes may have been authorized as part of the registration process and are often set by the Authorization Server in response to the client registration. In an OpenID Federation deployment, other mechanisms are needed to establish trust in such scope declarations.
 
 Furthermore, in a peer-to-peer registration, any scopes referenced are in the context of that specific registration. In an OpenID Federation deployment, generic scope values such as `read` or `write` may be ambiguous, since a client may interact with multiple Authorization Servers. One approach to mitigating this is to use distinct scope values mapped to specific resources or functions.
 
-**OpenID Connect Subject Types**: [@!OpenID.Registration, section 2] defines the `subject_type` metadata parameter, which is used by an OpenID Connect Relying Party to declare whether it requires subject identifiers in tokens to be `public` or `pairwise`. Correspondingly, an OpenID Provider's Discovery metadata contains the `subject_types_supported` parameter [@!OpenID.Discovery], listing the subject types the OpenID Provider supports. If OpenID Providers within the federation do not support both types, interoperability issues may arise. It is **RECOMMENDED** that the Federation Operator, via referenced profiles or federation rules, requires OpenID Providers to support both the `public` and `pairwise` subject types.
 
 # Acknowledgments
 
@@ -531,7 +521,7 @@ We would like to thank the following individuals for their comments, ideas, and 
     <author fullname="F. Skokan">
       <organization>Okta</organization>
     </author>
-    <date day="12" month="March" year="2026"/>
+    <date day="25" month="March" year="2026"/>
   </front>
 </reference>
 
