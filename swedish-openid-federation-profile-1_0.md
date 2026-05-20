@@ -94,17 +94,17 @@ This section describes the responsibilities of a Federation Operator, as manifes
 
 A Federation Operator **MUST** define Federation Rules that govern the operation of the federation and the conduct of its members. These rules encompass both technical requirements and non-technical processes. The following requirements apply to Federation Rules:
 
-- A Federation Operator **MUST** define rules and requirements for joining the federation. It is **RECOMMENDED** that Registration Policies are defined; see (#use_of_registration_policies).
+- The Federation Rules **MUST** define rules and requirements for joining the federation. It is **RECOMMENDED** that Registration Policies be defined; see (#use_of_registration_policies).
 
-- A Federation Operator **SHOULD** define protocol-specific requirements, including which underlying standards and profiles federation members are required to comply with. This includes interoperability requirements such as regulated algorithm support and requirements for Entity metadata. See (#adapting_oauth_2_0_and_openid_connect_for_openid_federation), (#adapting_oauth_2_0_and_openid_connect_for_openid_federation, use title).
+- Federation Rules **SHOULD** define protocol-specific requirements, including which underlying standards and profiles federation members are required to comply with. This includes interoperability requirements such as regulated algorithm support and requirements for Entity metadata. See (#adapting_oauth_2_0_and_openid_connect_for_openid_federation), (#adapting_oauth_2_0_and_openid_connect_for_openid_federation, use title).
 
-- A Federation Operator **SHOULD** define and maintain a Trust Mark Policy. See (#trust_mark_policy).
+- The Federation Rules **SHOULD** define and maintain a Trust Mark Policy. See (#trust_mark_policy).
 
-- It is **RECOMMENDED** that the Federation Operator defines federation-wide security requirements, such as minimum key lengths, key rollover frequency, and client authentication requirements.
+- It is **RECOMMENDED** that the Federation Rules define federation-wide security requirements, such as minimum key lengths, key rollover frequency, and client authentication requirements.
 
-- A Federation Operator **SHOULD** define recommended validity periods for Entity Statements in order to promote predictable behaviour and operational stability; see (#entity_statement_validity).
+- Federation Rules **SHOULD** define recommended validity periods for Entity Statements in order to promote predictable behaviour and operational stability; see (#entity_statement_validity).
 
-- A Federation Operator **SHOULD** define a base URL, or domain, for the federation. This base URL **SHOULD** be used when defining collision-resistant URLs within the federation context, such as Trust Mark type identifiers.
+- The Federation Rules **SHOULD** define a base URL, or domain, for the federation. This base URL **SHOULD** be used when defining collision-resistant URLs within the federation context, such as Trust Mark type identifiers.
 
 Some of the above rules are enforced through metadata policies or constraints, while others are enforced by operational means such as audits and controls.
 
@@ -263,7 +263,7 @@ A Trust Anchor or an Intermediate Entity that provides a `federation_resolve_end
 
 This section extends the requirements specified in [@!OpenID.Federation, section 8.3] with the following statements:
 
-A Federation Resolver **MAY** include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer. This functionality may be useful in cases when Trust Marks are being used a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.
+A Federation Resolver **MAY** include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer. This functionality may be useful in cases when Trust Marks are being used as a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.
 
 The requirements for the resolve response `exp` Claim given in [@!OpenID.Federation, section 8.3.2] states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is **RECOMMENDED** that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.
 
