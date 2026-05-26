@@ -1,5 +1,5 @@
 %%%
-title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 00"
+title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 01"
 abbrev = "swedish-openid-federation-profile"
 ipr = "none"
 workgroup = "OIDC Sweden"
@@ -34,12 +34,6 @@ fullname="Stefan Halén"
 
 [[contact]]
 fullname="Stefan Halén"
-
-[[contact]]
-fullname="Martin Solberg"
-
-[[contact]]
-fullname="e-Hälsomyndigheten"
 
 %%%
 
@@ -423,8 +417,6 @@ We would like to thank the following individuals for their comments, ideas, and 
 
 - [@Stefan Halén], Internetstiftelsen
 
-- [@Martin Solberg], [@e-Hälsomyndigheten]
-
 {backmatter}
 
 <reference anchor="OpenID.Discovery" target="https://openid.net/specs/openid-connect-discovery-1_0.html">
@@ -578,4 +570,8 @@ Copyright (c) 2026 OpenID Connect Sweden.
 
    -00 
 
-   *  Initial version
+   *  Initial version.
+   
+   -01
+   
+   *  Misc. fixes after comments from the working group.
