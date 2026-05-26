@@ -23,7 +23,7 @@ OpenID Connect Profile.
 
 ### OpenID Federation
 
-* Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - *ongoing*
+* [Swedish OpenID Federation Deployment and Interoperability Profile 1.0](https://www.oidc.se/specifications/drafts/swedish-openid-federation-profile-draft.html) - This document defines a deployment and interoperability profile for OpenID Federation. The profile introduces a constrained and implementation-focused subset of the OpenID Federation specification, designed to simplify deployment and promote interoperability across federations.
 
 * [OpenID Federation Organization Identifier Metadata Parameter 1.0](https://www.oidc.se/openid-federation-organization-identifier/main.html) - This specification defines the `organization_identifier` metadata parameter that allows Entities to declare an unique organization identifier.
 
