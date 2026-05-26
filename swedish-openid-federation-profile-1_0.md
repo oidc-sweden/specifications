@@ -79,7 +79,7 @@ Federation Service Entity
 : <br>An Entity within the federation that does not play a protocol role but instead takes on an operational role within the federation, such as a Trust Anchor, an Intermediate Entity, or a Trust Mark Issuer.<br>
 
 Federation Registration Entity
-: <br>A Superior Entity within the federation with which a Federation Protocol Entity (for example, an OpenID Connect Relying Party) registers to join the federation. This involves the collection of Entity Configuration and metadata, and the creation of an Entity Statement.<br>
+: <br>A Superior Entity within the federation with which a Federation Protocol Entity (for example, an OpenID Connect Relying Party) registers to join the federation. This involves the collection of Entity Configuration, and the creation of an Entity Statement.<br>
 
 Federation Resolver
 : <br>A Federation Service Entity that provides functionality for obtaining Resolved Metadata and Trust Marks for a given Entity.
@@ -122,7 +122,7 @@ This requirement implies that a Federation Protocol Entity is always a Leaf Enti
 
 Also, this algorithm relies on all participants publishing their Entity Configuration information at a well-known location, as specified in [@!OpenID.Federation, section 9]. However, this profile references an alternative way of publishing Entity Configuration (see (#hosted_entity_configurations) below), that requires a chain building algorithm starting with a Trust Anchor instead of the bottom-up approach specified in [@!OpenID.Federation, section 10].
 
-Therefore, it is **RECOMMENDED** that Entities compliant with this profile use a Federation Resolver in order to resolve metadata and trust for peer Entities. A Federation Resolver is an Entity within the federation that provides a `federation_resolve_endpoint` as specified in Sections [@!OpenID.Federation, 5.1.1] and [@!OpenID.Federation, 8.3] of [@!OpenID.Federation].
+Therefore, it is **RECOMMENDED** that Entities compliant with this profile use a Federation Resolver in order to resolve metadata and trust for peer Entities. A Federation Resolver is a Federation Service Entity within the federation that provides a `federation_resolve_endpoint` as specified in Sections [@!OpenID.Federation, 5.1.1] and [@!OpenID.Federation, 8.3] of [@!OpenID.Federation].
 
 A Trust Anchor adhering to this profile **MUST** ensure the availability of at least one Federation Resolver compliant with the requirements stated in this profile. This resolver **MUST** support resolving for the given Trust Anchor. It is **RECOMMENDED** that the resolver is provided as part of the Trust Anchor itself.
 
@@ -185,7 +185,7 @@ Adhering to this requirement, together with the requirement in (#chaining_models
 
 ## Federation Hierarchy Requirements and Recommendations {#federation_hierarchy_requirements_and_recommendations}
 
-[@!OpenID.Federation] defines an infrastructure in which multiple federation contexts may co-exist without clear boundaries between them. Each federation context is anchored by a common Trust Anchor. A Trust Anchor defines a policy that all subordinate services must satisfy in order for their metadata to be validated through that Trust Anchor.
+[@!OpenID.Federation] defines an infrastructure in which an Entity can belong to more than one federation context and therefore be reachable via different Trust Chains, each ending at a different Trust Anchor. Each federation context is anchored by a Trust Anchor. A Trust Anchor defines a policy that all its Subordinates must satisfy in order for their metadata to be validated through that Trust Anchor.
 
 A Federation Protocol Entity or Federation Service Entity may chain to more than one Trust Anchor. Chaining to a Trust Anchor does not, however, guarantee successful validation. Validation succeeds only if the Federation Protocol Entity's metadata conforms to the combined metadata policies of all Entities in the Trust Chain up to and including the Trust Anchor.
 
@@ -311,13 +311,13 @@ A Trust Mark Policy **MAY** also define rules or recommendations for the validat
 
 ## Requirements on Trust Mark Issuers {#requirements_on_trust_mark_issuers}
 
-A Federation Service Entity that exposes a Trust Mark endpoint as defined in [@!OpenID.Federation, section 8.3.3], is a Trust Mark Issuer.
+A Federation Service Entity that exposes a Trust Mark endpoint as defined in [@!OpenID.Federation, section 8.6], is a Trust Mark Issuer.
 
 For a Trust Mark to be recognized within the federation, the Trust Mark Issuer and the Federation Operator (Trust Anchor) **SHOULD** establish a bilateral agreement covering both the issuance of the Trust Mark type and its inclusion in the Trust Anchor's `trust_mark_issuers` Entity Configuration Claim. As part of this agreement, the Federation Operator defines the Trust Mark type identifier to be used.
 
 The Trust Mark Issuer is responsible for maintaining a repository of the Entities that are entitled to specific Trust Mark types, including the authorizations and limitations that apply to them. The procedures by which an Entity applies for a Trust Mark, and the procedures used to determine whether a Trust Mark is granted, are outside the scope of this profile.
 
-If short-lived Trust Mark instances, that is, JWTs with an `exp` Claim set to a near-term time, are issued, this affects the validity of Entity Configurations that include such Trust Marks. Consequently, the validity period of resolve responses issued by a Federation Resolver may also need to be reduced.
+If short-lived Trust Mark instances, that is, JWTs with an `exp` Claim set to a near-term time, are issued, this affects Entity Configurations that include such Trust Marks. Consequently, the validity period of resolve responses issued by a Federation Resolver may also need to be reduced.
 
 The practical consequences include the following:
 
@@ -408,7 +408,7 @@ A federation deployment that does not mandate support for [@!OpenID.RP.Choices] 
 
 An Authorization Server declares its supported scopes using the `scopes_supported` parameter [@!RFC8414], and an OAuth 2.0 client's metadata may contain a `scope` parameter [@!RFC7591] listing the scopes it intends to use when requesting tokens. In a non-federation deployment, these scopes may have been authorized as part of the registration process and are often set by the Authorization Server in response to the client registration. In an OpenID Federation deployment, other mechanisms are needed to establish trust in such scope declarations.
 
-Furthermore, in a peer-to-peer registration, any scopes referenced are in the context of that specific registration. In an OpenID Federation deployment, generic scope values such as `read` or `write` may be ambiguous, since a client may interact with multiple Authorization Servers. One approach to mitigating this is to use distinct scope values mapped to specific resources or functions.
+Furthermore, in a peer-to-peer registration, any scopes referenced are in the context of that specific registration. In an OpenID Federation deployment, generic scope values such as `read` or `write` may be ambiguous, since a client may interact with multiple Authorization Servers. One approach to mitigating this is to use unique scope values mapped to specific resources or functions.
 
 
 # Acknowledgments
