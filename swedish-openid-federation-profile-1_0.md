@@ -195,7 +195,7 @@ This section contains sub-sections with requirements and recommendations for str
 
 ### Chaining Models {#chaining_models}
 
-Federation Protocol Entities **SHOULD NOT** be chained directly under a Trust Anchor. Instead, they **SHOULD** be chained to an Intermediate Entity (that is chained to the Trust Anchor). This requirement enables chaining a Federation Protocol Entity to other federation contexts, that is a chain ending at a different Trust Anchor, without the risk of metadata policy conflicts as described above.
+Federation Protocol Entities **SHOULD NOT** be chained directly under a Trust Anchor. Instead, they **SHOULD** be chained to an Intermediate Entity (that is chained to the Trust Anchor). This requirement reduces the risk of metadata policy conflicts when chaining a Federation Protocol Entity to other federation contexts, that is, chains ending at different Trust Anchors.
 
 It is also **RECOMMENDED** that Federation Protocol Entities that need to be available under a common Trust Anchor chain to a common Intermediate Entity. This makes it easier for that Trust Anchor to create a chain to groups of Federation Protocol Entities by creating a single chain link to the common Intermediate Entity.
 
@@ -233,7 +233,7 @@ The Federation Registration Entity registers an Entity by creating and signing a
 
 The registration is performed according to a Registration Policy, and in order for other participants within a federation to trust a registered Entity, they must trust and accept the policy under which the Entity joined the federation. See (#use_of_registration_policies) below.
 
-If the Federation Registration Entity includes metadata values in Subordinate Statements, these values **SHOULD** be limited to fixing descriptive Entity metadata that was controlled during registration. Typically, such values include display names or organizational affiliation. Constraining other metadata values is the responsibility of the Trust Anchor, see (#controlling_metadata_for_subordinates).
+If the Federation Registration Entity declares metadata values in Subordinate Statements, these values **SHOULD** be limited to fixating descriptive Entity metadata that was controlled during registration. Typically, such values include display names or organizational affiliation. Constraining other metadata values is the responsibility of the Trust Anchor, see (#controlling_metadata_for_subordinates).
 
 An Intermediate Entity acting as a Federation Registration Entity and compliant with this profile **MUST** expose a subordinate listing endpoint as defined in [@!OpenID.Federation, section 8.2].
 
@@ -259,7 +259,7 @@ As described in (#federation_resolvers), this profile recommends the use of Fede
 
 ## Federation Resolver Requirements {#federation_resolver_requirements}
 
-A Trust Anchor or an Intermediate Entity that provides a `federation_resolve_endpoint` is regarded to be a Federation Resolver. 
+A Trust Anchor or an Intermediate Entity that provides a `federation_resolve_endpoint` takes on the role of a Federation Resolver. 
 
 This section extends the requirements specified in [@!OpenID.Federation, section 8.3] with the following statements:
 
@@ -293,7 +293,7 @@ Although the resolve response includes the Trust Chain in the `trust_chain` Clai
 
 ## Trust Mark Policy {#trust_mark_policy}
 
-A Federation Operator **SHOULD** define a Trust Mark Policy for the federation. The Trust Mark Policy **MUST** define:
+A Federation Operator **SHOULD** define a Trust Mark Policy for the federation. Such a Trust Mark Policy **SHOULD** define:
 
 - Rules and processes for designating which actors may act as federation-accredited Trust Mark Issuers.
 
