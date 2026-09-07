@@ -1,5 +1,5 @@
 %%%
-title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 01"
+title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 02"
 abbrev = "swedish-openid-federation-profile"
 ipr = "none"
 workgroup = "OIDC Sweden"
@@ -136,7 +136,6 @@ Federation rules **SHOULD** define recommended validity periods for Entity State
 
 An Entity **MUST** publish updated Entity Configurations at intervals shorter than the validity period indicated by the `exp` Claim. This ensures that a fresh Entity Configuration is available before the previously issued one expires, thereby increasing resilience in case of temporary outages, signing key rollover, or operational disruptions. Entities **SHOULD** publish updated Entity Configurations with sufficient margin to account for caching behaviour and clock skew.
 
-If Trust Marks with short validity periods are used, these may effectively limit the usable validity of an Entity Configuration, see (#requirements_on_trust_mark_issuers). Therefore, federation operators **SHOULD** ensure that Trust Mark Issuers within the federation comply with the Trust Mark validity requirements stated in (#requirements_on_trust_mark_issuers).
 
 ### Hosted Entity Configurations {#hosted_entity_configurations}
 
@@ -257,11 +256,9 @@ A Trust Anchor or an Intermediate Entity that provides a `federation_resolve_end
 
 This section extends the requirements specified in [@!OpenID.Federation, section 8.3] with the following statements:
 
-A Federation Resolver **MAY** include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer. This functionality may be useful in cases when Trust Marks are being used as a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type.
+A Federation Resolver **MAY** include Trust Marks that are not present in an Entity's Entity Configuration. It can do so by communicating directly with a Trust Mark Issuer. This functionality may be useful in cases when Trust Marks are being used as a control mechanism within the federation and Entities within the federation are unaware of a particular Trust Mark type. See (#obtaining_trust_marks).
 
-The requirements for the resolve response `exp` Claim given in [@!OpenID.Federation, section 8.3.2] states that the validity of the response must not exceed the validities of the underlying Trust Chain and Trust Marks included. If a Trust Mark instance for the Entity is being resolved is either expired, or has a validity that is shorter than the validity of the Trust Chain, it is **RECOMMENDED** that the resolver obtains a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer.
-
-By following this requirement, the Federation Resolver avoids issuing resolve responses with unnecessarily short validity periods. This reduces the frequency of resolve requests, as longer-lived responses are more amenable to caching by consuming parties.
+The requirements for the resolve response `exp` Claim given in [@!OpenID.Federation, section 8.3.2] state that the validity of the response must not exceed the validity of the underlying Trust Chain and of the included Trust Marks. If a Trust Mark instance for the Entity being resolved is either expired or has a validity that is shorter than the validity of the Trust Chain, a Federation Resolver **MAY** obtain a new Trust Mark instance for the Entity by calling the Trust Mark endpoint at the Trust Mark Issuer. By doing so, the Federation Resolver avoids issuing resolve responses with unnecessarily short validity periods. This reduces the frequency of resolve requests, as longer-lived responses are more amenable to caching by consuming parties.
 
 ## Using a Federation Resolver {#using_a_federation_resolver}
 
@@ -283,6 +280,8 @@ Implementations **SHOULD** implement caching of resolve responses. A cached resp
 
 Although the resolve response includes the Trust Chain in the `trust_chain` Claim as required by [@!OpenID.Federation, section 8.3.2], most consumers resolving peer metadata for the purpose of establishing protocol-level trust do not need to process or validate the Trust Chain themselves, as the Federation Resolver has already performed this validation. Such consumers **MAY** ignore the `trust_chain` Claim in the resolve response.
 
+**Note:** Depending on the federation's Trust Mark Policy, see (#trust_mark_policy), the `trust_marks` Claim of the resolve response might not contain instances for all Trust Marks held by the Entity, see (#obtaining_trust_marks). An Entity consuming resolve responses is expected to be aware of the federation's policy for Trust Marks.
+
 # Trust Marks {#trust_marks}
 
 ## Trust Mark Policy {#trust_mark_policy}
@@ -299,6 +298,8 @@ A Federation Operator **SHOULD** define a Trust Mark Policy for the federation. 
 
 - Whether Trust Mark Issuers may issue Trust Mark types that are not recognized federation-wide, for example Trust Marks intended for specific purposes or specific Entity audiences.
 
+- Whether the policy requires Entities to include held Trust Mark instances in their Entity Configurations and be responsible for keeping them up to date, or whether peer Entities (or resolvers) may obtain Trust Mark instances for specific Entities. Typically, a peer obtains such a Trust Mark instance when it needs to check whether a specific Trust Mark is held by its peer. See (#obtaining_trust_marks), (#obtaining_trust_marks, use title).
+
 A Trust Mark Policy **MAY** also define rules or recommendations for the validation of Trust Marks, see [@!OpenID.Federation, section 7.3]. If validation rules are defined, it is **RECOMMENDED** that these also cover requirements for Trust Mark status checking.  
 
 **Note**: Only a federation-accredited Trust Mark Issuer is allowed to issue Trust Mark types that are recognized by the federation. A Trust Mark Issuer is considered federation-accredited when it appears in the `trust_mark_issuers` Claim of the Trust Anchor's Entity Configuration, as defined in [@!OpenID.Federation, section 7]. This Claim also identifies which Trust Mark types are recognized by the federation, and which Trust Mark Issuers are authorized to issue each type.
@@ -311,19 +312,40 @@ For a Trust Mark to be recognized within the federation, the Trust Mark Issuer a
 
 The Trust Mark Issuer is responsible for maintaining a repository of the Entities that are entitled to specific Trust Mark types, including the authorizations and limitations that apply to them. The procedures by which an Entity applies for a Trust Mark, and the procedures used to determine whether a Trust Mark is granted, are outside the scope of this profile.
 
-If short-lived Trust Mark instances, that is, JWTs with an `exp` Claim set to a near-term time, are issued, this affects Entity Configurations that include such Trust Marks. Consequently, the validity period of resolve responses issued by a Federation Resolver may also need to be reduced.
-
-The practical consequences include the following:
+If short-lived Trust Mark instances, that is, JWTs with an `exp` Claim set to a near-term time, are issued and the federation deployment requires Leaf Entities to include held Trust Mark instances in their Entity Configurations, this has practical consequences, including the following:
 
 - Leaf Entities have to obtain new Trust Mark instances frequently and update and re-sign their Entity Configurations accordingly.
 
 - Federation Resolvers will be required to issue resolve responses with short validity periods, since a resolve response cannot exceed the validity of the artefacts it contains, see [@!OpenID.Federation, section 8.3.2]. This limits the ability to cache resolve responses within the federation and increases the number of invocations to Federation Resolvers.
+
+Also, in federation deployments where Trust Mark instances are not distributed via Entity Configurations, short-lived instances lead to potentially frequent calls to the Trust Mark endpoint, since cached instances expire quickly. 
 
 Therefore, the following requirements apply to Trust Mark Issuers that are compliant with this profile:
 
 - The validity period of a Trust Mark JWT **SHOULD** be aligned with the validity of the underlying authorization that determines the Entity’s entitlement to the Trust Mark. If that authorization is not time-limited, the Trust Mark Issuer **SHOULD NOT** include an `exp` Claim in the Trust Mark JWT.
 
 - A Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Federation, section 8.4]. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.
+
+## Obtaining Trust Marks {#obtaining_trust_marks}
+
+An Entity's Entity Configuration **MAY** contain the Trust Mark instances held by the Entity. An Entity wanting to check whether another Entity holds a specific Trust Mark can either use a resolver, where the peer's resolved metadata and verified Trust Mark instances are delivered in the resolve response, see [@!OpenID.Federation, section 8.3.2], or validate the Trust Mark of its peer according to [@!OpenID.Federation, section 7.3] after building the peer's Trust Chain (see [@!OpenID.Federation, section 10]).
+
+Both of the methods above for checking whether a peer Entity is in possession of a specific Trust Mark depend on the Entity including a valid Trust Mark instance in its Entity Configuration.
+
+Requiring Entities to keep the Trust Mark instances in their Entity Configurations up to date may be too demanding for some deployments. Every Entity has to obtain a new instance before the current one expires, and then update and re-sign its Entity Configuration.
+
+Some Trust Marks may also be of no interest to the Entities themselves. Where Trust Marks are used as a control mechanism within the federation, and the Entities holding them have no knowledge of the Trust Mark type in question, those Entities should not have to maintain the instances themselves.
+
+Therefore, this profile also allows for other mechanisms for obtaining Trust Marks:
+
+- An Entity **MAY** invoke the Trust Mark endpoint at the Trust Mark Issuer to obtain a Trust Mark instance for a peer Entity whose possession of that Trust Mark it wants to check.
+
+- A resolver **MAY** invoke the Trust Mark endpoint at the Trust Mark Issuer to obtain an Entity's Trust Marks and include them in a resolve response.
+
+In both scenarios above, the Entities obtaining Trust Marks for other Entities **SHOULD** use caching to minimize the number of calls to the Trust Mark Issuer's endpoint.
+
+A federation's Trust Mark Policy, see (#trust_mark_policy), **SHOULD** include rules for how Trust Marks are distributed and obtained. Such a policy **MAY** allow some Trust Marks to be obtained by peers, while requiring others to be maintained by the Entities that hold them.
+
 
 # Federation Algorithm Requirements {#federation_algorithm_requirements}
 
@@ -567,11 +589,17 @@ Copyright (c) 2026 OpenID Connect Sweden.
 # Document History
 
    [[ To be removed from the final specification ]]
+   
+   -02
+
+   * Modified some confusion writings about validity times Entity Configurations related to the Trust Marks held within the objects.
+
+   -01
+   
+   *  Misc. fixes after comments from the working group.
+
 
    -00 
 
    *  Initial version.
    
-   -01
-   
-   *  Misc. fixes after comments from the working group.
