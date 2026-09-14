@@ -294,7 +294,7 @@ A Federation Operator **SHOULD** define a Trust Mark Policy for the federation. 
 
 - Rules and processes for defining Trust Mark types recognized by the federation, including which Trust Mark Issuer(s) may issue each Trust Mark type.
 
-- The URL identifiers for Trust Mark types recognized within the federation.<br /><br />Note: The definition of these identifiers cannot be delegated to Trust Mark Issuers, since it is the responsibility of the Federation Operator to ensure that they are collision-resistant across multiple federations, see [@!OpenID.Federation, section 7.1].
+- Rules for Trust Mark type URL identifiers recognized within the federation, ensuring that they are collision-resistant across multiple federations (see [@!OpenID.Federation, section 7.1]).
 
 - Whether Trust Mark Issuers may issue Trust Mark types that are not recognized federation-wide, for example Trust Marks intended for specific purposes or specific Entity audiences.
 
@@ -324,13 +324,14 @@ Therefore, the following requirements apply to Trust Mark Issuers that are compl
 
 - The validity period of a Trust Mark JWT **SHOULD** be aligned with the validity of the underlying authorization that determines the Entity’s entitlement to the Trust Mark. If that authorization is not time-limited, the Trust Mark Issuer **SHOULD NOT** include an `exp` Claim in the Trust Mark JWT.
 
-- A Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Federation, section 8.4]. This is required because the use of long-lived Trust Mark instances needs to be combined with status checking, that is, verifying that the Trust Mark privileges for the holder have not been revoked.
+- If a Trust Mark Issuer issues Trust Marks without an expiration time, the Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Federation, section 8.4].
+
 
 ## Obtaining Trust Marks {#obtaining_trust_marks}
 
 An Entity's Entity Configuration **MAY** contain the Trust Mark instances held by the Entity. An Entity wanting to check whether another Entity holds a specific Trust Mark can either use a resolver, where the peer's resolved metadata and verified Trust Mark instances are delivered in the resolve response, see [@!OpenID.Federation, section 8.3.2], or validate the Trust Mark of its peer according to [@!OpenID.Federation, section 7.3] after building the peer's Trust Chain (see [@!OpenID.Federation, section 10]).
 
-Both of the methods above for checking whether a peer Entity is in possession of a specific Trust Mark depend on the Entity including a valid Trust Mark instance in its Entity Configuration.
+The former of the methods above for checking whether a peer Entity possesses a specific Trust Mark, and in some cases also the latter, depends on the Entity including a valid Trust Mark instance in its Entity Configuration.
 
 Requiring Entities to keep the Trust Mark instances in their Entity Configurations up to date may be too demanding for some deployments. Every Entity has to obtain a new instance before the current one expires, and then update and re-sign its Entity Configuration.
 
