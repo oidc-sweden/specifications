@@ -141,11 +141,11 @@ An Entity **MUST** publish updated Entity Configurations at intervals shorter th
 
 ### Hosted Entity Configurations {#hosted_entity_configurations}
 
-The specification "OpenID Federation Entity Configuration Hosting" [@!OpenID.Federation.Hosting] defines the Entity Statement extension Claim `ec_location`. The primary purpose of this Claim is to enable hosting of a Leaf Entity's Entity Configuration data at an alternate location from that specified in [@!OpenID.Federation, section 9].
+The specification for the extension "OpenID Federation Entity Configuration Hosting" [@!OpenID.Federation.Hosting] defines the Entity Statement extension Claim `ec_location`. The primary purpose of this Claim is to enable hosting of a Leaf Entity's Entity Configuration data at a location other than the one specified in [@!OpenID.Federation, section 9].
 
-Using this Claim, an OpenID Federation deployment can allow Entities that do not support the [@!OpenID.Federation] standard, or that for other reasons cannot meet its requirements for publishing Entity Configuration at a well-known location, to participate in the federation.
+Using this Claim, an OpenID Federation deployment can allow Entities that do not support the [@!OpenID.Federation] specification, or that for other reasons cannot meet its requirements for publishing their Entity Configuration at a well-known location, to participate in the federation.
 
-For deployments adhering to this profile it is **RECOMMENDED** that the `ec_location` extension Claim is supported. Furthermore, it is **RECOMMENDED** that Superior Entities supporting the Claim include the Claim in all published Entity Statements, even if the subject's Entity Configuration is published at the well-known location as specified in [@!OpenID.Federation]. The reason for this is to offer a uniform way for resolvers to locate the subject Entity Configuration.
+Deployments adhering to this profile **MAY** support the `ec_location` extension Claim. It is **RECOMMENDED** that Superior Entities supporting the Claim include the Claim in all published Entity Statements, even when the subject's Entity Configuration is published at the well-known location as specified in [@!OpenID.Federation]. This gives resolvers a uniform way to locate the subject's Entity Configuration.
 
 ## Controlling Metadata for Subordinates {#controlling_metadata_for_subordinates}
 
@@ -599,6 +599,7 @@ Copyright (c) 2026 OpenID Connect Sweden.
    -03
    
    * Additional recommendation for handling long-lived Trust Marks added.
+   * Changed support requirements for the `ec_location` extension Claim from RECOMMENDED to MAY.
    
    -02
 
