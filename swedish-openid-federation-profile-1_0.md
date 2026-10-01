@@ -147,6 +147,8 @@ Using this Claim, an OpenID Federation deployment can allow Entities that do not
 
 Deployments adhering to this profile **MAY** support the `ec_location` extension Claim. It is **RECOMMENDED** that Superior Entities supporting the Claim include the Claim in all published Entity Statements, even when the subject's Entity Configuration is published at the well-known location as specified in [@!OpenID.Federation]. This gives resolvers a uniform way to locate the subject's Entity Configuration.
 
+Note that [@!OpenID.Federation.Hosting] is an extension to [@!OpenID.Federation], and an Entity can be fully compliant with this profile without supporting it.
+
 ## Controlling Metadata for Subordinates {#controlling_metadata_for_subordinates}
 
 A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the `metadata` Claim in a Subordinate Statement, or by using the `metadata_policy` Claim as defined in [@!OpenID.Federation, section 6.1]. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.
@@ -244,7 +246,9 @@ A Federation Registration Entity that creates a Subordinate Statement for an Ent
 
 - Assertions that Entity informational metadata parameters such as `organization_name` and `display_name` contain values that correspond to the organization behind the Entity.
 
-It is **RECOMMENDED** that federation deployments compliant with this profile define Registration Policy URIs for the policies that are used for registering Entities, and that Federation Registration Entities include the `registration_policy` Claim as defined by [@!OpenID.Federation.RegPolicy].
+Federation deployments compliant with this profile **MAY** support the extension specification "OpenID Federation Registration Policy 1.0" [@!OpenID.Federation.RegPolicy], define Registration Policy URIs for the policies used when registering Entities, and have Federation Registration Entities include the `registration_policy` extension Claim in Subordinate Statements.
+
+Note that [@!OpenID.Federation.RegPolicy] is an extension to [@!OpenID.Federation], and an Entity can be fully compliant with this profile without supporting it.
 
 **Note**: A Trust Mark could in theory be used to represent that a certain policy was applied during registration of an Entity to the federation. However, there is an important distinction between Registration Policies and Trust Marks. Whether an Entity holds a particular Trust Mark is typically checked by other Entities after its metadata and Trust Marks have been resolved and validated. Registration Policies, on the other hand, operate as part of the Trust Chain building process and are enforced through constraints defined by the federation. 
 
@@ -600,6 +604,7 @@ Copyright (c) 2026 OpenID Connect Sweden.
    
    * Additional recommendation for handling long-lived Trust Marks added.
    * Changed support requirements for the `ec_location` extension Claim from RECOMMENDED to MAY.
+   * Changed support requirements for the `registration_policy` extension Claim from RECOMMENDED to MAY.
    
    -02
 
