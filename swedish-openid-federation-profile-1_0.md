@@ -1,5 +1,5 @@
 %%%
-title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 02"
+title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 03"
 abbrev = "swedish-openid-federation-profile"
 ipr = "none"
 workgroup = "OIDC Sweden"
@@ -34,6 +34,9 @@ fullname="Stefan Halén"
 
 [[contact]]
 fullname="Stefan Halén"
+
+[[contact]]
+fullname="Pål Axelsson"
 
 %%%
 
@@ -326,8 +329,7 @@ Therefore, the following requirements apply to Trust Mark Issuers that are compl
 
 - If a Trust Mark Issuer issues Trust Marks without an expiration time, the Trust Mark Issuer **MUST** expose a Trust Mark Status endpoint, as defined in [@!OpenID.Federation, section 8.4].
 
-
-## Obtaining Trust Marks {#obtaining_trust_marks}
+## Obtaining and Maintaining Trust Marks {#obtaining_trust_marks}
 
 An Entity's Entity Configuration **MAY** contain the Trust Mark instances held by the Entity. An Entity wanting to check whether another Entity holds a specific Trust Mark can either use a resolver, where the peer's resolved metadata and verified Trust Mark instances are delivered in the resolve response, see [@!OpenID.Federation, section 8.3.2], or validate the Trust Mark of its peer according to [@!OpenID.Federation, section 7.3] after building the peer's Trust Chain (see [@!OpenID.Federation, section 10]).
 
@@ -344,6 +346,8 @@ Therefore, this profile also allows for other mechanisms for obtaining Trust Mar
 - A resolver **MAY** invoke the Trust Mark endpoint at the Trust Mark Issuer to obtain an Entity's Trust Marks and include them in a resolve response.
 
 In both scenarios above, the Entities obtaining Trust Marks for other Entities **SHOULD** use caching to minimize the number of calls to the Trust Mark Issuer's endpoint.
+
+For Entities that include long-lived Trust Marks, or Trust Marks with no expiration, in their Entity Configurations, it is **RECOMMENDED** that such Trust Marks are periodically renewed or have their status checked. The reason for this recommendation is to account for possible changes of signing keys at the Trust Mark Issuer.  
 
 A federation's Trust Mark Policy, see (#trust_mark_policy), **SHOULD** include rules for how Trust Marks are distributed and obtained. Such a policy **MAY** allow some Trust Marks to be obtained by peers, while requiring others to be maintained by the Entities that hold them.
 
@@ -439,6 +443,8 @@ We would like to thank the following individuals for their comments, ideas, and 
 - Anders Malmros, Inera
 
 - [@Stefan Halén], Internetstiftelsen
+
+- [@Pål Axelsson], Sunet
 
 {backmatter}
 
@@ -590,6 +596,10 @@ Copyright (c) 2026 OpenID Connect Sweden.
 # Document History
 
    [[ To be removed from the final specification ]]
+   
+   -03
+   
+   * Additional recommendation for handling long-lived Trust Marks added.
    
    -02
 
