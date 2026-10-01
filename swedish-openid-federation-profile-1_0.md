@@ -137,8 +137,7 @@ The validity period of an Entity Statement is controlled by the `exp` Claim. Set
 
 Federation rules **SHOULD** define recommended validity periods for Entity Statements in order to promote predictable behaviour and operational stability. In particular, Federation Operators are responsible for establishing guidance on appropriate validity intervals for Entities within their federation, see (#responsibilities_of_a_federation_operator).
 
-An Entity **MUST** publish updated Entity Configurations at intervals shorter than the validity period indicated by the `exp` Claim. This ensures that a fresh Entity Configuration is available before the previously issued one expires, thereby increasing resilience in case of temporary outages, signing key rollover, or operational disruptions. Entities **SHOULD** publish updated Entity Configurations with sufficient margin to account for caching behaviour and clock skew.
-
+An Entity **MUST** publish updated Entity Configurations at intervals shorter than the validity period indicated by the `exp` Claim. This ensures that a fresh Entity Configuration is available before the previously issued one expires, thereby increasing resilience in case of temporary outages, signing key rollover, or operational disruptions. Entities **SHOULD** publish updated Entity Configurations with sufficient margin to account for caching behaviour and clock skew. It is **RECOMMENDED** that a new Entity Configuration be published when half of the lifetime of the current one, as given by its `iat` and `exp` Claims, has elapsed.
 
 ### Hosted Entity Configurations {#hosted_entity_configurations}
 
