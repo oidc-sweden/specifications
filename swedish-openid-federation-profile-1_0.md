@@ -151,34 +151,35 @@ Note that [@!OpenID.Federation.Hosting] is an extension to [@!OpenID.Federation]
 
 ## Controlling Metadata for Subordinates {#controlling_metadata_for_subordinates}
 
-A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the `metadata` Claim in a Subordinate Statement, or by using the `metadata_policy` Claim as defined in [@!OpenID.Federation, section 6.1]. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.
+An Entity declares its own metadata, that is, the parameters describing its capabilities and preferences, in the `metadata` Claim of its Entity Configuration. A Superior Entity can change the resolved metadata of a Subordinate Entity in two ways:
 
-This section specifies requirements and recommendations for metadata control in order to prevent unpredictable behaviour and to avoid metadata merge conflicts when chaining across federation contexts.
+- By declaring metadata values in the `metadata` Claim of the Subordinate Statement it issues for the Entity. These values apply only to the subject of the statement and override identically named parameters declared by the Entity.
 
-An Entity's Entity Configuration contains a `metadata` Claim in which the Entity declares parameters describing its preferences and capabilities. A metadata policy, as specified in Section 6.1 of [@!OpenID.Federation], may be included in Subordinate Statements to modify the metadata declared by an Entity.
+- By including a metadata policy, using the `metadata_policy` Claim as defined in [@!OpenID.Federation, section 6.1], in the Subordinate Statement. The policy applies to all Entities that are Subordinates of the Entity that sets the policy.
 
-Since any Entity in a Trust Chain that issues Subordinate Statements may define metadata policies, the effective metadata of an Entity is the result of merging all applicable policies along the chain. If a policy introduces parameter values that were not originally declared by the Entity, the resolved metadata may include capabilities or preferences that the Entity does not support. This can lead to unpredictable or invalid configurations.
+Since any Entity in a Trust Chain that issues Subordinate Statements may define metadata policies, the resolved metadata of an Entity is the result of merging all applicable policies along the chain. This can cause two problems:
 
-Furthermore, merging multiple metadata policies in a Trust Chain may lead to merge conflicts, making it impossible to validate the metadata through that chain in a meaningful way. The risk of such conflicts increases when complex policies are defined by lower-level Entities in the chain.
+- If a policy introduces parameter values that were not declared by the Entity, the resolved metadata may include capabilities or preferences that the Entity does not support. This can lead to unpredictable or invalid configurations.
 
-This profile therefore specifies the following requirements:
+- The policies along a chain may not be possible to merge. For example, if an Intermediate Entity uses the `value` operator to set `token_endpoint_auth_signing_alg` to `RS256`, and the Trust Anchor uses the same operator to set it to `ES256`, the policies cannot be merged, see [@!OpenID.Federation, section 6.1.3.1.1]. Such a merge conflict makes it impossible to validate the Entity's metadata through that Trust Chain. The risk of conflicts increases when complex policies are defined by lower-level Entities in the chain, and when an Entity is reachable through Trust Chains ending at different Trust Anchors.
 
-- Adding metadata parameter values to an Entity's metadata SHOULD be limited to the Entity itself and its Immediate Superior Entity responsible for registering the Entity in the federation.
-
-- An Immediate Superior Entity that needs to add metadata parameter values to an Entity's resolved metadata SHOULD declare these values directly in the `metadata` Claim of the Entity Statement issued for the Entity, and SHOULD NOT use metadata policy operators for this purpose.
-
-Metadata policies **SHOULD** be used to constrain, filter, or refine metadata values declared by the Entity, and **SHOULD NOT** be used to introduce capabilities or preferences that are unknown to the Entity.
-
-Metadata parameters can broadly be divided into two categories:
+To prevent these problems, this profile specifies requirements based on two categories of metadata parameters:
 
 - Descriptive parameters that characterise the Entity, such as display name, logotype, and organizational affiliation.
 
 - Protocol parameters that define security and functional settings, such as keys, algorithms, and endpoint URLs.
 
-Deployments compliant with this profile SHOULD concentrate metadata policies that control security and functional settings at Trust Anchors.
+The following requirements apply:
 
-Adhering to this requirement, together with the requirement in (#chaining_models) that Federation Protocol Entities are not chained directly under a Trust Anchor, enables the construction of alternative trust paths towards other Trust Anchors without requiring the application of multiple Trust Anchor metadata policies. This reduces the risk of merge conflicts caused by incompatible policies.
+- Adding metadata parameter values to an Entity's metadata **SHOULD** be limited to the Entity itself and its Immediate Superior Entity responsible for registering the Entity in the federation.
 
+- An Immediate Superior Entity that needs to add metadata parameter values to an Entity's resolved metadata **SHOULD** declare these values directly in the `metadata` Claim of the Entity Statement issued for the Entity, and **SHOULD NOT** use metadata policy operators for this purpose.
+
+- Metadata policies **SHOULD** be used to constrain, filter, or refine metadata values declared by the Entity, and **SHOULD NOT** be used to introduce capabilities or preferences that are unknown to the Entity.
+
+- Deployments compliant with this profile **SHOULD** concentrate metadata policies that control protocol parameters at Trust Anchors.
+
+Together with the requirement in (#chaining_models) that Federation Protocol Entities are not chained directly under a Trust Anchor, the last requirement makes it possible to build alternative Trust Chains towards other Trust Anchors without applying the metadata policies of more than one Trust Anchor. This reduces the risk of merge conflicts caused by incompatible policies.
 
 ## Federation Hierarchy Requirements and Recommendations {#federation_hierarchy_requirements_and_recommendations}
 
@@ -200,7 +201,7 @@ A Trust Anchor **SHOULD NOT** be chained directly to another Trust Anchor in ord
 
 ### Trust Anchor and Trust Mark Issuer Roles {#trust_anchor_and_trust_mark_issuer_roles}
 
-Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support Entities recognised by another Trust Anchor must chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See (#chaining_models) above.
+Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support Entities recognized by another Trust Anchor needs to chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See (#chaining_models) above.
 
 However, this approach is no longer viable when the other Trust Anchor also operates as a Trust Mark Issuer whose Trust Marks are required to be understood by all Entities. Chaining to a Subordinate Entity bypasses the Trust Anchor role and therefore excludes trust in the Trust Mark Issuer. Attempting to resolve this by chaining directly to the Trust Mark Issuer is also problematic because such chaining implicitly creates an additional path through the other Trust Anchor, resulting in two possible trust paths, one of which may fail due to policy conflicts.
 
@@ -605,6 +606,7 @@ Copyright (c) 2026 OpenID Connect Sweden.
    * Additional recommendation for handling long-lived Trust Marks added.
    * Changed support requirements for the `ec_location` extension Claim from RECOMMENDED to MAY.
    * Changed support requirements for the `registration_policy` extension Claim from RECOMMENDED to MAY.
+   * The "Controlling Metadata for Subordinates" section was re-written for clarity.
    
    -02
 
