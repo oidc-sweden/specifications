@@ -137,47 +137,49 @@ The validity period of an Entity Statement is controlled by the `exp` Claim. Set
 
 Federation rules **SHOULD** define recommended validity periods for Entity Statements in order to promote predictable behaviour and operational stability. In particular, Federation Operators are responsible for establishing guidance on appropriate validity intervals for Entities within their federation, see (#responsibilities_of_a_federation_operator).
 
-An Entity **MUST** publish updated Entity Configurations at intervals shorter than the validity period indicated by the `exp` Claim. This ensures that a fresh Entity Configuration is available before the previously issued one expires, thereby increasing resilience in case of temporary outages, signing key rollover, or operational disruptions. Entities **SHOULD** publish updated Entity Configurations with sufficient margin to account for caching behaviour and clock skew.
-
+An Entity **MUST** publish updated Entity Configurations at intervals shorter than the validity period indicated by the `exp` Claim. This ensures that a fresh Entity Configuration is available before the previously issued one expires, thereby increasing resilience in case of temporary outages, signing key rollover, or operational disruptions. Entities **SHOULD** publish updated Entity Configurations with sufficient margin to account for caching behaviour and clock skew. It is **RECOMMENDED** that a new Entity Configuration be published when half of the lifetime of the current one, as given by its `iat` and `exp` Claims, has elapsed.
 
 ### Hosted Entity Configurations {#hosted_entity_configurations}
 
-The specification "OpenID Federation Entity Configuration Hosting" [@!OpenID.Federation.Hosting] defines the Entity Statement extension Claim `ec_location`. The primary purpose of this Claim is to enable hosting of a Leaf Entity's Entity Configuration data at an alternate location from that specified in [@!OpenID.Federation, section 9].
+The specification for the extension "OpenID Federation Entity Configuration Hosting" [@!OpenID.Federation.Hosting] defines the Entity Statement extension Claim `ec_location`. The primary purpose of this Claim is to enable hosting of a Leaf Entity's Entity Configuration data at a location other than the one specified in [@!OpenID.Federation, section 9].
 
-Using this Claim, an OpenID Federation deployment can allow Entities that do not support the [@!OpenID.Federation] standard, or that for other reasons cannot meet its requirements for publishing Entity Configuration at a well-known location, to participate in the federation.
+Using this Claim, an OpenID Federation deployment can allow Entities that do not support the [@!OpenID.Federation] specification, or that for other reasons cannot meet its requirements for publishing their Entity Configuration at a well-known location, to participate in the federation.
 
-For deployments adhering to this profile it is **RECOMMENDED** that the `ec_location` extension Claim is supported. Furthermore, it is **RECOMMENDED** that Superior Entities supporting the Claim include the Claim in all published Entity Statements, even if the subject's Entity Configuration is published at the well-known location as specified in [@!OpenID.Federation]. The reason for this is to offer a uniform way for resolvers to locate the subject Entity Configuration.
+Deployments adhering to this profile **MAY** support the `ec_location` extension Claim. It is **RECOMMENDED** that Superior Entities supporting the Claim include the Claim in all published Entity Statements, even when the subject's Entity Configuration is published at the well-known location as specified in [@!OpenID.Federation]. This gives resolvers a uniform way to locate the subject's Entity Configuration.
+
+Note that [@!OpenID.Federation.Hosting] is an extension to [@!OpenID.Federation], and an Entity can be fully compliant with this profile without supporting it.
 
 ## Controlling Metadata for Subordinates {#controlling_metadata_for_subordinates}
 
-A Superior Entity can control the resolved metadata of a Subordinate Entity either by assigning metadata values under the `metadata` Claim in a Subordinate Statement, or by using the `metadata_policy` Claim as defined in [@!OpenID.Federation, section 6.1]. In the latter case, the policy applies to all Entities that are Subordinates of the Entity that sets the policy.
+An Entity declares its own metadata, that is, the parameters describing its capabilities and preferences, in the `metadata` Claim of its Entity Configuration. A Superior Entity can change the resolved metadata of a Subordinate Entity in two ways:
 
-This section specifies requirements and recommendations for metadata control in order to prevent unpredictable behaviour and to avoid metadata merge conflicts when chaining across federation contexts.
+- By declaring metadata values in the `metadata` Claim of the Subordinate Statement it issues for the Entity. These values apply only to the subject of the statement and override identically named parameters declared by the Entity.
 
-An Entity's Entity Configuration contains a `metadata` Claim in which the Entity declares parameters describing its preferences and capabilities. A metadata policy, as specified in Section 6.1 of [@!OpenID.Federation], may be included in Subordinate Statements to modify the metadata declared by an Entity.
+- By including a metadata policy, using the `metadata_policy` Claim as defined in [@!OpenID.Federation, section 6.1], in the Subordinate Statement. The policy applies to all Entities that are Subordinates of the Entity that sets the policy.
 
-Since any Entity in a Trust Chain that issues Subordinate Statements may define metadata policies, the effective metadata of an Entity is the result of merging all applicable policies along the chain. If a policy introduces parameter values that were not originally declared by the Entity, the resolved metadata may include capabilities or preferences that the Entity does not support. This can lead to unpredictable or invalid configurations.
+Since any Entity in a Trust Chain that issues Subordinate Statements may define metadata policies, the resolved metadata of an Entity is the result of merging all applicable policies along the chain. This can cause two problems:
 
-Furthermore, merging multiple metadata policies in a Trust Chain may lead to merge conflicts, making it impossible to validate the metadata through that chain in a meaningful way. The risk of such conflicts increases when complex policies are defined by lower-level Entities in the chain.
+- If a policy introduces parameter values that were not declared by the Entity, the resolved metadata may include capabilities or preferences that the Entity does not support. This can lead to unpredictable or invalid configurations.
 
-This profile therefore specifies the following requirements:
+- The policies along a chain may not be possible to merge. For example, if an Intermediate Entity uses the `value` operator to set `token_endpoint_auth_signing_alg` to `RS256`, and the Trust Anchor uses the same operator to set it to `ES256`, the policies cannot be merged, see [@!OpenID.Federation, section 6.1.3.1.1]. Such a merge conflict makes it impossible to validate the Entity's metadata through that Trust Chain. The risk of conflicts increases when complex policies are defined by lower-level Entities in the chain, and when an Entity is reachable through Trust Chains ending at different Trust Anchors.
 
-- Adding metadata parameter values to an Entity's metadata SHOULD be limited to the Entity itself and its Immediate Superior Entity responsible for registering the Entity in the federation.
-
-- An Immediate Superior Entity that needs to add metadata parameter values to an Entity's resolved metadata SHOULD declare these values directly in the `metadata` Claim of the Entity Statement issued for the Entity, and SHOULD NOT use metadata policy operators for this purpose.
-
-Metadata policies **SHOULD** be used to constrain, filter, or refine metadata values declared by the Entity, and **SHOULD NOT** be used to introduce capabilities or preferences that are unknown to the Entity.
-
-Metadata parameters can broadly be divided into two categories:
+To prevent these problems, this profile specifies requirements based on two categories of metadata parameters:
 
 - Descriptive parameters that characterise the Entity, such as display name, logotype, and organizational affiliation.
 
 - Protocol parameters that define security and functional settings, such as keys, algorithms, and endpoint URLs.
 
-Deployments compliant with this profile SHOULD concentrate metadata policies that control security and functional settings at Trust Anchors.
+The following requirements apply:
 
-Adhering to this requirement, together with the requirement in (#chaining_models) that Federation Protocol Entities are not chained directly under a Trust Anchor, enables the construction of alternative trust paths towards other Trust Anchors without requiring the application of multiple Trust Anchor metadata policies. This reduces the risk of merge conflicts caused by incompatible policies.
+- Adding metadata parameter values to an Entity's metadata **SHOULD** be limited to the Entity itself and its Immediate Superior Entity responsible for registering the Entity in the federation.
 
+- An Immediate Superior Entity that needs to add metadata parameter values to an Entity's resolved metadata **SHOULD** declare these values directly in the `metadata` Claim of the Entity Statement issued for the Entity, and **SHOULD NOT** use metadata policy operators for this purpose.
+
+- Metadata policies **SHOULD** be used to constrain, filter, or refine metadata values declared by the Entity, and **SHOULD NOT** be used to introduce capabilities or preferences that are unknown to the Entity.
+
+- Deployments compliant with this profile **SHOULD** concentrate metadata policies that control protocol parameters at Trust Anchors.
+
+Together with the requirement in (#chaining_models) that Federation Protocol Entities are not chained directly under a Trust Anchor, the last requirement makes it possible to build alternative Trust Chains towards other Trust Anchors without applying the metadata policies of more than one Trust Anchor. This reduces the risk of merge conflicts caused by incompatible policies.
 
 ## Federation Hierarchy Requirements and Recommendations {#federation_hierarchy_requirements_and_recommendations}
 
@@ -199,7 +201,7 @@ A Trust Anchor **SHOULD NOT** be chained directly to another Trust Anchor in ord
 
 ### Trust Anchor and Trust Mark Issuer Roles {#trust_anchor_and_trust_mark_issuer_roles}
 
-Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support Entities recognised by another Trust Anchor must chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See (#chaining_models) above.
+Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support Entities recognized by another Trust Anchor needs to chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See (#chaining_models) above.
 
 However, this approach is no longer viable when the other Trust Anchor also operates as a Trust Mark Issuer whose Trust Marks are required to be understood by all Entities. Chaining to a Subordinate Entity bypasses the Trust Anchor role and therefore excludes trust in the Trust Mark Issuer. Attempting to resolve this by chaining directly to the Trust Mark Issuer is also problematic because such chaining implicitly creates an additional path through the other Trust Anchor, resulting in two possible trust paths, one of which may fail due to policy conflicts.
 
@@ -245,7 +247,9 @@ A Federation Registration Entity that creates a Subordinate Statement for an Ent
 
 - Assertions that Entity informational metadata parameters such as `organization_name` and `display_name` contain values that correspond to the organization behind the Entity.
 
-It is **RECOMMENDED** that federation deployments compliant with this profile define Registration Policy URIs for the policies that are used for registering Entities, and that Federation Registration Entities include the `registration_policy` Claim as defined by [@!OpenID.Federation.RegPolicy].
+Federation deployments compliant with this profile **MAY** support the extension specification "OpenID Federation Registration Policy 1.0" [@!OpenID.Federation.RegPolicy], define Registration Policy URIs for the policies used when registering Entities, and have Federation Registration Entities include the `registration_policy` extension Claim in Subordinate Statements.
+
+Note that [@!OpenID.Federation.RegPolicy] is an extension to [@!OpenID.Federation], and an Entity can be fully compliant with this profile without supporting it.
 
 **Note**: A Trust Mark could in theory be used to represent that a certain policy was applied during registration of an Entity to the federation. However, there is an important distinction between Registration Policies and Trust Marks. Whether an Entity holds a particular Trust Mark is typically checked by other Entities after its metadata and Trust Marks have been resolved and validated. Registration Policies, on the other hand, operate as part of the Trust Chain building process and are enforced through constraints defined by the federation. 
 
@@ -600,6 +604,9 @@ Copyright (c) 2026 OpenID Connect Sweden.
    -03
    
    * Additional recommendation for handling long-lived Trust Marks added.
+   * Changed support requirements for the `ec_location` extension Claim from RECOMMENDED to MAY.
+   * Changed support requirements for the `registration_policy` extension Claim from RECOMMENDED to MAY.
+   * The "Controlling Metadata for Subordinates" section was re-written for clarity.
    
    -02
 
