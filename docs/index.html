@@ -105,7 +105,7 @@
     </li>
   </ul>
 
-  <h4>OpenID Federation Organization Identifier Metadata Parameter 1.0</h4>
+  <h4>OpenID Federation Organization Identifier Metadata Parameter</h4>
   <p>
     An Entity within a federation is, in almost all cases, owned by an organization. In many cases, an actor
     within the federation needs to know which organization that is behind a given Entity. Reasons for this may
@@ -118,7 +118,22 @@
   </p>
   <ul>
     <li>
-      <a href="openid-federation-organization-identifier-1_0.html">Version 1.0 - Draft</a>
+      <a href="openid-federation-organization-identifier-1_0.html">Version 1.0</a>
+    </li>
+  </ul>
+
+  <h4>OpenID Federation Entity Configuration Hosting</h4>
+  <p>
+    This specification defines an extension to OpenID Federation that enables Subordinate Statements to include a
+    Claim that indicates where a subject’s Entity Configuration is located. The extension introduces the
+    <code>ec_location</code> Claim, which specifies an alternative location for retrieving the subject’s Entity
+    Configuration. This functionality allows Entity Configuration data to be hosted at an Intermediate Entity or at
+    another location, which can be essential for enabling legacy systems or entities that do not have full federation
+    support to register and operate within a federation.
+  </p>
+  <ul>
+    <li>
+      <a href="openid-federation-hosting-1_0.html">Version 1.0</a>
     </li>
   </ul>
 
