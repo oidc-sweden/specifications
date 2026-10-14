@@ -444,8 +444,6 @@ We would like to thank the following individuals for their comments, ideas, and 
 
 - [@Per Mützell], Inera
 
-- Anders Malmros, Inera
-
 - [@Stefan Halén], Internetstiftelsen
 
 - [@Pål Axelsson], Sunet
@@ -550,7 +548,7 @@ We would like to thank the following individuals for their comments, ideas, and 
   </front>
 </reference>
 
-<reference anchor="OpenID.Federation.Hosting" target="https://www.oidc.se/openid-federation-hosting/main.html">
+<reference anchor="OpenID.Federation.Hosting" target="https://www.oidc.se/specifications/openid-federation-hosting-1_0.html">
   <front>
     <title>OpenID Federation Entity Configuration Hosting 1.0</title>
     <author fullname="Martin Lindström">
@@ -559,7 +557,7 @@ We would like to thank the following individuals for their comments, ideas, and 
     <author fullname="Stefan Santesson">
       <organization>IDsec Solutions</organization>
     </author>
-    <date day="9" month="January" year="2026"/>
+    <date day="14" month="October" year="2026"/>
   </front>
 </reference>
 
@@ -576,23 +574,6 @@ We would like to thank the following individuals for their comments, ideas, and 
   </front>
 </reference>
 
-<reference anchor="OpenID.Federation.OrgId" target="https://www.oidc.se/openid-federation-organization-identifier/main.html">
-  <front>
-    <title>OpenID Federation Organization Identifier Metadata Parameter 1.0</title>
-    <author fullname="Michael B. Jones">
-      <organization>Self-Issued Consulting</organization>
-    </author>    
-    <author fullname="Martin Lindström">
-      <organization>IDsec Solutions</organization>
-    </author>    
-    <author fullname="Stefan Santesson">
-      <organization>IDsec Solutions</organization>
-    </author>
-    <date day="12" month="January" year="2026"/>
-  </front>
-</reference>
-
-
 # Notices
 
 Copyright (c) 2026 OpenID Connect Sweden.
@@ -607,6 +588,7 @@ Copyright (c) 2026 OpenID Connect Sweden.
    * Changed support requirements for the `ec_location` extension Claim from RECOMMENDED to MAY.
    * Changed support requirements for the `registration_policy` extension Claim from RECOMMENDED to MAY.
    * The "Controlling Metadata for Subordinates" section was re-written for clarity.
+   * Updated reference to OpenID Federation Hosting specification
    
    -02
 
