@@ -117,7 +117,7 @@ This requirement implies that a Federation Protocol Entity is always a Leaf Enti
 
 [@!OpenID.Federation, section 10] specifies requirements for how an Entity resolves the Trust Chain and metadata of another Entity with which it wishes to establish trust. This process includes fetching Entity Statements, applying metadata policies and constraints, validating Trust Chains, and handling caching. The procedure is complex and may be difficult for all Federation Protocol Entities within the federation to implement. 
 
-Also, this algorithm relies on all participants publishing their Entity Configuration information at a well-known location, as specified in [@!OpenID.Federation, section 9]. However, this profile references an alternative way of publishing Entity Configuration (see (#hosted_entity_configurations) below), that requires a chain building algorithm starting with a Trust Anchor instead of the bottom-up approach specified in [@!OpenID.Federation, section 10].
+Also, this algorithm relies on all participants publishing their Entity Configuration information at a well-known location, as specified in [@!OpenID.Federation, section 9]. However, this profile references an alternative way of publishing Entity Configuration (see (#hosted_entity_configurations) below), that requires a Trust Chain building algorithm starting at the Trust Anchor instead of the bottom-up approach specified in [@!OpenID.Federation, section 10].
 
 Therefore, it is **RECOMMENDED** that Entities compliant with this profile use a Federation Resolver in order to resolve metadata and trust for peer Entities. A Federation Resolver is a Federation Service Entity within the federation that provides a `federation_resolve_endpoint` as specified in Sections [@!OpenID.Federation, 5.1.1] and [@!OpenID.Federation, 8.3] of [@!OpenID.Federation].
 
@@ -179,31 +179,31 @@ The following requirements apply:
 
 - Deployments compliant with this profile **SHOULD** concentrate metadata policies that control protocol parameters at Trust Anchors.
 
-Together with the requirement in (#chaining_models) that Federation Protocol Entities are not chained directly under a Trust Anchor, the last requirement makes it possible to build alternative Trust Chains towards other Trust Anchors without applying the metadata policies of more than one Trust Anchor. This reduces the risk of merge conflicts caused by incompatible policies.
+Together with the requirement in (#hierarchy_models) that Federation Protocol Entities are not Immediate Subordinates of a Trust Anchor, the last requirement makes it possible to build alternative Trust Chains towards other Trust Anchors without applying the metadata policies of more than one Trust Anchor. This reduces the risk of merge conflicts caused by incompatible policies.
 
 ## Federation Hierarchy Requirements and Recommendations {#federation_hierarchy_requirements_and_recommendations}
 
 [@!OpenID.Federation] defines an infrastructure in which an Entity can belong to more than one federation context and therefore be reachable via different Trust Chains, each ending at a different Trust Anchor. Each federation context is anchored by a Trust Anchor. A Trust Anchor defines a policy that all its Subordinates must satisfy in order for their metadata to be validated through that Trust Anchor.
 
-A Federation Protocol Entity or Federation Service Entity may chain to more than one Trust Anchor. Chaining to a Trust Anchor does not, however, guarantee successful validation. Validation succeeds only if the Federation Protocol Entity's metadata conforms to the combined metadata policies of all Entities in the Trust Chain up to and including the Trust Anchor.
+A Federation Protocol Entity or Federation Service Entity may have paths to more than one Trust Anchor. A path to a Trust Anchor does not, however, guarantee a valid Trust Chain. The Trust Chain is valid only if the Entity's metadata conforms to the combined metadata policies of all Entities in the Trust Chain up to and including the Trust Anchor, see [@!OpenID.Federation, section 6.1.4].
 
 It is therefore important to structure the hierarchy of Federation Service Entities and their metadata policies carefully. The aim is to enforce essential rules while avoiding the unintended blocking of legitimate services due to incompatible policy applications.
 
 This section contains sub-sections with requirements and recommendations for structuring a federation hierarchy in order to avoid unnecessary complexity and pitfalls.
 
-### Chaining Models {#chaining_models}
+### Hierarchy Models {#hierarchy_models}
 
-Federation Protocol Entities **SHOULD NOT** be chained directly under a Trust Anchor. Instead, they **SHOULD** be chained to an Intermediate Entity (that is chained to the Trust Anchor). This requirement reduces the risk of metadata policy conflicts when chaining a Federation Protocol Entity to other federation contexts, that is, chains ending at different Trust Anchors.
+Federation Protocol Entities **SHOULD NOT** be Immediate Subordinates of a Trust Anchor. Instead, their Immediate Superior **SHOULD** be an Intermediate Entity that is an Immediate Subordinate of the Trust Anchor. This requirement reduces the risk of metadata policy conflicts when a Federation Protocol Entity also has paths to other Trust Anchors.
 
-It is also **RECOMMENDED** that Federation Protocol Entities that need to be available under a common Trust Anchor chain to a common Intermediate Entity. This makes it easier for that Trust Anchor to create a chain to groups of Federation Protocol Entities by creating a single chain link to the common Intermediate Entity.
+It is also **RECOMMENDED** that Federation Protocol Entities that need to be available under a common Trust Anchor have a common Intermediate Entity as their Immediate Superior. This makes it easier for that Trust Anchor to include a group of Federation Protocol Entities, since it only needs to issue a single Subordinate Statement about the common Intermediate Entity.
 
-A Trust Anchor **SHOULD NOT** be chained directly to another Trust Anchor in order to minimise risks of merge conflicts between Trust Anchor metadata policies.
+A Trust Anchor **SHOULD NOT** issue a Subordinate Statement about another Trust Anchor, in order to minimise the risk of merge conflicts between Trust Anchor metadata policies.
 
 ### Trust Anchor and Trust Mark Issuer Roles {#trust_anchor_and_trust_mark_issuer_roles}
 
-Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support Entities recognized by another Trust Anchor needs to chain directly to a Subordinate Entity under that other Trust Anchor rather than chaining to the other Trust Anchor itself. See (#chaining_models) above.
+Trust Anchors may apply different metadata policies to the same Entity. That is, one Trust Anchor may restrict the set of metadata preferences in one way, while another imposes a different and potentially incompatible set of restrictions. When these policies cannot be reconciled into a single combined policy, a Trust Anchor that wants to support Entities recognized by another Trust Anchor needs to issue a Subordinate Statement directly about a Subordinate Entity of that other Trust Anchor, rather than about the other Trust Anchor itself. See (#hierarchy_models) above.
 
-However, this approach is no longer viable when the other Trust Anchor also operates as a Trust Mark Issuer whose Trust Marks are required to be understood by all Entities. Chaining to a Subordinate Entity bypasses the Trust Anchor role and therefore excludes trust in the Trust Mark Issuer. Attempting to resolve this by chaining directly to the Trust Mark Issuer is also problematic because such chaining implicitly creates an additional path through the other Trust Anchor, resulting in two possible trust paths, one of which may fail due to policy conflicts.
+However, this approach is no longer viable when the other Trust Anchor also operates as a Trust Mark Issuer whose Trust Marks are required to be understood by all Entities. Issuing a Subordinate Statement about a Subordinate Entity bypasses the Trust Anchor role and therefore excludes trust in the Trust Mark Issuer. Attempting to resolve this by issuing a Subordinate Statement directly about the Trust Mark Issuer is also problematic, because it implicitly creates an additional path through the other Trust Anchor, resulting in two possible trust paths, one of which may fail due to policy conflicts.
 
 These issues are inherently difficult to resolve and introduce ambiguity and inconsistency in the trust path evaluation process. Therefore, deployments compliant with this profile **SHOULD NOT** allow Trust Anchors to also function as Trust Mark Issuers.
 
@@ -561,7 +561,7 @@ We would like to thank the following individuals for their comments, ideas, and 
   </front>
 </reference>
 
-<reference anchor="OpenID.Federation.RegPolicy" target="https://www.oidc.se/openid-federation-registration-policy/main.html">
+<reference anchor="OpenID.Federation.RegPolicy" target="https://www.oidc.se/specifications/openid-federation-registration-policy-1_0.html">
   <front>
     <title>OpenID Federation Registration Policy 1.0</title>
     <author fullname="Martin Lindström">
@@ -570,7 +570,7 @@ We would like to thank the following individuals for their comments, ideas, and 
     <author fullname="Stefan Santesson">
       <organization>IDsec Solutions</organization>
     </author>
-    <date day="12" month="January" year="2026"/>
+    <date day="16" month="October" year="2026"/>
   </front>
 </reference>
 
@@ -602,4 +602,3 @@ Copyright (c) 2026 OpenID Connect Sweden.
    -00 
 
    *  Initial version.
-   
