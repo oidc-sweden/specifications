@@ -1,5 +1,5 @@
 %%%
-title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0 - draft 03"
+title = "Swedish OpenID Federation Deployment and Interoperability Profile 1.0"
 abbrev = "swedish-openid-federation-profile"
 ipr = "none"
 workgroup = "OIDC Sweden"
@@ -123,7 +123,7 @@ Therefore, it is **RECOMMENDED** that Entities compliant with this profile use a
 
 A Trust Anchor adhering to this profile **MUST** ensure the availability of at least one Federation Resolver compliant with the requirements stated in this profile. This resolver **MUST** support resolving for the given Trust Anchor. It is **RECOMMENDED** that the resolver is provided as part of the Trust Anchor itself.
 
-A> If the resolver is provided by a Subordinate Entity to the Trust Anchor, federation participants that entirely relies on the use of the resolver will have to configure two trusted federation keys; both to the Trust Anchor and to the Entity implementing the Federation Resolver. See [@!OpenID.Federation, section 8.3.3].
+A> If the resolver is provided by a Subordinate Entity to the Trust Anchor, federation participants that entirely rely on the use of the resolver will have to configure two trusted federation keys; both to the Trust Anchor and to the Entity implementing the Federation Resolver. See [@!OpenID.Federation, section 8.3.3].
 
 (#resolving_metadata_and_trust_marks), (#resolving_metadata_and_trust_marks, use title), specifies further requirements for Federation Resolver usage and implementation. 
 
@@ -211,7 +211,7 @@ These issues are inherently difficult to resolve and introduce ambiguity and inc
 
 "OpenID Connect Dynamic Client Registration" [@!OpenID.Registration] and "OAuth 2.0 Dynamic Client Registration Protocol" [@!RFC7591] specify how a Client registers at an OpenID Provider or an OAuth 2.0 Authorization Server. Such registrations are performed in a peer-to-peer manner, where a Client is registered with a single service. A given Client's registration at another service may differ in naming, metadata, and security mechanisms.
 
-When a Client joins a federation, it registers, not at a specific service, but to the federation itself. This fact implies that the registration data for a Client joining the federation **MUST** be generic in a sense that the registration does not presupposes a particular peer service. This also applies for other Entity types other than OAuth 2.0 Clients and OpenID Relying Parties.
+When a Client joins a federation, it registers, not at a specific service, but to the federation itself. This fact implies that the registration data for a Client joining the federation **MUST** be generic in a sense that the registration does not presuppose a particular peer service. This also applies for other Entity types other than OAuth 2.0 Clients and OpenID Relying Parties.
 
 Consequently, an OpenID Provider or an OAuth 2.0 Authorization Server compliant with this profile **MUST** be prepared to accept, and incorporate the metadata of an already registered Client, to its service configuration.
 
@@ -380,7 +380,7 @@ If a Federation Service Entity requires client authentication using `private_key
 
 # Adapting OAuth 2.0 and OpenID Connect for OpenID Federation {#adapting_oauth_2_0_and_openid_connect_for_openid_federation}
 
-This document is a profile for OpenID Federation and should refrain from introducing protocol-specific requirements for the use of OAuth 2.0 and OpenID Connect — such requirements should be addressed in protocol-specific standards and profiles.
+This document is a profile for OpenID Federation and should refrain from introducing protocol-specific requirements for the use of OAuth 2.0 and OpenID Connect. Such requirements should be addressed in protocol-specific standards and profiles.
 
 However, OAuth 2.0 and OpenID Connect predate the introduction of OpenID Federation, and some concepts of these protocols do not mix naturally with a federated environment.
 
@@ -525,7 +525,7 @@ We would like to thank the following individuals for their comments, ideas, and 
     <author fullname="Vladimir Dzhuvinov">
       <organization>Connect2id</organization>
     </author>
-    <date day="4" month="December" year="2025"/>
+    <date day="17" month="February" year="2026"/>
   </front>
 </reference>
 
@@ -577,28 +577,3 @@ We would like to thank the following individuals for their comments, ideas, and 
 # Notices
 
 Copyright (c) 2026 OpenID Connect Sweden.
-
-# Document History
-
-   [[ To be removed from the final specification ]]
-   
-   -03
-   
-   * Additional recommendation for handling long-lived Trust Marks added.
-   * Changed support requirements for the `ec_location` extension Claim from RECOMMENDED to MAY.
-   * Changed support requirements for the `registration_policy` extension Claim from RECOMMENDED to MAY.
-   * The "Controlling Metadata for Subordinates" section was re-written for clarity.
-   * Updated reference to OpenID Federation Hosting specification
-   
-   -02
-
-   * Modified some confusion writings about validity times Entity Configurations related to the Trust Marks held within the objects.
-
-   -01
-   
-   *  Misc. fixes after comments from the working group.
-
-
-   -00 
-
-   *  Initial version.
